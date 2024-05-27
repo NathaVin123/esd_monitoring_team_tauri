@@ -1,10 +1,10 @@
-import {HeaderComponent} from "@/pages/components/chakra-ui/HeaderComponent";
+import {CustomContainerCenter} from "@/pages/components/mui/CustomContainer";
 
 export function CaseList() {
     return (
-        <HeaderComponent>
+        <CustomContainerCenter>
             Case List
-        </HeaderComponent>
+        </CustomContainerCenter>
     );
 }
 

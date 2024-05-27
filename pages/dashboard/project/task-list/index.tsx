@@ -1,11 +1,11 @@
-import {HeaderComponent} from "@/pages/components/chakra-ui/HeaderComponent";
-import LayoutComponent from "@/pages/components/chakra-ui/LayoutComponent";
+import {CustomContainerCenter} from "@/pages/components/mui/CustomContainer";
+
 
 export function TaskList() {
     return (
-        <LayoutComponent>
+        <CustomContainerCenter>
             Task List
-        </LayoutComponent>
+        </CustomContainerCenter>
     );
 }
 

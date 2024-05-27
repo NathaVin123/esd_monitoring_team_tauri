@@ -5,11 +5,11 @@ interface ToastProps {
     open: boolean;
     onClose: () => void;
     message: string;
-    severity: AlertColor;
+    severity?: AlertColor;  // Make severity optional
     autoHideDuration?: number;
 }
 
-const CustomToast: React.FC<ToastProps> = ({ open, onClose, message, severity, autoHideDuration = 6000 }) => {
+const CustomToast: React.FC<ToastProps> = ({ open, onClose, message, severity = 'info', autoHideDuration = 6000 }) => {
     return (
         <Snackbar open={open} autoHideDuration={autoHideDuration} onClose={onClose}>
             <Alert onClose={onClose} severity={severity} sx={{ width: '100%' }}>

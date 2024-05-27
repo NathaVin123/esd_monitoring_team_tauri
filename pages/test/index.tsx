@@ -12,7 +12,6 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CustomImage from "@/pages/components/mui/CustomImage";
-
 import PolytronIcon from "../../public/assets/polytron-icon.png";
 import CustomSideBar from "@/pages/components/mui/CustomSideBar";
 import CustomPieChart from "@/pages/components/mui/CustomPieChart";
@@ -134,16 +133,16 @@ export function Test() {
                                 required
                                 placeholder="Select time"
                             />
-                            <CustomTextField
-                                type="select"
-                                label="Select Option"
-                                required
-                                options={[
-                                    { value: 'option1', label: 'Option 1' },
-                                    { value: 'option2', label: 'Option 2' },
-                                    { value: 'option3', label: 'Option 3' }
-                                ]}
-                            />
+                            {/*<CustomTextField*/}
+                            {/*    type="select"*/}
+                            {/*    label="Select Option"*/}
+                            {/*    required*/}
+                            {/*    options={[*/}
+                            {/*        { value: 'option1', label: 'Option 1' },*/}
+                            {/*        { value: 'option2', label: 'Option 2' },*/}
+                            {/*        { value: 'option3', label: 'Option 3' }*/}
+                            {/*    ]}*/}
+                            {/*/>*/}
                             <CustomSpacer height={Contants(1)} />
                             <CustomButton type="submit" variant="contained" fullWidth>
                                 Tes Button
@@ -164,7 +163,7 @@ export function Test() {
 
                             <CustomImage path={PolytronIcon} alt="Polytron Icon" size="XL" />
 
-                            {/*<CustomPieChart data={data} dataKey="value" nameKey="name" showLegend={true} />*/}
+                            <CustomPieChart data={data} dataKey="value" nameKey="name" showLegend={true} />
 
                             <CustomPieChart data={data} dataKey="value" nameKey="name" showLegend={false} />
 

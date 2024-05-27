@@ -1,7 +1,7 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface CustomTextFieldProps {
     type?: string;
@@ -17,18 +17,7 @@ export default function CustomTextField(props: CustomTextFieldProps) {
     const [error, setError] = useState(false);
     const [helperText, setHelperText] = useState('');
 
-    useEffect(() => {
-        validateInput(value);
-    }, [value]);
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(event.target.value);
-        if (props.onChange) {
-            props.onChange(event);
-        }
-    };
-
-    const validateInput = (value: string) => {
+    const validateInput = useCallback((value: string) => {
         if (props.required && value.trim() === '') {
             setError(true);
             setHelperText('This field is required');
@@ -47,6 +36,17 @@ export default function CustomTextField(props: CustomTextFieldProps) {
         } else {
             setError(false);
             setHelperText('');
+        }
+    }, [props.required, props.type]);
+
+    useEffect(() => {
+        validateInput(value);
+    }, [value, validateInput]);
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(event.target.value);
+        if (props.onChange) {
+            props.onChange(event);
         }
     };
 

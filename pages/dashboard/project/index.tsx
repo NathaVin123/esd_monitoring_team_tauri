@@ -1,10 +1,10 @@
 import {Box} from "@chakra-ui/react";
-import LayoutComponent from "@/pages/components/chakra-ui/LayoutComponent";
+import {CustomContainerCenter} from "@/pages/components/mui/CustomContainer";
 
 export default function Project() {
     return (
-        <LayoutComponent>
+        <CustomContainerCenter>
                 Welcome to Project
-        </LayoutComponent>
+        </CustomContainerCenter>
     );
 }

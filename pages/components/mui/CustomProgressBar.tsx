@@ -18,4 +18,4 @@ export const CustomCircularProgressBar: React.FC<CustomCircularProgressBarProps>
     );
 };
 
-// export default CustomCircularProgressBar;
+export default CustomCircularProgressBar;

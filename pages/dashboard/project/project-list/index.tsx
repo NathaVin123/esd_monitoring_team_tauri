@@ -1,11 +1,11 @@
-import LayoutComponent from "@/pages/components/chakra-ui/LayoutComponent";
+import {CustomContainerCenter} from "@/pages/components/mui/CustomContainer";
 
 
 export function ProjectList() {
     return (
-        <LayoutComponent>
+        <CustomContainerCenter>
             Project List
-        </LayoutComponent>
+        </CustomContainerCenter>
     );
 }
 

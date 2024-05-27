@@ -1,11 +1,26 @@
 import React from 'react';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Divider, Box } from '@mui/material';
+import {
+    Drawer,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    IconButton,
+    Divider,
+    Box,
+} from '@mui/material';
 import InboxIcon from '@mui/icons-material/Inbox';
 import MailIcon from '@mui/icons-material/Mail';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { useTheme } from '@mui/material/styles';
 
-const CustomSideBar = ({ open, handleDrawerClose, darkMode }) => {
+interface CustomSideBarProps {
+    open: boolean;
+    handleDrawerClose: () => void;
+    darkMode: boolean;
+}
+
+const CustomSideBar: React.FC<CustomSideBarProps> = ({ open, handleDrawerClose, darkMode }) => {
     const theme = useTheme();
     const menuItems = [
         { text: 'Inbox', icon: <InboxIcon /> },

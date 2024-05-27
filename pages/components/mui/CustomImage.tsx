@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import Image from 'next/image';
 
 interface CustomImageProps {
-    path: any;
+    path: any; // Changed to string type for next/image compatibility
     alt?: string;
     size?: 'XS' | 'S' | 'M' | 'L' | 'XL';
     borderRadius?: number | string;

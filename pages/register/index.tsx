@@ -1,10 +1,5 @@
-import {Center, Flex, Button, Box, Text} from "@chakra-ui/react";
-import {Inter} from "next/font/google";
 import {useEffect, useState} from "react";
-import { FaUser } from "react-icons/fa";
-import ButtonComponent from "@/pages/components/chakra-ui/ButtonComponent";
-import {HeaderComponent} from "@/pages/components/chakra-ui/HeaderComponent";
-import NavbarComponent from "@/pages/components/chakra-ui/NavbarComponent";
+
 import {useRouter} from "next/router";
 import axios from "axios";
 import CustomTypography from "@/pages/components/mui/CustomTypography";
@@ -15,11 +10,10 @@ import DeveloperModeIcon from '@mui/icons-material/DeveloperMode';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import CustomSpacer from "@/pages/components/mui/CustomSpacer";
 import Contants from "@/pages/components/mui/value/contants";
-
-const inter = Inter({ subsets: ["latin"] });
+import {URLAPI} from "@/pages/api/env";
+import {Box} from "@mui/material";
 
 export function RegisterRole() {
-    const BASE_URL = 'http://localhost:3001'
     const router = useRouter();
     const [selectedRole, setSelectedRole] = useState<string>('');
 
@@ -34,7 +28,7 @@ export function RegisterRole() {
     const doFetchRoleData = async () => {
         const routeAPI = '/api/role/getRole';
         try {
-            const response = await axios.get(`${BASE_URL}${routeAPI}`)
+            const response = await axios.get(`${URLAPI}${routeAPI}`)
 
             console.log(JSON.stringify(response.data.data));
 

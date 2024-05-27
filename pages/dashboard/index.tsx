@@ -1,24 +1,10 @@
-import ImageComponent from "../components/chakra-ui/ImageComponent"
-import PolytronLogo from "../../public/assets/polytron-icon.png";
-import CircularProgressBarComponent from "../components/chakra-ui/CircularProgressBarComponent";
-import {Container, VStack, Flex, Box, Center, useToast, Input} from '@chakra-ui/react'
-import TextComponent from "../components/chakra-ui/TextComponent";
-import Image from "next/image";
-import { Inter } from "next/font/google";
-import {ButtonComponent} from "@/pages/components/chakra-ui/ButtonComponent";
-import {ToastComponent} from "@/pages/components/chakra-ui/ToastComponent";
-
 import {useEffect, useState} from "react";
-import sendConsoleLog from "@/utils/sendConsoleLog";
 import {useRouter} from "next/router";
-import SideMenuComponent from "@/pages/components/chakra-ui/SideMenuComponent";
-import LayoutComponent from "@/pages/components/chakra-ui/LayoutComponent";
 import axios from "axios";
-import {URLAPI} from "@/pages/api/env";
 import {concatAddressAPIRoute} from "@/utils/concatAddressAPIRoute";
 import {consoleLogAddressAPI} from "@/utils/consoleLogAddressAPI";
-
-const inter = Inter({ subsets: ["latin"] });
+import {CustomContainerCenter} from "@/pages/components/mui/CustomContainer";
+import {URLAPI} from "@/pages/api/env";
 
 export default function Dashboard() {
 
@@ -26,7 +12,7 @@ export default function Dashboard() {
 
     const { nik } = router.query;
 
-    const [user, setUser] = useState<>([]);
+    const [user, setUser] = useState<[]>([]);
 
     // const {token, setToken} = useState(null);
 
@@ -49,9 +35,6 @@ export default function Dashboard() {
 
         const routeAPI = '/api/auth/getUserWithRole';
 
-        const addressAPI = concatAddressAPIRoute(URLAPI, routeAPI);
-
-        await consoleLogAddressAPI('POST', addressAPI);
 
         try {
             const formData = {
@@ -60,7 +43,7 @@ export default function Dashboard() {
 
             console.log(formData);
 
-            const response = await axios.post(addressAPI, [formData]);
+            const response = await axios.post(`${URLAPI}${routeAPI}`, [formData]);
 
             console.log(response.data);
             setUser(response.data.data);
@@ -71,8 +54,9 @@ export default function Dashboard() {
     }
 
     useEffect(() => {
-        doGetUser().then(() => console.log(user));
-        // fetchToken().then(() => {});
+        const token = localStorage.getItem('token');
+
+        console.log('Token : ' + token);
     },[]);
 
     // const [nik, setNik] = useState<string>('');
@@ -83,8 +67,8 @@ export default function Dashboard() {
     // }
 
     return (
-        <LayoutComponent>
+        <CustomContainerCenter>
             Welcome to ESD Monitoring Team, {nik}
-        </LayoutComponent>
+        </CustomContainerCenter>
     );
 }

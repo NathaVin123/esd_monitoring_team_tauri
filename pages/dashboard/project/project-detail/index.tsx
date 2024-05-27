@@ -1,12 +1,11 @@
-import {HeaderComponent} from "@/pages/components/chakra-ui/HeaderComponent";
-import LayoutComponent from "@/pages/components/chakra-ui/LayoutComponent";
 import {Box} from "@chakra-ui/react";
+import {CustomContainerCenter} from "@/pages/components/mui/CustomContainer";
 
 export function ProjectDetail() {
     return (
-        <LayoutComponent>
+        <CustomContainerCenter>
             Project Detail
-        </LayoutComponent>
+        </CustomContainerCenter>
     );
 }
 
