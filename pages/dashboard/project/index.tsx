@@ -1,5 +1,5 @@
 import {Box} from "@chakra-ui/react";
-import LayoutComponent from "@/pages/components/LayoutComponent";
+import LayoutComponent from "@/pages/components/chakra-ui/LayoutComponent";
 
 export default function Project() {
     return (

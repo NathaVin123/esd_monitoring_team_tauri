@@ -1,6 +1,6 @@
 import { Box, Flex } from '@chakra-ui/react';
 import SideMenuComponent from './SideMenuComponent';
-import NavbarComponent from "@/pages/components/NavbarComponent";
+import NavbarComponent from "@/pages/components/chakra-ui/NavbarComponent";
 
 const LayoutComponent = ({ children }) => {
     return (

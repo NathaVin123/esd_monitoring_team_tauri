@@ -1,12 +1,12 @@
-import ImageComponent from "../components/ImageComponent"
+import ImageComponent from "../components/chakra-ui/ImageComponent"
 import PolytronLogo from "../../public/assets/polytron-icon.png";
-import CircularProgressBarComponent from "../components/CircularProgressBarComponent";
-import {Container, VStack, Flex, Box, Center, useToast, Input, Divider, Text, Link, InputGroup, InputRightElement, Button} from '@chakra-ui/react'
-import TextComponent from "../components/TextComponent";
+import CircularProgressBarComponent from "../components/chakra-ui/CircularProgressBarComponent";
+// import {Container, VStack, Flex, Box, Center, useToast, Input, Divider, Text, Link, InputGroup, InputRightElement, Button} from '@chakra-ui/react'
+import TextComponent from "../components/chakra-ui/TextComponent";
 import Image from "next/image";
 import { Inter } from "next/font/google";
-import {ButtonComponent} from "@/pages/components/ButtonComponent";
-import {ToastComponent} from "@/pages/components/ToastComponent";
+import {ButtonComponent} from "@/pages/components/chakra-ui/ButtonComponent";
+import {ToastComponent} from "@/pages/components/chakra-ui/ToastComponent";
 
 import {fetchLoginData} from '../api/api';
 
@@ -19,206 +19,134 @@ import {
     FormHelperText,
 } from '@chakra-ui/react'
 
-import {PORT, URL_DEV_LOCAL} from "../api/env";
-
 import {useEffect, useState} from "react";
 import sendConsoleLog from "@/utils/sendConsoleLog";
 import {useRouter} from "next/router";
-import {HeaderComponent} from "@/pages/components/HeaderComponent";
-import NavbarComponent from "@/pages/components/NavbarComponent";
+import {HeaderComponent} from "@/pages/components/chakra-ui/HeaderComponent";
+import NavbarComponent from "@/pages/components/chakra-ui/NavbarComponent";
 import axios from "axios";
+import {URLAPI} from "@/pages/api/env";
+import CustomContainer, {CustomContainerCenter} from "@/pages/components/mui/CustomContainer";
+import CustomTypography from "@/pages/components/mui/CustomTypography";
+import CustomTextField from "@/pages/components/mui/CustomTextField";
+import CustomButton from "@/pages/components/mui/CustomButton";
+import CustomSpacer from "@/pages/components/mui/CustomSpacer";
+import Constants from "@/pages/components/mui/value/contants";
+import {Box, Link as MuiLink} from "@mui/material";
+import CustomToast from "@/pages/components/mui/CustomToast";
+import {CustomCircularProgressBar} from "@/pages/components/mui/CustomProgressBar";
+
+import Link from 'next/link'; // Import Link component
 
 const inter = Inter({ subsets: ["latin"] });
 
 export function Login() {
-    // console.log(URL_DEV_LOCAL + PORT);
-
-    const BASE_URL = `http://localhost:3001`;
-
-
-    console.log(BASE_URL);
-
     const router = useRouter();
-    const toast = useToast();
+
+    const [toastOpen, setToastOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const [nik, setNik] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [showPassword, setShowPassword] = useState<boolean>(false);
-    const [errorMessage, setErrorMessage] = useState<string>('');
 
-    const [user, setUser] = useState(null);
+    const [severity, setSeverity] = useState<any>('');
 
-    // const [formData, setFormData] = useState({nik: '', password: ''})
+    const [message, setMessage] = useState<string>('');
 
     const [result, setResult] = useState<any>();
+
+    const handleCloseToast = () => {
+        setToastOpen(false);
+    };
 
     useEffect(() => {
 
     },[nik, password]);
 
+    const submitLogin = async () => {
+        doFetchLoginData().then(([success, message]) => {
+            if(success === true) {
+                setSeverity('warning');
+                setMessage(message);
+            } else if(success === false) {
+                setSeverity('success');
+                setMessage(message);
+            } else {
+                setSeverity('error');
+                setMessage('Something Wrong!');
+            }
+            setToastOpen(true);
+            setIsLoading(false);
+        })
+    }
+
 
     const doFetchLoginData = async () => {
         const routeAPI = '/api/auth/loginUser';
 
-        console.log("Do fetch login data");
       try {
-        const formData = {
-          nik: nik,
-          password: password,
+          console.log(`${URLAPI}${routeAPI}`);
+          const formData = {
+              nik: nik,
+              password: password,
         };
 
-        console.log(formData);
-
-        const response = await axios.post(`${BASE_URL}${routeAPI}`, formData);
+        const response = await axios.post(`${URLAPI}${routeAPI}`, formData);
 
         console.log(response.data);
 
-        return [response.data.message, response.data.success];
+        return [response.data.success, response.data.message];
+
       } catch (error) {
         console.error("Error fetching data:", error);
         return [JSON.stringify(error), "false"];
       }
     };
 
-    const handleSubmitLogin = async (e) => {
-        console.log('login');
-
-        e.preventDefault();
-
-        if(!nik || !password) {
-            toast({
-                title: 'Error',
-                description: 'NIK and Password cannot be empty!',
-                status: "error",
-                duration: 5000,
-                isClosable: true,
-            })
-        }
-        else {
-            await doFetchLoginData().then(([message, success]) => {
-                // toast({
-                //     title: data,
-                //     description: data,
-                //     status: data,
-                //     duration: 5000,
-                //     isClosable: true,
-                // })
-
-                toast({
-                    title: success === true ? 'Success : ' : 'Failed : ',
-                    description: message,
-                    status: success === true ? 'success' : 'error',
-                    duration: 5000,
-                    isClosable: true,
-                })
-
-                if(success === true) {
-                    router.push({
-                        pathname: '/dashboard',
-                        query: {
-                            nik: nik,
-                        }
-                    })
-                }
-
-
-            });
-        }
-    }
-
-    const handleInputNumberOnly = (e) => {
-        const inputValue = e.target.value;
-        const regex = /^\d*$/; // Regex pattern to allow only numeric characters
-
-        if (regex.test(inputValue)) {
-            setNik(inputValue);
-        }
-        console.log(nik);
-    };
-
-    const handleNIKKeyDown = (e) => {
-        const numericKeys = /^[0-9]*$/;
-
-        if (!numericKeys.test(e.key)) {
-            return false;
-        } else {
-            return true;
-        }
-    };
-
-    const handleShowHidePassword = () => setShowPassword(!showPassword)
-
     return (
-        <>
-        <NavbarComponent isDashboard={false}></NavbarComponent>
-        <HeaderComponent>
-            <Center>
-                <Flex direction={["column", "row"]}>
-                    <VStack direction={"column"} justifyContent={"space-between"}>
-                        <Box>
-                            <ImageComponent src={PolytronLogo} size={'xs'}></ImageComponent>
-                        </Box>
-                        <Box>
-                            <b style={{fontSize:"40px"}}>Sign In</b>
-                        </Box>
-                        <Box
-                            padding={25}
-                            maxW="md"
-                             mx="auto"
-                             mt={8}
-                             p={4}
-                             borderWidth="2px"
-                             borderRadius="lg"
-                             display="flex"
-                             flexDirection="column"
-                             alignItems="center"
-                             justifyContent="center">
-                            {/*<form onSubmit={(e) => handleSubmitLogin(e)}>*/}
-                                <FormControl isRequired>
-                                    <FormLabel>NIK</FormLabel>
-                                    <InputGroup>
-                                        <Input value={nik} type='text' onChange={(e) => {handleInputNumberOnly(e)}} onKeyDown={(e) => {handleNIKKeyDown(e)}} maxLength={10}/>
-                                    </InputGroup>
-                                    {/*<FormHelperText></FormHelperText>*/}
-                                </FormControl>
-                                <FormControl isRequired>
-                                    <FormLabel>Password</FormLabel>
-                                    <InputGroup>
-                                        <Input value={password} type={showPassword ? 'text' : 'password'} onChange={(e) => {setPassword(e.target.value)}} />
-                                        <InputRightElement width='4.5rem'>
-                                            <Button h='1.75rem' size='sm' onClick={handleShowHidePassword}>
-                                                {showPassword ? 'Hide' : 'Show'}
-                                            </Button>
-                                        </InputRightElement>
-                                        {/*<FormHelperText></FormHelperText>*/}
-                                        <FormErrorMessage>{errorMessage}</FormErrorMessage>
-                                    </InputGroup>
-                                </FormControl>
-                                <Box height={5}>
-                                </Box>
-                                {errorMessage}
-                                <ButtonComponent title={'Submit'}
-                                                 onClick={ async (e) => {
-                                                     setErrorMessage('');
-                                                     await handleSubmitLogin(e);
-                                                 }}></ButtonComponent>
-                            {/*</form>*/}
+        <CustomContainerCenter>
+            <CustomTypography size={'XL'}>
+                Log In
+            </CustomTypography>
+            <CustomSpacer height={Constants(4)}></CustomSpacer>
+            <Box>
+                <CustomTextField
+                    label="NIK"
+                    type="text"
+                    required
+                    value={nik}
+                    onChange={(e) => setNik(e.target.value)}
+                    sx={{ mb: 2 }}
+                />
+                <CustomTextField
+                    label="Password"
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    sx={{ mb: 2 }}
+                />
+                <CustomButton disabled={isLoading} type="submit" variant="contained" color="primary" fullWidth onClick={() => {
+                    submitLogin().then(() => {
+                        console.log('Submit Button Clicked!')
+                        setIsLoading(true);
+                    })}
+                }>
+                    {isLoading ? (<CustomCircularProgressBar color={'inherit'}></CustomCircularProgressBar>): 'Submit'}
+                </CustomButton>
 
-                            <Box margin={15}/>
-                            <Flex justifyContent="center" alignItems="center">
-                                <Text p="2" fontSize="m">
-                                    Doesn't have an account? {' '}
-                                    <Link onClick={() => router.push('/register')} textDecoration="underline" _hover={{ color: 'red.500' }}>
-                                        Register
-                                    </Link>
-                                </Text>
-                            </Flex>
-                        </Box>
-                    </VStack>
-                </Flex>
-            </Center>
-        </HeaderComponent>
-        </>
+                <CustomToast open={toastOpen} onClose={handleCloseToast} message={message} severity={severity}></CustomToast>
+
+                <CustomSpacer height={Constants(1)}></CustomSpacer>
+
+                <Box textAlign={'center'}>
+                    <Link href="/register" passHref>
+                        Don't have an account? <MuiLink underline="hover" onClick={() => {router.push('/register')}}> Register here</MuiLink>
+                    </Link>
+                </Box>
+            </Box>
+
+        </CustomContainerCenter>
     );
 }
 

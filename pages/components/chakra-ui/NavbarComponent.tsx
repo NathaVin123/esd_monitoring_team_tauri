@@ -21,7 +21,7 @@ import {
 
 import Image from 'next/image';
 
-import PolytronIcon from '../../public/assets/polytron-icon.png';
+import PolytronIcon from '../../../public/assets/polytron-icon.png';
 
 import { MoonIcon, SunIcon, SettingsIcon } from '@chakra-ui/icons'
 

@@ -1,4 +1,4 @@
-import {HeaderComponent} from "@/pages/components/HeaderComponent";
+import {HeaderComponent} from "@/pages/components/chakra-ui/HeaderComponent";
 
 export function CaseList() {
     return (

@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import axios from 'axios';
 
-import {PORT ,URL_DEV_LOCAL, URL_DEV_SERVER, URL_PROD_SERVER} from './env';
+import {PORT ,URL_DEV_LOCAL, URL_DEV_SERVER, URL_PROD_SERVER} from '../../env';
 
 type LoginRequest = {
     nik: string;

@@ -1,21 +1,22 @@
-import ImageComponent from "../components/ImageComponent"
+import ImageComponent from "../components/chakra-ui/ImageComponent"
 import PolytronLogo from "../../public/assets/polytron-icon.png";
-import CircularProgressBarComponent from "../components/CircularProgressBarComponent";
+import CircularProgressBarComponent from "../components/chakra-ui/CircularProgressBarComponent";
 import {Container, VStack, Flex, Box, Center, useToast, Input} from '@chakra-ui/react'
-import TextComponent from "../components/TextComponent";
+import TextComponent from "../components/chakra-ui/TextComponent";
 import Image from "next/image";
 import { Inter } from "next/font/google";
-import {ButtonComponent} from "@/pages/components/ButtonComponent";
-import {ToastComponent} from "@/pages/components/ToastComponent";
-
-import { PORT, URL_DEV_LOCAL } from '../api/env';
+import {ButtonComponent} from "@/pages/components/chakra-ui/ButtonComponent";
+import {ToastComponent} from "@/pages/components/chakra-ui/ToastComponent";
 
 import {useEffect, useState} from "react";
 import sendConsoleLog from "@/utils/sendConsoleLog";
 import {useRouter} from "next/router";
-import SideMenuComponent from "@/pages/components/SideMenuComponent";
-import LayoutComponent from "@/pages/components/LayoutComponent";
+import SideMenuComponent from "@/pages/components/chakra-ui/SideMenuComponent";
+import LayoutComponent from "@/pages/components/chakra-ui/LayoutComponent";
 import axios from "axios";
+import {URLAPI} from "@/pages/api/env";
+import {concatAddressAPIRoute} from "@/utils/concatAddressAPIRoute";
+import {consoleLogAddressAPI} from "@/utils/consoleLogAddressAPI";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,14 +26,15 @@ export default function Dashboard() {
 
     const { nik } = router.query;
 
-    const BASE_URL = `http://localhost:3001`;
+    const [user, setUser] = useState<>([]);
 
     // const {token, setToken} = useState(null);
 
     const fetchToken = async () => {
         const routeAPI = '/api/auth/getToken';
+
         try {
-            const response = await axios.get(`${BASE_URL}${routeAPI}`);
+            const response = await axios.get(`${URLAPI}${routeAPI}`);
 
             console.log(response.data);
             // setToken(response.data);
@@ -42,48 +44,36 @@ export default function Dashboard() {
         }
     }
 
-    useEffect(() => {
-        fetchToken().then(() => {});
-    },[]);
-
-    const doFetchLoginData = async () => {
-        console.log('Do fetch login data');
-        const routeAPI = '/api/auth/loginUser';
-        try {
-            const formData = {
-                nik: nik,
-            };
-
-            const response = await axios.post(`http://${URL_DEV_LOCAL}:${PORT}/api/auth/loginUser`, formData);
-
-            console.log(response);
-
-            // return [response.data.message, response.data.success];
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            return [JSON.stringify(error), 'false']
-        }
-    };
-
     const doGetUser = async () => {
         console.log('Run API Get User With Role');
 
         const routeAPI = '/api/auth/getUserWithRole';
+
+        const addressAPI = concatAddressAPIRoute(URLAPI, routeAPI);
+
+        await consoleLogAddressAPI('POST', addressAPI);
 
         try {
             const formData = {
                 nik: nik,
             }
 
-            const response = await axios.post(`${BASE_URL}${routeAPI}`)
+            console.log(formData);
+
+            const response = await axios.post(addressAPI, [formData]);
 
             console.log(response.data);
-
+            setUser(response.data.data);
         } catch (error) {
             console.error('Error fetching data:', error);
             return [JSON.stringify(error), 'false']
         }
     }
+
+    useEffect(() => {
+        doGetUser().then(() => console.log(user));
+        // fetchToken().then(() => {});
+    },[]);
 
     // const [nik, setNik] = useState<string>('');
     // const [password, setPassword] = useState('');

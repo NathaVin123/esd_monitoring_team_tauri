@@ -1,6 +1,6 @@
 import axios from 'axios';
 import type { NextRequest, NextResponse } from "next/server";
-import {PORT, URL_DEV_LOCAL} from "@/pages/api/env";
+import {PORT, URL_DEV_LOCAL} from "@/env";
 
 export const fetchLoginData = async (nik: string, password: string) => {
     const routeAPI = '/api/auth/loginUser';

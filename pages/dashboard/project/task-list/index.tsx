@@ -1,5 +1,5 @@
-import {HeaderComponent} from "@/pages/components/HeaderComponent";
-import LayoutComponent from "@/pages/components/LayoutComponent";
+import {HeaderComponent} from "@/pages/components/chakra-ui/HeaderComponent";
+import LayoutComponent from "@/pages/components/chakra-ui/LayoutComponent";
 
 export function TaskList() {
     return (

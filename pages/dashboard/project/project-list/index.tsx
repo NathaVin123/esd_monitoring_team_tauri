@@ -1,4 +1,4 @@
-import LayoutComponent from "@/pages/components/LayoutComponent";
+import LayoutComponent from "@/pages/components/chakra-ui/LayoutComponent";
 
 
 export function ProjectList() {
