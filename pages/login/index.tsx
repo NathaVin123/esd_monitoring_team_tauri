@@ -53,13 +53,13 @@ export function Login() {
         }
         setIsLoading(true);
         const [success, message] = await doFetchLoginData();
-        if (success === false) {
+        if (!success) {
             setSeverity('warning');
             setMessage(message);
-        } else if (success === true) {
+        } else if (success) {
             setSeverity('success');
             setMessage(message);
-            router.replace('/dashboard');
+            await router.replace('/dashboard');
         } else {
             setSeverity('error');
             setMessage('Something went wrong!');
@@ -80,11 +80,9 @@ export function Login() {
 
             const response = await axios.post(`${URLAPI}${routeAPI}`, formData);
 
-            console.log(response.data.data.token);
-            console.log(response.data.success);
-
             if (response.data.success) {
                 localStorage.setItem('token', response.data.data.token);
+                localStorage.setItem('nikUser', response.data.data.nik);
             }
 
             return [response.data.success, response.data.message];

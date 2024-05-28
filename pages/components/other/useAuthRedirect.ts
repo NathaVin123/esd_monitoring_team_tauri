@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import {useEffect, useState} from 'react';
 import { useRouter } from 'next/router';
 import {jwtDecode} from 'jwt-decode';
 
@@ -9,8 +9,12 @@ interface DecodedToken {
 const useAuthRedirect = () => {
     const router = useRouter();
 
+    const [state, setState] = useState<boolean>(false);
+
+
     useEffect(() => {
         const token = localStorage.getItem('token');
+
 
         console.log('Token:', token);
         if (!token) {
@@ -30,8 +34,10 @@ const useAuthRedirect = () => {
             if (decodedToken.exp < currentTime) {
                 localStorage.removeItem('token');
                 router.replace('/login');
+                setState(false)
             } else {
                 router.replace('/dashboard');
+                setState(true);
             }
         } catch (error) {
             console.error('Error decoding token:', error);
@@ -39,6 +45,8 @@ const useAuthRedirect = () => {
             router.replace('/login');
         }
     }, [router]);
+
+    return state;
 };
 
 export default useAuthRedirect;

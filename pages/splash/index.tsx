@@ -9,7 +9,8 @@ import CustomSpacer from "@/pages/components/mui/CustomSpacer";
 import Constants from "@/pages/components/mui/value/contants";
 import CustomButton from "@/pages/components/mui/CustomButton";
 import CustomToast from "@/pages/components/mui/CustomToast";
-import useAuthRedirect from "@/pages/components/other/useAuthRedirect"; // Import the custom hook
+import useAuthRedirect from "@/pages/components/other/useAuthRedirect";
+import {AlertColor} from "@mui/material"; // Import the custom hook
 
 export default function Splash() {
 
@@ -17,12 +18,29 @@ export default function Splash() {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
+    const useAuthRedirect1= useAuthRedirect();
+
+    const handleCloseToast = () => {
+        setToastOpen(false);
+    };
+
+    const [message, setMessage] = useState<string>('');
+
+    const [severity, setSeverity] = useState<AlertColor>('info');
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         console.log('Token in Splash : '+ token);
-    }, []);
+        console.log('useAuthRedirect1 : '+useAuthRedirect1);
 
-    useAuthRedirect(); // Call the custom hook to handle redirection
+        if(useAuthRedirect1) {
+            setMessage('Login Successfully!')
+            setSeverity('success');
+        } else {
+            setMessage('Session over!')
+            setSeverity('warning');
+        }
+    }, []);
 
     return (
         <CustomContainerCenter>
@@ -31,6 +49,8 @@ export default function Splash() {
             <CustomSpacer height={Constants(2)} />
             <CustomLinearProgessBar />
             <CustomSpacer height={Constants(2)} />
+            <CustomToast open={toastOpen} onClose={handleCloseToast} message={message}></CustomToast>
         </CustomContainerCenter>
+
     );
 }

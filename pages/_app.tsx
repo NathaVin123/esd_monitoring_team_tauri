@@ -9,7 +9,9 @@ import { createTheme } from "@mui/material/styles";
 import { red, grey } from '@mui/material/colors';
 import { useEffect, useState } from "react";
 import CustomToolbar from "@/pages/components/mui/CustomToolbar";
-import {useRouter} from "next/router"; // Ensure the correct path to CustomToolbar
+import {useRouter} from "next/router";
+import CustomSideBar from "@/pages/components/mui/CustomSideBar";
+import * as React from "react"; // Ensure the correct path to CustomToolbar
 
 export const lightTheme = createTheme({
     palette: {
@@ -98,6 +100,16 @@ export default function App({ Component, pageProps }: AppProps) {
             localStorage.setItem('darkMode', newMode.toString());
             return newMode;
         });
+    };
+
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+
+    const handleDrawerOpen = () => {
+        setSidebarOpen(true);
+    };
+
+    const handleDrawerClose = () => {
+        setSidebarOpen(false);
     };
 
     return (
