@@ -83,6 +83,7 @@ export function Login() {
             if (response.data.success) {
                 localStorage.setItem('token', response.data.data.token);
                 localStorage.setItem('nikUser', response.data.data.nik);
+                // console.log('Data Nik : '+JSON.stringify(response.data));
             }
 
             return [response.data.success, response.data.message];

@@ -4,7 +4,7 @@ import { useEffect, useState, ReactNode } from 'react';
 
 // Define the prop types for CustomContainer
 interface CustomContainerProps {
-    darkMode: boolean;
+    darkMode?: boolean;
     children: ReactNode;
 }
 
@@ -19,6 +19,7 @@ export function CustomContainer({ darkMode, children }: CustomContainerProps) {
                 bgcolor: darkMode ? 'grey.900' : 'background.paper',
                 color: darkMode ? 'grey.300' : 'text.primary',
                 overflow: 'auto',
+                padding: '16px',
             }}
         >
             {children}
@@ -33,10 +34,6 @@ interface CustomContainerCenterProps {
 
 export function CustomContainerCenter({ children }: CustomContainerCenterProps) {
     const [darkMode, setDarkMode] = useState<boolean>(false);
-
-    useEffect(() => {
-        // You can add any side effects here if necessary to manage dark mode state
-    }, [darkMode]);
 
     return (
         <CustomContainer darkMode={darkMode}>

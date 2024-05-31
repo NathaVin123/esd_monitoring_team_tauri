@@ -15,7 +15,6 @@ const useAuthRedirect = () => {
     useEffect(() => {
         const token = localStorage.getItem('token');
 
-
         console.log('Token:', token);
         if (!token) {
             console.log('Not have token');
@@ -33,10 +32,10 @@ const useAuthRedirect = () => {
 
             if (decodedToken.exp < currentTime) {
                 localStorage.removeItem('token');
-                router.replace('/login');
+                router.replace('/login').then(r => {});
                 setState(false)
             } else {
-                router.replace('/dashboard');
+                router.replace('/dashboard').then(r => {});
                 setState(true);
             }
         } catch (error) {
@@ -44,7 +43,7 @@ const useAuthRedirect = () => {
             localStorage.removeItem('token');
             router.replace('/login');
         }
-    }, [router]);
+    }, []);
 
     return state;
 };

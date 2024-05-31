@@ -18,31 +18,36 @@ export default function Dashboard() {
     const router = useRouter();
 
     const [name, setName] = useState<string>('');
+    const [role, setRole] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
-    const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
     const doGetUser = async () => {
         setLoading(true);
-        console.log('Run API Get User With Role');
 
         const routeAPI = '/api/user/getUserWithRole';
 
         const nikUser = localStorage.getItem('nikUser');
 
-        console.log(nikUser);
-
         try {
             const formData = {
-                nik: '001',
+                nik: nikUser,
             }
-
-            console.log(formData);
 
             const response = await axios.post(`${URLAPI}${routeAPI}`, formData);
 
-            setName(response.data.data.full_name);
+            setName(response.data.data.full_name ?? '-');
+            setRole(response.data.data.role.role_name ?? '');
+            // setRole('System Analyst');
 
-            setLoading(false);
+            if(role === 'Admin') {
+                await router.replace('/dashboard/admin');
+            } else if(role === 'Developer') {
+                await router.replace('/dashboard/developer');
+            } else if(role === 'System Analyst') {
+                await router.replace('/dashboard/system_analyst');
+            } else {
+
+            }
         } catch (error) {
             console.error('Error fetching data:', error);
             return [JSON.stringify(error), 'false']
@@ -51,61 +56,23 @@ export default function Dashboard() {
 
     useEffect(() => {
         doGetUser().then(r => {
-            console.log('Get User Done')
+            setLoading(false);
         })
     }, [name]);
 
-    const handleSignOut = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('nikUser');
-        router.push('/login');
-    };
-
-    const handleDrawerClose = () => {
-        setSidebarOpen(false);
-    };
+    // const handleSignOut = () => {
+    //     localStorage.removeItem('token');
+    //     localStorage.removeItem('nikUser');
+    //     router.push('/login');
+    // };
+    //
+    // const handleDrawerClose = () => {
+    //     setSidebarOpen(false);
+    // };
 
     return (
-        <>
-            <CustomSideBar open={sidebarOpen} handleDrawerClose={handleDrawerClose}></CustomSideBar>
-            <Box
-                component="main"
-                sx={{
-                    flexGrow: 1,
-                    marginLeft: sidebarOpen ? '240px' : '0px', // Adjust this value based on your sidebar width
-                    transition: 'margin 0.3s',
-                    overflow: 'auto',
-                }}
-            >
-                <CustomContainer>
-                    <CustomSpacer height={Contants(10)}></CustomSpacer>
-                    <CustomTypography size={'M'}>
-                        Admin Center
-                    </CustomTypography>
-                    <Box style={{ justifyContent: 'flex-end', alignItems: 'center'}}>
-                        <CustomTypography>
-                            Welcome Back, {name}
-                        </CustomTypography>
-                        <CustomSpacer width={Contants(2)}></CustomSpacer>
-                        <CustomButton
-                            size='small'
-                            variant="contained"
-                            color="secondary"
-                            startIcon={<ExitToAppIcon />}
-                            onClick={handleSignOut}
-                        >
-                            Sign Out
-                        </CustomButton>
-                    </Box>
-                    {loading ? (<CustomCircularProgressBar></CustomCircularProgressBar>) : (
-                        <>
-                            <CustomTypography>
-                                Tes
-                            </CustomTypography>
-                        </>
-                    )}
-                </CustomContainer>
-            </Box>
-        </>
+        <CustomContainerCenter>
+            {loading ? (<CustomCircularProgressBar></CustomCircularProgressBar>) : (<></>)}
+        </CustomContainerCenter>
     );
 }
