@@ -9,7 +9,7 @@ const variants = {
     exit: { opacity: 0 },
 };
 
-const AnimatedLayout: React.FC = ({ children }) => {
+const AnimatedLayout: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     const { asPath } = useRouter();
 
     return (

@@ -10,13 +10,14 @@ import PolytronLogo from "@/public/assets/polytron-icon.png";
 
 const drawerWidth = 250;
 
-const Sidebar: React.FC<{ mobileOpen: boolean; handleDrawerToggle: () => void }> = ({
-                                                                                        mobileOpen,
-                                                                                        handleDrawerToggle,
-                                                                                    }) => {
-    let getRoute = localStorage.getItem('routeSidebar');
-    const parseRoute = JSON.parse(getRoute);
-    const routes = parseRoute;
+interface Route {
+    path: string;
+    text: string;
+}
+
+const Sidebar: React.FC<{ mobileOpen: boolean; handleDrawerToggle: () => void }> = ({mobileOpen, handleDrawerToggle}) => {
+    const getRoute = localStorage.getItem('routeSidebar');
+    const routes: Route[] = getRoute ? JSON.parse(getRoute) : [];
 
     const drawer = (
         <>
@@ -29,7 +30,7 @@ const Sidebar: React.FC<{ mobileOpen: boolean; handleDrawerToggle: () => void }>
                 </Box>
             </Box>
             <List>
-                {routes.map((route, index) => (
+                {routes.map((route: Route, index: number) => (
                     <Link href={route.path} key={route.text} passHref>
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}

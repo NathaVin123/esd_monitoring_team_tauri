@@ -1,6 +1,6 @@
 import {CustomContainerCenter} from "@/pages/components/mui/CustomContainer";
 import {useEffect} from "react";
-import {ro} from "date-fns/locale";
+import {CustomTypography} from "@/pages/components/mui/CustomTypography";
 
 export function adminDashboard() {
 
@@ -13,10 +13,12 @@ export function adminDashboard() {
     useEffect(() => {
         localStorage.setItem('customTitle', 'Admin Center')
         localStorage.setItem('routeSidebar', JSON.stringify(routes))
-    },[routes]);
+    },[]);
 
     return (
-        <CustomContainerCenter>Welcome to Admin</CustomContainerCenter>
+        <CustomContainerCenter>
+            Welcome to Admin
+        </CustomContainerCenter>
     );
 }
 

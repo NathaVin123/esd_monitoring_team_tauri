@@ -22,7 +22,7 @@ const CustomImage: React.FC<CustomImageProps> = ({ path, alt = 'image', size = '
 
     return (
         <Box sx={{ borderRadius: borderRadius, overflow: 'hidden', display: 'inline-block', width: dimension, height: dimension }}>
-            <Image src={path} alt={alt} width={dimension} height={dimension} />
+            <Image src={path} alt={alt} width={dimension} height={dimension} fetchPriority="auto" />
         </Box>
     );
 }

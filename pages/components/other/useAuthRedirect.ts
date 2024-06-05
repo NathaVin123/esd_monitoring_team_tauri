@@ -43,7 +43,7 @@ const useAuthRedirect = () => {
             localStorage.removeItem('token');
             router.replace('/login');
         }
-    }, []);
+    }, [router]);
 
     return state;
 };

@@ -1,13 +1,12 @@
 // components/MainLayout.tsx
 import React, { useState } from 'react';
-import {Box, CssBaseline, ThemeProvider, createTheme, IconButton} from '@mui/material';
-import MyAppBar from "@/pages/components/mui/DashboardComponent/AppBar";
-import Sidebar from "@/pages/components/mui/DashboardComponent/SideBar";
-import {grey, red} from "@mui/material/colors";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import {useRouter} from "next/router";
+import { Box, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { grey, red } from "@mui/material/colors";
+import { useRouter } from "next/router";
+import MyAppBar from './AppBar';
+import Sidebar from './SideBar';
 
-const MainLayout: React.FC = ({ children }) => {
+const MainLayout: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [darkMode, setDarkMode] = useState(false);
 
@@ -19,7 +18,7 @@ const MainLayout: React.FC = ({ children }) => {
         setDarkMode(!darkMode);
     };
 
-     const lightTheme = createTheme({
+    const lightTheme = createTheme({
         palette: {
             mode: 'light',
             primary: {
@@ -54,7 +53,7 @@ const MainLayout: React.FC = ({ children }) => {
         },
     });
 
-     const darkTheme = createTheme({
+    const darkTheme = createTheme({
         palette: {
             mode: 'dark',
             primary: {
@@ -89,7 +88,7 @@ const MainLayout: React.FC = ({ children }) => {
         },
     });
 
-     const router = useRouter();
+    const router = useRouter();
 
     return (
         <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
@@ -101,9 +100,7 @@ const MainLayout: React.FC = ({ children }) => {
                         <Sidebar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
                     </>
                 )}
-                <Box
-                    component="main"
-                >
+                <Box component="main">
                     {children}
                 </Box>
             </Box>

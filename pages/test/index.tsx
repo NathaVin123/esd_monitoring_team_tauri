@@ -13,7 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CustomImage from "@/pages/components/mui/CustomImage";
 import PolytronIcon from "../../public/assets/polytron-icon.png";
-import CustomSideBar from "@/pages/components/mui/CustomSideBar";
+// import CustomSideBar from "@/pages/components/mui/CustomSideBar";
 import CustomPieChart from "@/pages/components/mui/CustomPieChart";
 import {
     CustomCircularProgressBar,
@@ -83,7 +83,7 @@ export function Test() {
                     <Switch checked={darkMode} onChange={handleThemeChange} color="default" />
                 </Toolbar>
             </AppBar>
-            <CustomSideBar open={sidebarOpen} handleDrawerClose={handleDrawerClose} darkMode={darkMode} />
+            {/*<CustomSideBar open={sidebarOpen} handleDrawerClose={handleDrawerClose} darkMode={darkMode} />*/}
             <Box
                 component="main"
                 sx={{

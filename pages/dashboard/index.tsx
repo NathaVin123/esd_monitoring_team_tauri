@@ -37,6 +37,7 @@ export default function Dashboard() {
 
             setName(response.data.data.full_name ?? '-');
             setRole(response.data.data.role.role_name ?? '');
+            console.log(role);
             // setRole('System Analyst');
 
             if(role === 'Admin') {
@@ -46,7 +47,7 @@ export default function Dashboard() {
             } else if(role === 'System Analyst') {
                 await router.replace('/dashboard/system_analyst');
             } else {
-
+                return 'Somothing wrong';
             }
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -58,7 +59,7 @@ export default function Dashboard() {
         doGetUser().then(r => {
             setLoading(false);
         })
-    }, [name]);
+    }, [doGetUser]);
 
     // const handleSignOut = () => {
     //     localStorage.removeItem('token');
