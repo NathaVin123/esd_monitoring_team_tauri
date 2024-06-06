@@ -22,10 +22,13 @@ import { CustomContainer, CustomContainerCenter } from '@/pages/components/mui/C
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+
 import CustomSpacer from "@/pages/components/mui/CustomSpacer";
 import Constants from "@/pages/components/mui/value/contants";
 import axios from 'axios';
 import {URLAPI} from "@/pages/api/env";
+import CustomTextField from '@/pages/components/mui/CustomTextField';
 
 // interface User {
 //     id: number;
@@ -38,11 +41,6 @@ import {URLAPI} from "@/pages/api/env";
 const initialRows: [] = [];
 
 const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'uuid', headerName: 'UUID', width: 150, editable: true },
-    { field: 'nik', headerName: 'NIK', width: 110, editable: true },
-    { field: 'full_name', headerName: 'Full Name', width: 200, editable: true },
-    // { field: 'address', headerName: 'Address', width: 250, editable: true },
     {
         field: 'actions',
         headerName: 'Actions',
@@ -50,12 +48,28 @@ const columns: GridColDef[] = [
         sortable: false,
         renderCell: (params) => {
             return (
-                <IconButton onClick={() => handleDeleteRow(params.id)}>
-                    <DeleteIcon />
-                </IconButton>
+                <div>
+                    <IconButton onClick={() => handleDeleteRow(params.id)}>
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => handleDeleteRow(params.id)}>
+                        <DeleteIcon />
+                    </IconButton>
+                </div>
+
             );
         }
-    }
+    },
+    { field: 'id', headerName: 'ID', width: 50, sortable: true },
+    { field: 'uuid', headerName: 'UUID', width: 200, editable: true },
+    { field: 'nik', headerName: 'NIK', width: 110, editable: true },
+    { field: 'full_name', headerName: 'Full Name', width: 250, editable: true },
+    { field: 'email', headerName: 'Email', width: 200, editable: true},
+    { field: 'gender', headerName: 'Gender', width: 200, editable: true},
+    { field: 'created_at', headerName: 'Created At', width: 200, editable: true},
+    { field: 'updated_at', headerName: 'Updated At', width: 200, editable: true},
+    { field: 'created_by', headerName: 'Created By', width: 200, editable: true},
+    { field: 'updated_by', headerName: 'Updated By', width: 200, editable: true},
 ];
 
 export const UserMaster = () => {
@@ -81,8 +95,15 @@ export const UserMaster = () => {
                     [{
                         id: index,
                         uuid: data.uuid,
-                        nik: data.email,
-                        full_name: data.full_name
+                        nik: data.nik,
+                        full_name: data.full_name,
+                        email: data.email,
+                        gender: data.gender,
+                        active_user: data.active_user,
+                        created_at: data.created_at,
+                        created_by: data.created_by,
+                        updated_at: data.updated_at,
+                        updated_by: data.update_by,
                     }]
                 );
             })
@@ -167,11 +188,12 @@ export const UserMaster = () => {
             <CustomSpacer height={Constants(8)}></CustomSpacer>
             <Box sx={{ height: 'calc(100vh - 160px)', width: '100%' }}>
                 <Button variant="contained" color="primary" onClick={handleAddRow}>Add User</Button>
+                <CustomSpacer height={Constants(2)}></CustomSpacer>
                 <DataGrid
                     rows={rows}
                     columns={columns}
-                    pageSize={5}
-                    checkboxSelection
+                    pageSize={10}
+                    // checkboxSelection
                     onCellEditCommit={handleRowEditCommit}
                     onRowClick={(params) => handleDialogOpen(params.row as User)}
                     sx={{
@@ -249,40 +271,67 @@ export const UserMaster = () => {
                 <DialogTitle>Add User</DialogTitle>
                 <DialogContent>
                     <DialogContentText>Enter user details and save.</DialogContentText>
-                    <TextField
+                    <CustomTextField
                         margin="dense"
-                        name="name"
-                        label="Name"
+                        name="nik"
+                        label="NIK"
                         type="text"
                         fullWidth
-                        value={newUser.name}
+                        // value={newUser.name}
                         onChange={handleNewUserChange}
                     />
-                    <TextField
+                    <CustomTextField
                         margin="dense"
-                        name="age"
-                        label="Age"
-                        type="number"
+                        name="full_name"
+                        label="Full Name"
+                        type="text"
                         fullWidth
-                        value={newUser.age}
+                        // value={newUser.age}
                         onChange={handleNewUserChange}
                     />
-                    <TextField
+                    <CustomTextField
                         margin="dense"
                         name="email"
                         label="Email"
                         type="email"
                         fullWidth
-                        value={newUser.email}
+                        // value={newUser.email}
                         onChange={handleNewUserChange}
                     />
-                    <TextField
+                    <CustomTextField
                         margin="dense"
-                        name="address"
-                        label="Address"
-                        type="text"
+                        name="gender"
+                        label="Gender"
+                        type="select"
                         fullWidth
-                        value={newUser.address}
+                        // value={newUser.address}
+                        onChange={handleNewUserChange}
+                    />
+                    <CustomTextField
+                        margin="dense"
+                        name="active"
+                        label="Active"
+                        type="select"
+                        fullWidth
+                        // value={newUser.address}
+                        onChange={handleNewUserChange}
+                    />
+                    <CustomTextField
+                        margin="dense"
+                        name="role"
+                        label="Role"
+                        type="select"
+                        fullWidth
+                        // value={newUser.address}
+                        onChange={handleNewUserChange}
+                    />
+                    <CustomTextField
+                        margin="dense"
+                        name="team"
+                        label="Team"
+                        type="select"
+                        fullWidth
+                        // value={newUser.address}
                         onChange={handleNewUserChange}
                     />
                 </DialogContent>
@@ -294,5 +343,4 @@ export const UserMaster = () => {
         </CustomContainer>
     );
 };
-
 export default UserMaster;
