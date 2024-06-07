@@ -111,8 +111,8 @@ export default function CustomTextField(props: CustomTextFieldProps) {
             }}
         >
             {props.type === 'select' && props.options && props.options.map(option => (
-                <MenuItem key={option.key} value={option.value}>
-                    {option.key}
+                <MenuItem key={option.key} value={option.key}>
+                    {option.value}
                 </MenuItem>
             ))}
         </TextField>

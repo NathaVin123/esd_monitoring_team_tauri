@@ -4,7 +4,6 @@ import { Box, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import { grey, red } from "@mui/material/colors";
 import { useRouter } from "next/router";
 import MyAppBar from './AppBar';
-import Sidebar from './SideBar';
 
 const MainLayout: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -95,10 +94,7 @@ const MainLayout: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
                 {(router.pathname !== '/' && router.pathname !== '/login') && (
-                    <>
-                        <MyAppBar handleDrawerToggle={handleDrawerToggle} darkMode={darkMode} onThemeChange={handleThemeChange} hideHeaderTitle={mobileOpen} />
-                        <Sidebar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
-                    </>
+                    <MyAppBar handleDrawerToggle={handleDrawerToggle} darkMode={darkMode} onThemeChange={handleThemeChange} hideHeaderTitle={mobileOpen}></MyAppBar>
                 )}
                 <Box component="main">
                     {children}

@@ -4,9 +4,9 @@ import {Box, Drawer, List, ListItem, ListItemText} from '@mui/material';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import CustomTypography from "@/pages/components/mui/CustomTypography";
-import CustomImage from "@/pages/components/mui/CustomImage";
-import PolytronLogo from "@/public/assets/polytron-icon.png";
+import CustomTypography from "../pages/components/mui/CustomTypography";
+import CustomImage from "../pages/components/mui/CustomImage";
+import PolytronLogo from "../public/assets/polytron-icon.png";
 
 const drawerWidth = 250;
 

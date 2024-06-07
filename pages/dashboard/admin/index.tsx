@@ -11,8 +11,8 @@ export function adminDashboard() {
     ];
 
     useEffect(() => {
-        localStorage.setItem('customTitle', 'Admin Center')
-        localStorage.setItem('routeSidebar', JSON.stringify(routes))
+        // localStorage.setItem('customTitle', 'Admin Center')
+        // localStorage.setItem('routeSidebar', JSON.stringify(routes))
     },[]);
 
     return (

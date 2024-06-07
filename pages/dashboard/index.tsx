@@ -37,9 +37,10 @@ export default function Dashboard() {
 
             setName(response.data.data.full_name ?? '-');
             setRole(response.data.data.role.role_name ?? '');
-            console.log(role);
+            // console.log(role);
             // setRole('System Analyst');
 
+            // await router.replace('/dashboard/admin');
             if(role === 'Admin') {
                 await router.replace('/dashboard/admin');
             } else if(role === 'Developer') {
@@ -56,20 +57,11 @@ export default function Dashboard() {
     }
 
     useEffect(() => {
-        doGetUser().then(r => {
+        doGetUser().then(() => {
             setLoading(false);
         })
-    }, [doGetUser]);
+    }, [role]);
 
-    // const handleSignOut = () => {
-    //     localStorage.removeItem('token');
-    //     localStorage.removeItem('nikUser');
-    //     router.push('/login');
-    // };
-    //
-    // const handleDrawerClose = () => {
-    //     setSidebarOpen(false);
-    // };
 
     return (
         <CustomContainerCenter>
