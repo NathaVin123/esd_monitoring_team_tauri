@@ -10,7 +10,15 @@ import Constants from "@/pages/components/mui/value/contants";
 import CustomButton from "@/pages/components/mui/CustomButton";
 import CustomToast from "@/pages/components/mui/CustomToast";
 import useAuthRedirect from "@/pages/components/other/useAuthRedirect";
-import {AlertColor} from "@mui/material"; // Import the custom hook
+import {AlertColor} from "@mui/material";
+import axios from "axios";
+import {URLAPI} from "@/pages/api/env";
+import {jwtDecode} from "jwt-decode";
+import {router} from "next/client";
+
+interface DecodedToken {
+    exp: number;
+}
 
 export default function Splash() {
 
@@ -18,7 +26,11 @@ export default function Splash() {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
-    const useAuthRedirect1= useAuthRedirect();
+    const [state, setState] = useState<boolean>(false);
+
+    // const doUseAuthRedirect = useAuthRedirect();
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleCloseToast = () => {
         setToastOpen(false);
@@ -28,19 +40,66 @@ export default function Splash() {
 
     const [severity, setSeverity] = useState<AlertColor>('info');
 
+    const doCheckConnectivityToServer = async()  => {
+        try {
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const useAuthRedirect = async () => {
+            try {
+                const routeAPI: string = '/api/auth/checkConnectivity';
+
+                console.log(URLAPI+routeAPI);
+                await axios.get(URLAPI+routeAPI);
+
+                const token = localStorage.getItem('token');
+
+                if (!token) {
+                    await router.replace('/login');
+                    return;
+                }
+
+                const decodedToken = jwtDecode<DecodedToken>(token);
+
+                const currentTime = Date.now() / 1000;
+
+                console.log('Token Expiration Time:', decodedToken.exp);
+                console.log('Current Time:', currentTime);
+
+                if (decodedToken.exp < currentTime) {
+                    localStorage.removeItem('token');
+                    router.replace('/login').then(r => {});
+                    setState(false)
+                    return false;
+                } else {
+                    router.replace('/dashboard').then(r => {});
+                    setState(true);
+                    return false;
+                }
+            } catch (error) {
+                console.log(error);
+                localStorage.removeItem('token');
+
+                await router.replace('/no_connection');
+            }
+    };
+
     useEffect(() => {
         const token = localStorage.getItem('token');
-        console.log('Token in Splash : '+ token);
-        console.log('useAuthRedirect1 : '+useAuthRedirect1);
 
-        if(useAuthRedirect1) {
-            setMessage('Login Successfully!')
-            setSeverity('success');
-        } else {
-            setMessage('Session over!')
-            setSeverity('warning');
-        }
+        setIsLoading(true);
+
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const doUseAuthRedirect = useAuthRedirect();
+
+        setIsLoading(false);
+
     }, []);
+
 
     return (
         <CustomContainerCenter>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useCallback, useEffect, useState} from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { URLAPI } from "@/pages/api/env";
@@ -13,6 +13,9 @@ import CustomToast from "@/pages/components/mui/CustomToast";
 import { CustomCircularProgressBar } from "@/pages/components/mui/CustomProgressBar";
 
 import Link from 'next/link';
+import CustomImage from "@/pages/components/mui/CustomImage";
+
+import PolytronIcon from '../../public/assets/polytron-icon.png';
 
 export function Login() {
     const router = useRouter();
@@ -29,9 +32,19 @@ export function Login() {
 
     const [result, setResult] = useState<any>();
 
+    const [errors, setErrors] = useState({ nik: false, password: false });
+
     const handleCloseToast = () => {
         setToastOpen(false);
     };
+
+    const handleNikError = useCallback((hasError) => {
+        setErrors((prev) => ({ ...prev, nik: hasError }));
+    }, []);
+
+    const handlePasswordError = useCallback((hasError) => {
+        setErrors((prev) => ({ ...prev, password: hasError }));
+    }, []);
 
     useEffect(() => {
         validateInput(nik, password);
@@ -44,6 +57,7 @@ export function Login() {
             setToastOpen(true);
             return false;
         }
+
         return true;
     };
 
@@ -95,17 +109,23 @@ export function Login() {
 
     return (
         <CustomContainerCenter>
-            <CustomTypography size={'XL'}>
+            <CustomImage path={PolytronIcon}></CustomImage>
+            <CustomTypography bold size={'XL'}>
+                ESD Monitoring Team
+            </CustomTypography>
+            <CustomSpacer height={Constants(4)} />
+            <CustomTypography size={'L'}>
                 Log In
             </CustomTypography>
             <CustomSpacer height={Constants(4)} />
             <Box>
                 <CustomTextField
                     label="NIK"
-                    type="text"
+                    type="number"
                     required
                     value={nik}
                     onChange={(e) => setNik(e.target.value)}
+                    onError={handleNikError}
                     sx={{ mb: 2 }}
                 />
                 <CustomTextField
@@ -114,6 +134,7 @@ export function Login() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    onError={handlePasswordError}
                     sx={{ mb: 2 }}
                 />
                 <CustomButton disabled={isLoading} type="submit" variant="contained" color="primary" fullWidth onClick={submitLogin}>

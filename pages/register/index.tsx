@@ -65,7 +65,9 @@ export function RegisterRole() {
                         handleRoleSelection('Developer').then(r => {
                             console.log(r +' selected');
                         });
-                    }}>Developer</CustomButton>
+                    }}>
+                        Developer
+                    </CustomButton>
                     <CustomSpacer width={Contants(2)}></CustomSpacer>
                     <CustomButton leftIcon={<AssignmentIndIcon />} type={'button'} variant={'contained'} onClick={() => {
                         handleRoleSelection('System Analyst').then(r => {

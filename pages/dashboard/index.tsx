@@ -3,15 +3,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { CustomContainer, CustomContainerCenter } from "@/pages/components/mui/CustomContainer";
 import { URLAPI } from "@/pages/api/env";
-import Button from '@mui/material/Button';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import CustomCircularProgressBar from "@/pages/components/mui/CustomProgressBar";
-import CustomButton from "@/pages/components/mui/CustomButton";
-import CustomTypography from "@/pages/components/mui/CustomTypography";
-import CustomSpacer from "@/pages/components/mui/CustomSpacer";
-import Contants from "@/pages/components/mui/value/contants";
-import CustomSideBar from "@/pages/components/mui/CustomSideBar";
-import { Box } from "@mui/material";
 
 export default function Dashboard() {
 
@@ -37,10 +29,7 @@ export default function Dashboard() {
 
             setName(response.data.data.full_name ?? '-');
             setRole(response.data.data.role.role_name ?? '');
-            // console.log(role);
-            // setRole('System Analyst');
 
-            // await router.replace('/dashboard/admin');
             if(role === 'Admin') {
                 await router.replace('/dashboard/admin');
             } else if(role === 'Developer') {

@@ -11,14 +11,9 @@ import axios from 'axios';
 import {URLAPI} from "@/pages/api/env";
 import CustomTextField from '@/pages/components/mui/CustomTextField';
 import CustomTypography from '@/pages/components/mui/CustomTypography';
+import MyAppBar from "@/pages/components/mui/DashboardComponent/AppBar";
+import {routes} from './routes';
 
-// interface User {
-//     id: number;
-//     name: string;
-//     age: number;
-//     email: string;
-//     address: string;
-// }
 
 const initialRows: [] = [];
 
@@ -52,7 +47,8 @@ const columns: GridColDef[] = [
     { field: 'updated_by', headerName: 'Updated By', width: 200, editable: true},
 ];
 
-export const userMaster = () => {
+export const RoleMaster = () => {
+
     const [rows, setRows] = useState<User[]>(initialRows);
     const [selectedRow, setSelectedRow] = useState<User | null>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -161,6 +157,7 @@ export const userMaster = () => {
 
     return (
         <CustomContainer>
+            <MyAppBar routes={routes}></MyAppBar>
             <CustomSpacer height={Constants(8)}></CustomSpacer>
             <CustomTypography bold size={"M"}>Role Master</CustomTypography>
             <CustomSpacer height={Constants(2)}></CustomSpacer>
@@ -322,4 +319,4 @@ export const userMaster = () => {
     );
 }
 
-export default userMaster;
+export default RoleMaster;

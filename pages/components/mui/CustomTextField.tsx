@@ -18,6 +18,7 @@ export default function CustomTextField(props: CustomTextFieldProps) {
     const [helperText, setHelperText] = useState('');
 
     const validateInput = useCallback((value: string) => {
+        let hasError = false;
         if (props.required && value.trim() === '') {
             setError(true);
             setHelperText('This field is required');
@@ -33,10 +34,13 @@ export default function CustomTextField(props: CustomTextFieldProps) {
         } else if (props.type === 'time' && !isValidTime(value)) {
             setError(true);
             setHelperText('Invalid time format');
-        } else {
+        }
+        else {
+            hasError = true;
             setError(false);
             setHelperText('');
         }
+
     }, [props.required, props.type]);
 
     useEffect(() => {
@@ -63,6 +67,10 @@ export default function CustomTextField(props: CustomTextFieldProps) {
         return /^([01]\d|2[0-3]):([0-5]\d)$/.test(value);
     };
 
+    // const isValidNumber = (value: string) => {
+    //     return /^\d+$/g.test(value);
+    // };
+
     return (
         <TextField
             variant="filled" // Default variant
@@ -75,6 +83,7 @@ export default function CustomTextField(props: CustomTextFieldProps) {
             helperText={helperText}
             select={props.type === 'select'}
             InputLabelProps={props.type === 'date' || props.type === 'datetime-local' || props.type === 'time' ? { shrink: true } : {}}
+            inputProps={props.type === 'number' ? { inputMode: 'numeric', pattern: '\\d*' } : {}}
             sx={{
                 '& .MuiFilledInput-root': {
                     backgroundColor: 'white', // Keep input field background in light mode
@@ -103,6 +112,13 @@ export default function CustomTextField(props: CustomTextFieldProps) {
                 },
                 '& .MuiInputBase-input': {
                     color: 'black', // Keep input text color black
+                    '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+                        '-webkit-appearance': 'none',
+                        margin: 0,
+                    },
+                    '&[type=number]': {
+                        '-moz-appearance': 'textfield', // Firefox
+                    },
                 },
                 '& .MuiSvgIcon-root': {
                     color: 'black', // Keep icons in the input (like clear button) black

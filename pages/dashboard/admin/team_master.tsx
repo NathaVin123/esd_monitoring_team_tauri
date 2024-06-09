@@ -10,6 +10,10 @@ import CustomTypography from '@/pages/components/mui/CustomTypography';
 import CustomSpacer from '@/pages/components/mui/CustomSpacer';
 import Constants from '@/pages/components/mui/value/contants';
 
+import {routes} from './routes';
+import MyAppBar from "@/pages/components/mui/DashboardComponent/AppBar";
+import CustomButton from "@/pages/components/mui/CustomButton";
+
 const columns: GridColDef[] = [
     {
         field: 'actions',
@@ -150,13 +154,15 @@ export const teamMaster = () => {
     const handleNewUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewUser({ ...newUser, [e.target.name]: e.target.value });
     };
+    // @ts-ignore
     return (
         <CustomContainer>
+            <MyAppBar routes={routes}></MyAppBar>
             <CustomSpacer height={Constants(8)}></CustomSpacer>
             <CustomTypography bold size={"M"}>Team Master</CustomTypography>
             <CustomSpacer height={Constants(2)}></CustomSpacer>
             <Box sx={{ height: 'calc(100vh - 160px)', width: '100%' }}>
-                <Button variant="contained" color="primary" onClick={handleAddRow}>Add Team</Button>
+                <CustomButton variant="contained" onClick={handleAddRow}>Add Team</CustomButton>
                 <CustomSpacer height={Constants(2)}></CustomSpacer>
                 <DataGrid
                     rows={rows}

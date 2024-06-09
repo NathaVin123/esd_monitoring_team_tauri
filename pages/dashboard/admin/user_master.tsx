@@ -13,6 +13,8 @@ import CustomTextField from '@/pages/components/mui/CustomTextField';
 import CustomTypography from '@/pages/components/mui/CustomTypography';
 import CustomButton from '@/pages/components/mui/CustomButton';
 import CustomCircularProgressBar from '@/pages/components/mui/CustomProgressBar';
+import {routes} from './routes';
+import MyAppBar from "@/pages/components/mui/DashboardComponent/AppBar";
 
 const initialRows: [] = [];
 
@@ -321,6 +323,7 @@ export const UserMaster = () => {
 
     return (
         <CustomContainer>
+            <MyAppBar routes={routes}></MyAppBar>
             {isLoading ? (<CustomCircularProgressBar></CustomCircularProgressBar>) : (
                 <>
                     <>

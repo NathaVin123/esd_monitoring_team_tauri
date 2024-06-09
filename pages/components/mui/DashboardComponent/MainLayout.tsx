@@ -93,9 +93,6 @@ const MainLayout: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
         <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
-                {(router.pathname !== '/' && router.pathname !== '/login') && (
-                    <MyAppBar handleDrawerToggle={handleDrawerToggle} darkMode={darkMode} onThemeChange={handleThemeChange} hideHeaderTitle={mobileOpen}></MyAppBar>
-                )}
                 <Box component="main">
                     {children}
                 </Box>
