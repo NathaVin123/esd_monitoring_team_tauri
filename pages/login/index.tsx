@@ -38,11 +38,11 @@ export function Login() {
         setToastOpen(false);
     };
 
-    const handleNikError = useCallback((hasError) => {
+    const handleNikError = useCallback((hasError : any) => {
         setErrors((prev) => ({ ...prev, nik: hasError }));
     }, []);
 
-    const handlePasswordError = useCallback((hasError) => {
+    const handlePasswordError = useCallback((hasError : any) => {
         setErrors((prev) => ({ ...prev, password: hasError }));
     }, []);
 
@@ -97,7 +97,6 @@ export function Login() {
             if (response.data.success) {
                 localStorage.setItem('token', response.data.data.token);
                 localStorage.setItem('nikUser', response.data.data.nik);
-                // console.log('Data Nik : '+JSON.stringify(response.data));
             }
 
             return [response.data.success, response.data.message];

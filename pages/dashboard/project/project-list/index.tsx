@@ -1,6 +1,5 @@
 import {CustomContainerCenter} from "@/pages/components/mui/CustomContainer";
 
-
 export function ProjectList() {
     return (
         <CustomContainerCenter>

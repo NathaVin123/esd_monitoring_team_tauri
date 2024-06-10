@@ -1,12 +1,8 @@
-// components/AppBar.tsx
 import React, {useEffect, useState} from 'react';
 import { AppBar, Toolbar, Typography, IconButton, useTheme, Box, Popover } from '@mui/material';
 import { useRouter } from "next/router";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CustomImage from "@/pages/components/mui/CustomImage";
 import CustomTypography from "@/pages/components/mui/CustomTypography";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -17,12 +13,14 @@ import Constants from '../value/contants';
 import axios from "axios";
 import {URLAPI} from "@/pages/api/env";
 
+interface routesInterface {
+    title: string;
+    route: string;
+}
+
 interface MyAppBarProps {
-    // handleDrawerToggle: () => void;
-    // darkMode: boolean;
-    // onThemeChange: () => void;
     hideHeaderTitle?: boolean;
-    routes? : [];
+    routes? : routesInterface[];
 }
 
 const MyAppBar: React.FC<MyAppBarProps> = ({ hideHeaderTitle, routes }) => {
@@ -69,29 +67,28 @@ const MyAppBar: React.FC<MyAppBarProps> = ({ hideHeaderTitle, routes }) => {
     const theme = useTheme();
     const router = useRouter();
 
-    const [routesList, setRoutesList] = useState<[]>([]);
+    const [routesList, setRoutesList] = useState<routesInterface[]>([]);
 
-    let nikFromStorage = localStorage.getItem('nikUser');
+    let nikFromStorage: string | null = localStorage.getItem('nikUser');
 
-    const [nik, setNik] = useState<string>(nikFromStorage);
+    const [nik, setNik] = useState<string | null>(nikFromStorage);
 
     useEffect(() => {
-        setRoutesList(routes ?? []);
+        // @ts-ignore
+        setRoutesList(routes);
         setNik(nikFromStorage ?? '');
     },[routes])
 
     const doFetchUser = () => {
         const addressAPI = '/api/user/getUserWithRole';
 
-        const request = [
+        const data = [
             {
 
             }
         ]
 
         const fetchUser = axios.post(URLAPI+addressAPI, nik);
-
-        setUser
     }
 
     const signOut = async () => {

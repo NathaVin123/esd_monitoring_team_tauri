@@ -9,7 +9,6 @@ import CustomSpacer from "@/pages/components/mui/CustomSpacer";
 import Constants from "@/pages/components/mui/value/contants";
 import CustomButton from "@/pages/components/mui/CustomButton";
 import CustomToast from "@/pages/components/mui/CustomToast";
-import useAuthRedirect from "@/pages/components/other/useAuthRedirect";
 import {AlertColor} from "@mui/material";
 import axios from "axios";
 import {URLAPI} from "@/pages/api/env";
@@ -84,7 +83,7 @@ export default function Splash() {
                 console.log(error);
                 localStorage.removeItem('token');
 
-                await router.replace('/no_connection');
+                // await router.replace('/noconnection');
             }
     };
 

@@ -19,7 +19,7 @@ import RefreshIcon from '@mui/icons-material/Refresh'; // Import Refresh icon
 
 const initialRows: [] = [];
 
-const TeamMaster = () => {
+const StatusMaster = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [rows, setRows] = useState<[]>(initialRows);
     const [selectedRow, setSelectedRow] = useState<any>(null);
@@ -27,8 +27,8 @@ const TeamMaster = () => {
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
 
-    const [teamUuid, setTeamUuid] = useState<string>('');
-    const [teamName, setTeamName] = useState<string>('');
+    const [statusUuid, setStatusUuid] = useState<string>('');
+    const [statusName, setStatusName] = useState<string>('');
     const [teamDescription, setTeamDescription] = useState<string>('');
 
     const columns: GridColDef[] = [
@@ -70,7 +70,7 @@ const TeamMaster = () => {
     }, []);
 
     const handleAddRow = () => {
-        setTeamName('');
+        setStatusName('');
         setTeamDescription('');
 
         setIsAddDialogOpen(true);
@@ -88,7 +88,7 @@ const TeamMaster = () => {
     const handleAddDialogSave = async () => {
         try {
             let dataNew = {
-                teamName: teamName,
+                statusName: statusName,
                 teamDescription: teamDescription,
                 // createdBy: createdBy,
             };
@@ -100,7 +100,7 @@ const TeamMaster = () => {
     };
 
     const handleNewTeamName = (e: any) => {
-        setTeamName(e.target.value);
+        setStatusName(e.target.value);
     };
 
     const handleNewTeamDescription = (e: any) => {
@@ -145,13 +145,13 @@ const TeamMaster = () => {
     const handleEditRow = (row: any) => {
         setSelectedRow([]);
 
-        setTeamUuid('')
-        setTeamName('');
+        setStatusUuid('')
+        setStatusName('');
         setTeamDescription('');
 
         setSelectedRow(row);
-        setTeamUuid(row.uuid);
-        setTeamName(row.team_name);
+        setStatusUuid(row.uuid);
+        setStatusName(row.team_name);
         setTeamDescription(row.team_description);
 
         setIsDialogOpen(true);
@@ -191,8 +191,8 @@ const TeamMaster = () => {
     const handleEditDialogSave = async () => {
         try {
             const updatedRow = {
-                uuid: teamUuid,
-                teamName: teamName,
+                uuid: statusUuid,
+                statusName: statusName,
                 teamDescription: teamDescription,
             };
 
@@ -284,7 +284,7 @@ const TeamMaster = () => {
                                 label="Team Name"
                                 type="text"
                                 fullWidth
-                                value={teamName}
+                                value={statusName}
                                 onChange={handleNewTeamName}
                             />
                             <CustomTextField
@@ -313,7 +313,7 @@ const TeamMaster = () => {
                                 label="Team Name"
                                 type="text"
                                 fullWidth
-                                value={teamName}
+                                value={statusName}
                                 onChange={handleNewTeamName}
                             />
                             <CustomTextField
@@ -336,7 +336,7 @@ const TeamMaster = () => {
                         <DialogTitle>Confirm Delete</DialogTitle>
                         <DialogContent>
                             <DialogContentText>
-                                Are you sure you want to delete this team?
+                                Are you sure you want to delete this status?
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
@@ -350,4 +350,4 @@ const TeamMaster = () => {
     );
 }
 
-export default TeamMaster;
+export default StatusMaster;

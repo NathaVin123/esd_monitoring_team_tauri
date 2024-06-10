@@ -1,7 +1,7 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 
 interface CustomTextFieldProps {
     type?: string;
@@ -9,16 +9,15 @@ interface CustomTextFieldProps {
     options?: { key: string; value: string }[];
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     sx?: object;
+    value?: string; // Add value prop
     [key: string]: any;
 }
 
 export default function CustomTextField(props: CustomTextFieldProps) {
-    const [value, setValue] = useState('');
     const [error, setError] = useState(false);
     const [helperText, setHelperText] = useState('');
 
     const validateInput = useCallback((value: string) => {
-        let hasError = false;
         if (props.required && value.trim() === '') {
             setError(true);
             setHelperText('This field is required');
@@ -34,24 +33,23 @@ export default function CustomTextField(props: CustomTextFieldProps) {
         } else if (props.type === 'time' && !isValidTime(value)) {
             setError(true);
             setHelperText('Invalid time format');
-        }
-        else {
-            hasError = true;
+        } else {
             setError(false);
             setHelperText('');
         }
-
     }, [props.required, props.type]);
 
     useEffect(() => {
-        validateInput(value);
-    }, [value, validateInput]);
+        if (props.value !== undefined) {
+            validateInput(props.value);
+        }
+    }, [props.value, validateInput]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(event.target.value);
         if (props.onChange) {
             props.onChange(event);
         }
+        validateInput(event.target.value);
     };
 
     const isValidDateTime = (value: string) => {
@@ -67,17 +65,13 @@ export default function CustomTextField(props: CustomTextFieldProps) {
         return /^([01]\d|2[0-3]):([0-5]\d)$/.test(value);
     };
 
-    // const isValidNumber = (value: string) => {
-    //     return /^\d+$/g.test(value);
-    // };
-
     return (
         <TextField
             variant="filled" // Default variant
             label="Custom TextField" // Default label
             fullWidth // Default full width
             {...props} // Spread the rest of the props
-            value={value}
+            value={props.value} // Use the value prop directly
             onChange={handleChange}
             error={error}
             helperText={helperText}

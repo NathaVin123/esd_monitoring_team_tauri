@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["next", "next/types/global", "next-intl"],
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
