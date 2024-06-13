@@ -37,7 +37,7 @@ export default function Dashboard() {
             } else if(role === 'System Analyst') {
                 await router.replace('/dashboard/system_analyst');
             } else {
-                return 'Somothing wrong';
+                return 'Something wrong';
             }
         } catch (error) {
             console.error('Error fetching data:', error);

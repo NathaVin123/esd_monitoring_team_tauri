@@ -108,46 +108,48 @@ export function Login() {
 
     return (
         <CustomContainerCenter>
-            <CustomImage path={PolytronIcon}></CustomImage>
-            <CustomTypography bold size={'XL'}>
-                ESD Monitoring Team
-            </CustomTypography>
-            <CustomSpacer height={Constants(4)} />
-            <CustomTypography size={'L'}>
-                Log In
-            </CustomTypography>
-            <CustomSpacer height={Constants(4)} />
             <Box>
-                <CustomTextField
-                    label="NIK"
-                    type="number"
-                    required
-                    value={nik}
-                    onChange={(e) => setNik(e.target.value)}
-                    onError={handleNikError}
-                    sx={{ mb: 2 }}
-                />
-                <CustomTextField
-                    label="Password"
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    onError={handlePasswordError}
-                    sx={{ mb: 2 }}
-                />
-                <CustomButton disabled={isLoading} type="submit" variant="contained" color="primary" fullWidth onClick={submitLogin}>
-                    {isLoading ? (<CustomCircularProgressBar color={'inherit'} />) : 'Submit'}
-                </CustomButton>
+                <CustomImage path={PolytronIcon}></CustomImage>
+                <CustomTypography bold size={'XL'}>
+                    ESD Monitoring Team
+                </CustomTypography>
+                <CustomSpacer height={Constants(4)} />
+                <CustomTypography size={'L'}>
+                    Log In
+                </CustomTypography>
+                <CustomSpacer height={Constants(4)} />
+                <Box>
+                    <CustomTextField
+                        label="NIK"
+                        type="number"
+                        required
+                        value={nik}
+                        onChange={(e) => setNik(e.target.value)}
+                        onError={handleNikError}
+                        sx={{ mb: 2 }}
+                    />
+                    <CustomTextField
+                        label="Password"
+                        type="password"
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        onError={handlePasswordError}
+                        sx={{ mb: 2 }}
+                    />
+                    <CustomButton disabled={isLoading} type="submit" variant="contained" color="primary" fullWidth onClick={submitLogin}>
+                        {isLoading ? (<CustomCircularProgressBar color={'inherit'} />) : 'Submit'}
+                    </CustomButton>
 
-                <CustomToast open={toastOpen} onClose={handleCloseToast} message={message} severity={severity} />
+                    <CustomToast open={toastOpen} onClose={handleCloseToast} message={message} severity={severity} />
 
-                <CustomSpacer height={Constants(1)} />
+                    <CustomSpacer height={Constants(1)} />
 
-                <Box textAlign={'center'}>
-                    <Link href="/register" passHref>
-                        Don&apos;t have an account? <MuiLink underline="hover" onClick={() => { router.push('/register') }}> Register here</MuiLink>
-                    </Link>
+                    <Box textAlign={'center'}>
+                        <Link href="/register" passHref>
+                            Don&apos;t have an account? <MuiLink underline="hover" onClick={() => { router.push('/register') }}> Register here</MuiLink>
+                        </Link>
+                    </Box>
                 </Box>
             </Box>
         </CustomContainerCenter>

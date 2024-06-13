@@ -12,7 +12,7 @@ import CustomTextField from '@/pages/components/mui/CustomTextField';
 import CustomTypography from '@/pages/components/mui/CustomTypography';
 import CustomButton from '@/pages/components/mui/CustomButton';
 import CustomCircularProgressBar from '@/pages/components/mui/CustomProgressBar';
-import { routes } from './routes';
+import { routes } from '@/routes/routes';
 import MyAppBar from "@/pages/components/mui/DashboardComponent/AppBar";
 import moment from 'moment';
 import RefreshIcon from '@mui/icons-material/Refresh'; // Import Refresh icon
@@ -29,7 +29,7 @@ const StatusMaster = () => {
 
     const [statusUuid, setStatusUuid] = useState<string>('');
     const [statusName, setStatusName] = useState<string>('');
-    const [teamDescription, setTeamDescription] = useState<string>('');
+    const [statusDescription, setStatusDescription] = useState<string>('');
 
     const columns: GridColDef[] = [
         {
@@ -52,8 +52,8 @@ const StatusMaster = () => {
         },
         { field: 'id', headerName: 'ID', width: 50, sortable: true },
         { field: 'uuid', headerName: 'UUID', width: 200, editable: false },
-        { field: 'team_name', headerName: 'Team Name', width: 200, editable: false },
-        { field: 'team_description', headerName: 'Team Description', width: 200, editable: false },
+        { field: 'status_name', headerName: 'Status Name', width: 200, editable: false },
+        { field: 'status_description', headerName: 'Status Description', width: 200, editable: false },
         { field: 'created_at', headerName: 'Created At', width: 200, editable: false},
         { field: 'updated_at', headerName: 'Updated At', width: 200, editable: false},
         { field: 'created_by', headerName: 'Created By', width: 200, editable: false},
@@ -63,15 +63,15 @@ const StatusMaster = () => {
     useEffect(() => {
         setIsLoading(true);
 
-        fetchTeam().then(() => {
-            console.log('Get All Team Completed')
+        fetchStatus().then(() => {
+            console.log('Get All Status Completed')
             setIsLoading(false);
         });
     }, []);
 
     const handleAddRow = () => {
         setStatusName('');
-        setTeamDescription('');
+        setStatusDescription('');
 
         setIsAddDialogOpen(true);
     };
@@ -89,11 +89,11 @@ const StatusMaster = () => {
         try {
             let dataNew = {
                 statusName: statusName,
-                teamDescription: teamDescription,
+                statusDescription: statusDescription,
                 // createdBy: createdBy,
             };
 
-            await createTeam(dataNew);
+            await createStatus(dataNew);
         } catch (error) {
             console.error("Failed to add user", error);
         }
@@ -104,41 +104,41 @@ const StatusMaster = () => {
     };
 
     const handleNewTeamDescription = (e: any) => {
-        setTeamDescription(e.target.value);
+        setStatusDescription(e.target.value);
     };
 
-    const fetchTeam = async () => {
+    const fetchStatus = async () => {
         try {
-            const routeAPI: string = '/api/team/getAllTeam';
+            const routeAPI: string = '/api/status/getAllStatus';
             console.log(URLAPI+routeAPI);
 
             const response = await axios.get(URLAPI+routeAPI);
-            let teamData = response.data.data.map((data: any, index: number) => ({
+            let statusData = response.data.data.map((data: any, index: number) => ({
                 id: index + 1,
                 uuid: data.uuid,
-                team_name: data.team_name ?? '-',
-                team_description: data.team_description ?? '-',
+                status_name: data.status_name ?? '-',
+                status_description: data.status_description ?? '-',
                 created_at: data.created_at ? moment(data.created_at).format('DD/MM/YYYY hh:mm:ss') : '-',
                 created_by: data.created_by ?? '-',
                 updated_at: data.updated_at ? moment(data.updated_at).format('DD/MM/YYYY hh:mm:ss') : '-',
                 updated_by: data.update_by ?? '-',
             }));
 
-            setRows(teamData);
+            setRows(statusData);
 
         } catch (error) {
             console.error("Failed to fetch users", error);
         }
     };
 
-    const createTeam = async (dataNew: any) => {
+    const createStatus = async (dataNew: any) => {
         try {
-            const routeAPI: string = '/api/team/createTeam';
+            const routeAPI: string = '/api/status/createStatus';
             await axios.post(URLAPI + routeAPI, dataNew);
             setIsAddDialogOpen(false);
-            await fetchTeam();
+            await fetchStatus();
         } catch (error) {
-            console.error("Failed to create team", error);
+            console.error("Failed to create status", error);
         }
     };
 
@@ -147,12 +147,12 @@ const StatusMaster = () => {
 
         setStatusUuid('')
         setStatusName('');
-        setTeamDescription('');
+        setStatusDescription('');
 
         setSelectedRow(row);
         setStatusUuid(row.uuid);
-        setStatusName(row.team_name);
-        setTeamDescription(row.team_description);
+        setStatusName(row.status_name);
+        setStatusDescription(row.status_description);
 
         setIsDialogOpen(true);
     };
@@ -169,10 +169,10 @@ const StatusMaster = () => {
 
     const handleConfirmDelete = async () => {
         try {
-            await deleteTeam(selectedRow);
+            await deleteStatus(selectedRow);
             setIsConfirmDialogOpen(false);
             setSelectedRow(null);
-            await fetchTeam();
+            await fetchStatus();
         } catch (error) {
             console.error("Failed to delete user", error);
         }
@@ -185,7 +185,7 @@ const StatusMaster = () => {
             uuid: row.uuid,
         };
 
-        await deleteTeam(deletedRow);
+        await deleteStatus(deletedRow);
     }
 
     const handleEditDialogSave = async () => {
@@ -193,39 +193,39 @@ const StatusMaster = () => {
             const updatedRow = {
                 uuid: statusUuid,
                 statusName: statusName,
-                teamDescription: teamDescription,
+                statusDescription: statusDescription,
             };
 
-            await updateTeam(updatedRow);
+            await updateStatus(updatedRow);
 
             setIsDialogOpen(false);
             setSelectedRow(null);
 
-            await fetchTeam();
+            await fetchStatus();
         } catch (error) {
             console.error("Failed to update user", error);
         }
     };
 
-    const deleteTeam = async (deleteRow: any) => {
+    const deleteStatus = async (deleteRow: any) => {
         try {
-            const routeAPI: string = `/api/team/deleteTeam`;
+            const routeAPI: string = `/api/status/deleteStatus`;
             console.log(URLAPI+routeAPI);
             await axios.post(URLAPI + routeAPI, deleteRow);
-            await fetchTeam();
+            await fetchStatus();
         } catch (error) {
             console.error("Failed to delete user", error);
         }
     };
 
-    const updateTeam = async (updatedRow: any) => {
+    const updateStatus = async (updatedRow: any) => {
         try {
-            const routeAPI: string = `/api/team/updateTeam`;
+            const routeAPI: string = `/api/status/updateStatus`;
             console.log(URLAPI+routeAPI);
             await axios.post(URLAPI + routeAPI, updatedRow);
-            await fetchTeam();
+            await fetchStatus();
         } catch (error) {
-            console.error("Failed to update team", error);
+            console.error("Failed to update status", error);
         }
     };
 
@@ -237,12 +237,12 @@ const StatusMaster = () => {
             ) : (
                 <>
                     <CustomSpacer height={Constants(8)}></CustomSpacer>
-                    <CustomTypography bold size={"M"}>Team Master</CustomTypography>
+                    <CustomTypography bold size={"M"}>Status Master</CustomTypography>
                     <CustomSpacer height={Constants(2)}></CustomSpacer>
                     <Box sx={{ height: 'calc(100vh - 160px)', width: '100%' }}>
                         <Box display="flex" flexDirection="row" alignItems="center" gap={2}>
-                            <CustomButton variant="contained" onClick={handleAddRow}>Add Team</CustomButton>
-                            <IconButton onClick={fetchTeam}>
+                            <CustomButton variant="contained" onClick={handleAddRow}>Add Status</CustomButton>
+                            <IconButton onClick={fetchStatus}>
                                 <RefreshIcon></RefreshIcon>
                             </IconButton>
                         </Box>
@@ -275,13 +275,13 @@ const StatusMaster = () => {
                     </Box>
 
                     <Dialog open={isAddDialogOpen} onClose={handleAddDialogClose}>
-                        <DialogTitle>Add Team</DialogTitle>
+                        <DialogTitle>Add Status</DialogTitle>
                         <DialogContent>
-                            <DialogContentText>Enter team details and save.</DialogContentText>
+                            <DialogContentText>Enter status details and save.</DialogContentText>
                             <CustomTextField
                                 margin="dense"
-                                name="team_name"
-                                label="Team Name"
+                                name="status_name"
+                                label="Status Name"
                                 type="text"
                                 fullWidth
                                 value={statusName}
@@ -289,11 +289,11 @@ const StatusMaster = () => {
                             />
                             <CustomTextField
                                 margin="dense"
-                                name="team_description"
-                                label="Team Description"
+                                name="status_description"
+                                label="Status Description"
                                 type="text"
                                 fullWidth
-                                value={teamDescription}
+                                value={statusDescription}
                                 onChange={handleNewTeamDescription}
                             />
                         </DialogContent>
@@ -304,13 +304,13 @@ const StatusMaster = () => {
                     </Dialog>
 
                     <Dialog open={isDialogOpen} onClose={handleDialogClose}>
-                        <DialogTitle>Edit Team</DialogTitle>
+                        <DialogTitle>Edit Status</DialogTitle>
                         <DialogContent>
-                            <DialogContentText>Update team details and save.</DialogContentText>
+                            <DialogContentText>Update status details and save.</DialogContentText>
                             <CustomTextField
                                 margin="dense"
-                                name="team_name"
-                                label="Team Name"
+                                name="status_name"
+                                label="Status Name"
                                 type="text"
                                 fullWidth
                                 value={statusName}
@@ -318,11 +318,11 @@ const StatusMaster = () => {
                             />
                             <CustomTextField
                                 margin="dense"
-                                name="team_description"
-                                label="Team Description"
+                                name="status_description"
+                                label="Status Description"
                                 type="text"
                                 fullWidth
-                                value={teamDescription}
+                                value={statusDescription}
                                 onChange={handleNewTeamDescription}
                             />
                         </DialogContent>

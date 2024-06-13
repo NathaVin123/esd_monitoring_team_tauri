@@ -12,7 +12,7 @@ import CustomTextField from '@/pages/components/mui/CustomTextField';
 import CustomTypography from '@/pages/components/mui/CustomTypography';
 import CustomButton from '@/pages/components/mui/CustomButton';
 import CustomCircularProgressBar from '@/pages/components/mui/CustomProgressBar';
-import { routes } from './routes';
+import { routes } from '../../../routes/routes';
 import MyAppBar from "@/pages/components/mui/DashboardComponent/AppBar";
 import moment from 'moment';
 import RefreshIcon from '@mui/icons-material/Refresh'; // Import Refresh icon

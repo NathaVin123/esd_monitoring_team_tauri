@@ -1,6 +1,6 @@
 import {CustomContainerCenter} from "@/pages/components/mui/CustomContainer";
 import MyAppBar from "@/pages/components/mui/DashboardComponent/AppBar";
-import {routes} from './routes';
+import {routes} from '@/routes/routes';
 
 export const adminDashboard = () => {
     return (

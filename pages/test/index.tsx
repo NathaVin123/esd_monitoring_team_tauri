@@ -1,42 +1,78 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { AppBar, Toolbar, IconButton, Typography, Box, Grid, Switch, CssBaseline, Divider } from '@mui/material';
-import { CustomButton } from "@/pages/components/mui/CustomButton";
-import CustomTextField from "@/pages/components/mui/CustomTextField";
-import CustomSpacer from "@/pages/components/mui/CustomSpacer";
-import Contants from "@/pages/components/mui/value/contants";
-import CustomTypography from "@/pages/components/mui/CustomTypography";
-import MenuIcon from '@mui/icons-material/Menu';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import AddIcon from '@mui/icons-material/Add';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import CustomImage from "@/pages/components/mui/CustomImage";
-import PolytronIcon from "../../public/assets/polytron-icon.png";
-// import CustomSideBar from "@/pages/components/mui/CustomSideBar";
-import CustomPieChart from "@/pages/components/mui/CustomPieChart";
-import {
-    CustomCircularProgressBar,
-    CustomLinearProgessBar
-} from "@/pages/components/mui/CustomProgressBar";
-// import CustomContainer, {CustomContainerCenter} from "@/pages/components/mui/CustomContainer";
-// import CustomLanguageSwitcher from "@/pages/components/mui/CustomLanguageSwitcher";
-
-import { useTranslation } from 'next-i18next'
-import {GetStaticProps} from "next";
-import { useTranslations } from 'next-intl';
-import CustomTimer from "@/pages/components/mui/CustomTimer";
 import {useRouter} from "next/router";
-import {CustomContainerCenter} from "@/pages/components/mui/CustomContainer";
+import MyAppBar from "@/pages/components/mui/DashboardComponent/AppBar";
+import CustomSideBar from "@/pages/components/mui/CustomSideBar";
+import CustomSpacer from "@/pages/components/mui/CustomSpacer";
+import Constants from "@/pages/components/mui/value/contants";
+import CustomTypography from "@/pages/components/mui/CustomTypography";
+import DeveloperDashaboard, {DeveloperDashboard} from "@/pages/dashboard/developer";
+import DevProjectPage from "@/pages/dashboard/developer/project";
+import {DevMonitoringPage} from "@/pages/dashboard/developer/monitoring";
+import {SettingPage} from "@/pages/setting";
+import AboutPage from "@/pages/about";
+import {useState} from "react";
+import {DevProjectTaskPage} from "@/pages/dashboard/developer/project/task";
 
 const drawerWidth = 240;
 
+const sidebarItems = [
+    { name: 'Dashboard', route: '/dashboard/developer' },
+    { name: 'Project', route: '/dashboard/developer/project' },
+    { name: 'Monitoring', route: '/dashboard/developer/monitoring' },
+    { name: 'Settings', route: '/settings' },
+    { name: 'About', route: '/about' },
+];
+
 export function Test() {
+    const [currentRoute, setCurrentRoute] = useState(sidebarItems[0].route); // Default to the first route
+
+    const handleNavigation = (route : any) => {
+        setCurrentRoute(route);
+    };
+
+    const router = useRouter();
+
+    const renderContent = () => {
+        switch (currentRoute) {
+            case '/dashboard/developer':
+                return <DeveloperDashboard />;
+            case '/dashboard/developer/project':
+                return <DevProjectPage />;
+            case '/dashboard/developer/monitoring':
+                return <DevMonitoringPage />;
+            case '/settings':
+                return <SettingPage />;
+            case '/about':
+                return <AboutPage />;
+            default:
+                return <div>404 - Page Not Found</div>;
+        }
+    };
 
     return (
-        <CustomContainerCenter>
-            <CustomTimer></CustomTimer>
-        </CustomContainerCenter>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh",
+          width: "100vw",
+        }}
+      >
+        <MyAppBar routes={[]} />
+        <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+          <CustomSideBar items={sidebarItems} onNavigate={handleNavigation} />
+          <div
+            style={{
+              flex: 1,
+              overflow: "auto",
+              padding: "0px",
+            }}
+          >
+            {renderContent()}
+            <CustomSpacer height={Constants(5)} />
+          </div>
+        </div>
+      </div>
     );
 
     // const [darkMode, setDarkMode] = useState(false);
@@ -195,7 +231,6 @@ export function Test() {
     //     </Box>
     // );
 
-    const router = useRouter();
 
     // const changeLanguage = (locale: string) => {
     //     router.push(router.pathname, router.asPath, { locale });

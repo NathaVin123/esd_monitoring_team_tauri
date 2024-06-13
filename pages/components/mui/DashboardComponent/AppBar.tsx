@@ -23,6 +23,17 @@ interface MyAppBarProps {
     routes? : routesInterface[];
 }
 
+function isLocalStorageAvailable() {
+    try {
+        const test = '__localStorage_test__';
+        localStorage.setItem(test, test);
+        localStorage.removeItem(test);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
 const MyAppBar: React.FC<MyAppBarProps> = ({ hideHeaderTitle, routes }) => {
 
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -67,26 +78,26 @@ const MyAppBar: React.FC<MyAppBarProps> = ({ hideHeaderTitle, routes }) => {
     const theme = useTheme();
     const router = useRouter();
 
-    const [routesList, setRoutesList] = useState<routesInterface[]>([]);
+    const [routesList, setRoutesList] = useState<routesInterface[] | undefined>([]);
 
-    let nikFromStorage: string | null = localStorage.getItem('nikUser');
+    const [valueNik , setValueNik] = useState<string | null>('');
 
-    const [nik, setNik] = useState<string | null>(nikFromStorage);
+
+    const [nik, setNik] = useState<string | null>('');
 
     useEffect(() => {
-        // @ts-ignore
         setRoutesList(routes);
-        setNik(nikFromStorage ?? '');
+        if(isLocalStorageAvailable()) {
+            setValueNik(localStorage.getItem('nikUser'));
+            setNik(localStorage.getItem('nikUser'));
+        } else {
+            setValueNik('');
+            setNik('');
+        }
     },[routes])
 
     const doFetchUser = () => {
         const addressAPI = '/api/user/getUserWithRole';
-
-        const data = [
-            {
-
-            }
-        ]
 
         const fetchUser = axios.post(URLAPI+addressAPI, nik);
     }
@@ -100,9 +111,8 @@ const MyAppBar: React.FC<MyAppBarProps> = ({ hideHeaderTitle, routes }) => {
         });
     }
 
-    // @ts-ignore
     return (
-        <AppBar>
+        <AppBar position={'static'}>
             <Toolbar sx={{
                 backgroundColor: theme.palette.background.paper,
                 color: theme.palette.text.primary,
@@ -116,9 +126,6 @@ const MyAppBar: React.FC<MyAppBarProps> = ({ hideHeaderTitle, routes }) => {
                 </Box>
                 ) : <></>}
                 <CustomSpacer width={Constants(4)}></CustomSpacer>
-                {/*<IconButton color="inherit" onClick={handleThemeChange} sx={{ ml: 'auto' }}>*/}
-                {/*    {!darkMode ? <Brightness7Icon /> : <Brightness4Icon />}*/}
-                {/*</IconButton>*/}
                 <IconButton
                     color="inherit"
                     onClick={handleMenuClick}
@@ -164,18 +171,20 @@ const MyAppBar: React.FC<MyAppBarProps> = ({ hideHeaderTitle, routes }) => {
                         width="100%"      // Ensures the Box takes full width of its container
                         justifyContent="flex-end"
                     >
-                        {routesList.map((item, index) => (
-                            <React.Fragment key={index}>
-                                <CustomSpacer height={Constants(1)}></CustomSpacer>
-                                <CustomSpacer height={Constants(2)}></CustomSpacer>
-                                <CustomTypography size={'S'} hoverable={true} onClick={() => {
-                                    router.replace(item.route);
-                                }}>
-                                    {item.title}
-                                </CustomTypography>
-                                <CustomSpacer height={Constants(1)}></CustomSpacer>
-                            </React.Fragment>
-                        ))}
+                        {routesList ? (
+                            routesList.map((item, index) => (
+                                <React.Fragment key={index}>
+                                    <CustomSpacer height={Constants(1)}></CustomSpacer>
+                                    <CustomSpacer height={Constants(2)}></CustomSpacer>
+                                    <CustomTypography size={'S'} hoverable={true} onClick={() => {
+                                        router.replace(item.route);
+                                    }}>
+                                        {item.title}
+                                    </CustomTypography>
+                                    <CustomSpacer height={Constants(1)}></CustomSpacer>
+                                </React.Fragment>
+                            ))) : <></>}
+
                     </Box>
                 </Popover>
                 <Popover
@@ -193,7 +202,7 @@ const MyAppBar: React.FC<MyAppBarProps> = ({ hideHeaderTitle, routes }) => {
                     }}
                 >
                     <Box p={2}>
-                        <Typography variant="h6">Welcome, fefjesifjsijfiesjfijsifjsif</Typography>
+                        <Typography variant="h6">Welcome, {}</Typography>
                         <CustomSpacer height={Constants(4)}></CustomSpacer>
                         <Typography variant="body1"></Typography>
                         {/* Add more profile information here */}

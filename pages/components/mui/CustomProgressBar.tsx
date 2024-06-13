@@ -18,4 +18,36 @@ export const CustomCircularProgressBar: React.FC<CustomCircularProgressBarProps>
     );
 };
 
+export const CustomProgressBarEntireScreen = ({ size = 80, thickness = 4 }) => {
+    return (
+        <Box
+            position="fixed"
+            top={0}
+            left={0}
+            width="100%"
+            height="100%"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            bgcolor="rgba(0, 0, 0, 0.5)"
+            zIndex={1300}
+        >
+            <Box position="relative" display="inline-flex">
+                <CircularProgress  color = 'primary'/>
+                <Box
+                    top={0}
+                    left={0}
+                    bottom={0}
+                    right={0}
+                    position="absolute"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                >
+                </Box>
+            </Box>
+        </Box>
+    );
+}
+
 export default CustomCircularProgressBar;
