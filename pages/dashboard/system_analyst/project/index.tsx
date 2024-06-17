@@ -5,3 +5,5 @@ export const SAProjectPage = () => {
         </>
     );
 }
+
+export default SAProjectPage;

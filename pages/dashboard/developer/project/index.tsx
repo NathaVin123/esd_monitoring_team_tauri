@@ -51,10 +51,10 @@ export const DevProjectPage = () => {
 
     const goToTask = (params : any) => {
         try {
-            const { project_tcode, project_name, task_list, case_list} = params.row;
+            const { project_tcode, project_name, task_list, case_list, sa_leader_name} = params.row;
             router.push({
                 pathname: '/dashboard/developer/project/task',
-                query: { project_tcode, project_name, task_list : JSON.stringify(task_list), case_list: JSON.stringify(case_list) }
+                query: { project_tcode, project_name, task_list : JSON.stringify(task_list), case_list: JSON.stringify(case_list) , sa_leader_name: sa_leader_name}
             }).then(() => {});
         } catch (error) {
             console.error(error);
@@ -105,8 +105,12 @@ export const DevProjectPage = () => {
                         {isLoading ? (
                             <CustomProgressBarEntireScreen></CustomProgressBarEntireScreen>
                         ) : (
-                            <DataGrid rows={rows} columns={columns} onRowClick={goToTask}>
-                            </DataGrid>
+                            <>
+                                <DataGrid rows={rows} columns={columns} onRowClick={goToTask}>
+                                </DataGrid>
+
+                            </>
+
                         )}
                     </div>
                 </div>

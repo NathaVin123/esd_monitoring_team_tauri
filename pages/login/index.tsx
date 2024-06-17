@@ -73,7 +73,12 @@ export function Login() {
         } else if (success) {
             setSeverity('success');
             setMessage(message);
-            await router.replace('/dashboard');
+            await router.replace({
+                pathname: '/dashboard',
+                query: { nik }
+            });
+
+            localStorage.setItem('nikUser', nik);
         } else {
             setSeverity('error');
             setMessage('Something went wrong!');
@@ -108,7 +113,6 @@ export function Login() {
 
     return (
         <CustomContainerCenter>
-            <Box>
                 <CustomImage path={PolytronIcon}></CustomImage>
                 <CustomTypography bold size={'XL'}>
                     ESD Monitoring Team
@@ -151,7 +155,6 @@ export function Login() {
                         </Link>
                     </Box>
                 </Box>
-            </Box>
         </CustomContainerCenter>
     );
 }

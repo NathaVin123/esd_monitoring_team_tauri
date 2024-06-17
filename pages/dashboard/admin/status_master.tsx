@@ -11,11 +11,12 @@ import { URLAPI } from "@/pages/api/env";
 import CustomTextField from '@/pages/components/mui/CustomTextField';
 import CustomTypography from '@/pages/components/mui/CustomTypography';
 import CustomButton from '@/pages/components/mui/CustomButton';
-import CustomCircularProgressBar from '@/pages/components/mui/CustomProgressBar';
+import CustomCircularProgressBar, {CustomProgressBarEntireScreen} from '@/pages/components/mui/CustomProgressBar';
 import { routes } from '@/routes/routes';
 import MyAppBar from "@/pages/components/mui/DashboardComponent/AppBar";
 import moment from 'moment';
-import RefreshIcon from '@mui/icons-material/Refresh'; // Import Refresh icon
+import RefreshIcon from '@mui/icons-material/Refresh';
+import {router} from "next/client"; // Import Refresh icon
 
 const initialRows: [] = [];
 
@@ -108,6 +109,7 @@ const StatusMaster = () => {
     };
 
     const fetchStatus = async () => {
+        setIsLoading(true);
         try {
             const routeAPI: string = '/api/status/getAllStatus';
             console.log(URLAPI+routeAPI);
@@ -125,8 +127,13 @@ const StatusMaster = () => {
             }));
 
             setRows(statusData);
-
-        } catch (error) {
+            setIsLoading(false);
+        } catch (error : any) {
+            await router.replace({
+                pathname: '/error',
+                query : {
+                    message: error.message,
+                }});
             console.error("Failed to fetch users", error);
         }
     };
@@ -137,7 +144,12 @@ const StatusMaster = () => {
             await axios.post(URLAPI + routeAPI, dataNew);
             setIsAddDialogOpen(false);
             await fetchStatus();
-        } catch (error) {
+        } catch (error : any) {
+            await router.replace({
+                pathname: '/error',
+                query : {
+                    message: error.message,
+                }});
             console.error("Failed to create status", error);
         }
     };
@@ -211,9 +223,16 @@ const StatusMaster = () => {
         try {
             const routeAPI: string = `/api/status/deleteStatus`;
             console.log(URLAPI+routeAPI);
-            await axios.post(URLAPI + routeAPI, deleteRow);
+            const response = axios.post(URLAPI + routeAPI, deleteRow);
+            console.log(response);
             await fetchStatus();
-        } catch (error) {
+        } catch (error : any) {
+            await router.replace({
+                pathname: '/error',
+                query : {
+                    message: error.message,
+                }});
+
             console.error("Failed to delete user", error);
         }
     };
@@ -224,22 +243,25 @@ const StatusMaster = () => {
             console.log(URLAPI+routeAPI);
             await axios.post(URLAPI + routeAPI, updatedRow);
             await fetchStatus();
-        } catch (error) {
+        } catch (error : any) {
+            await router.replace({
+                pathname: '/error',
+                query : {
+                    message: error.message,
+                }});
             console.error("Failed to update status", error);
         }
     };
 
     return (
-        <CustomContainer>
-            <MyAppBar routes={routes}></MyAppBar>
+        <>
             {isLoading ? (
-                <CustomCircularProgressBar></CustomCircularProgressBar>
+                <CustomProgressBarEntireScreen></CustomProgressBarEntireScreen>
             ) : (
-                <>
-                    <CustomSpacer height={Constants(8)}></CustomSpacer>
+                <div style={{height: '100vh', width: '85vw', overflow: 'hidden', padding: "20px"}}>
                     <CustomTypography bold size={"M"}>Status Master</CustomTypography>
                     <CustomSpacer height={Constants(2)}></CustomSpacer>
-                    <Box sx={{ height: 'calc(100vh - 160px)', width: '100%' }}>
+                    <Box sx={{height: 'calc(100vh - 160px)', width: '100%'}}>
                         <Box display="flex" flexDirection="row" alignItems="center" gap={2}>
                             <CustomButton variant="contained" onClick={handleAddRow}>Add Status</CustomButton>
                             <IconButton onClick={fetchStatus}>
@@ -344,9 +366,9 @@ const StatusMaster = () => {
                             <CustomButton variant={'contained'} onClick={handleConfirmDelete}>Delete</CustomButton>
                         </DialogActions>
                     </Dialog>
-                </>
+                </div>
             )}
-        </CustomContainer>
+        </>
     );
 }
 

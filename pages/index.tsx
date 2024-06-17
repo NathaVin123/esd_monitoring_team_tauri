@@ -7,7 +7,7 @@ export default function Home() {
 
 
   return (
-    // <Splash></Splash>
-      <Test></Test>
+    <Splash></Splash>
+    //   <Test></Test>
   );
 }

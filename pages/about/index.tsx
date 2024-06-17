@@ -13,7 +13,7 @@ export const AboutPage = () => {
             <CustomImage size={'XL'} path={PolytronLogo}></CustomImage>
             <CustomTypography size={'L'}>ESD Monitoring Team</CustomTypography>
             <CustomSpacer height={Constants(3)}></CustomSpacer>
-            <CustomTypography size={'S'}>Developed By : Vincent - 01017533</CustomTypography>
+            <CustomTypography size={'S'}>Developed By : Nathaniel Vincent Wibowo - 01017533</CustomTypography>
         </Box>
     );
 }

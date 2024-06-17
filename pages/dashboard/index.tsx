@@ -9,23 +9,26 @@ export default function Dashboard() {
 
     const router = useRouter();
 
+    const {nik} = router.query;
+
     const [name, setName] = useState<string>('');
     const [role, setRole] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
 
     const doGetUser = async () => {
-        setLoading(true);
-
-        const routeAPI = '/api/user/getUserWithRole';
-
-        const nikUser = localStorage.getItem('nikUser');
-
         try {
+            const nik = "001";
+            setLoading(true);
+
+            const routeAPI = '/api/user/getUserWithRole';
+
+            const nikUser = localStorage.getItem('nikUser');
+
             const formData = {
                 nik: nikUser,
             }
 
-            const response = await axios.post(`${URLAPI}${routeAPI}`, formData);
+            const response = await axios.post(URLAPI+routeAPI, formData);
 
             setName(response.data.data.full_name ?? '-');
             setRole(response.data.data.role.role_name ?? '');
@@ -37,11 +40,12 @@ export default function Dashboard() {
             } else if(role === 'System Analyst') {
                 await router.replace('/dashboard/system_analyst');
             } else {
-                return 'Something wrong';
+                return 'Something wrong with get role';
             }
         } catch (error) {
             console.error('Error fetching data:', error);
-            return [JSON.stringify(error), 'false']
+            router.replace('/error');
+            // return [JSON.stringify(error), 'false']
         }
     }
 

@@ -5,7 +5,6 @@ import CustomImage from "@/pages/components/mui/CustomImage";
 import CustomTypography from "@/pages/components/mui/CustomTypography";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import PolytronLogo from '../../../../public/assets/polytron-icon.png';
 import CustomSpacer from '../CustomSpacer';
@@ -44,6 +43,8 @@ const MyAppBar: React.FC<MyAppBarProps> = ({ hideHeaderTitle, routes }) => {
 
     const [anchorElMenu, setAnchorElMenu] = useState<null | HTMLElement>(null);
 
+    const [name, setName] = useState<string>('');
+
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -80,33 +81,58 @@ const MyAppBar: React.FC<MyAppBarProps> = ({ hideHeaderTitle, routes }) => {
 
     const [routesList, setRoutesList] = useState<routesInterface[] | undefined>([]);
 
-    const [valueNik , setValueNik] = useState<string | null>('');
 
-
-    const [nik, setNik] = useState<string | null>('');
+    // const [nik, setNik] = useState<string | null>('');
 
     useEffect(() => {
-        setRoutesList(routes);
-        if(isLocalStorageAvailable()) {
-            setValueNik(localStorage.getItem('nikUser'));
-            setNik(localStorage.getItem('nikUser'));
-        } else {
-            setValueNik('');
-            setNik('');
-        }
+        // setRoutesList(routes);
+        // if(isLocalStorageAvailable()) {
+        //     setNik(localStorage.getItem('nikUser'));
+        // } else {
+        //     setNik('');
+        // }
+        console.log('App Bar NIK : '+localStorage.getItem('nikUser'));
+
+        // setNik(localStorage.getItem('nikUser') ?? '-');
+
+        doFetchUser().then(() => {
+            console.log('Successfully fetching user');
+        })
+
     },[routes])
 
-    const doFetchUser = () => {
-        const addressAPI = '/api/user/getUserWithRole';
+    const doFetchUser = async () => {
+        const routeAPI: string = '/api/user/getUserWithRole';
 
-        const fetchUser = axios.post(URLAPI+addressAPI, nik);
+        const nik = localStorage.getItem('nikUser');
+
+        console.log('This is a nik 2', nik);
+
+        let data = {
+            nik: nik,
+        }
+
+        console.log(URLAPI + routeAPI , data);
+
+        const response = await axios.post(URLAPI + routeAPI, data);
+
+        let userData = response.data.data;
+
+        if(userData) {
+            console.log('Successfully Get User Profile');
+
+            setName(userData.full_name);
+        } else {
+            console.log('Something went wrong getting user');
+
+        }
     }
 
     const signOut = async () => {
         localStorage.removeItem('token');
-        localStorage.removeItem('nikUser');
+        // localStorage.removeItem('nikUser');
 
-        await router.replace('/login').then(() => {
+        await router.replace('/splash').then(() => {
             console.log('Back to Login');
         });
     }
@@ -126,17 +152,6 @@ const MyAppBar: React.FC<MyAppBarProps> = ({ hideHeaderTitle, routes }) => {
                 </Box>
                 ) : <></>}
                 <CustomSpacer width={Constants(4)}></CustomSpacer>
-                <IconButton
-                    color="inherit"
-                    onClick={handleMenuClick}
-                >
-                    <Box display="flex" flexDirection="row" alignItems="center">
-                        <ExpandMoreIcon />
-                        <CustomTypography>
-                            Menu
-                        </CustomTypography>
-                    </Box>
-                </IconButton>
                 <CustomSpacer width={Constants(2)}></CustomSpacer>
                 <IconButton
                     color="inherit"
@@ -145,48 +160,10 @@ const MyAppBar: React.FC<MyAppBarProps> = ({ hideHeaderTitle, routes }) => {
                     <Box display="flex" flexDirection="column" alignItems="center">
                         <AccountCircleIcon />
                         <CustomTypography>
-                            {nik}
+                            {name ?? '-'}
                         </CustomTypography>
                     </Box>
                 </IconButton>
-                <Popover
-                    id={idMenu}
-                    open={openMenu}
-                    anchorEl={anchorElMenu}
-                    onClose={handleMenuClose}
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'center',
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center',
-                    }}
-                >
-                    <Box
-                        p={2}
-                        display="flex"
-                        flexDirection="column"
-                        overflow="auto"  // Enables horizontal scrolling
-                        width="100%"      // Ensures the Box takes full width of its container
-                        justifyContent="flex-end"
-                    >
-                        {routesList ? (
-                            routesList.map((item, index) => (
-                                <React.Fragment key={index}>
-                                    <CustomSpacer height={Constants(1)}></CustomSpacer>
-                                    <CustomSpacer height={Constants(2)}></CustomSpacer>
-                                    <CustomTypography size={'S'} hoverable={true} onClick={() => {
-                                        router.replace(item.route);
-                                    }}>
-                                        {item.title}
-                                    </CustomTypography>
-                                    <CustomSpacer height={Constants(1)}></CustomSpacer>
-                                </React.Fragment>
-                            ))) : <></>}
-
-                    </Box>
-                </Popover>
                 <Popover
                     id={id}
                     open={open}
@@ -201,11 +178,20 @@ const MyAppBar: React.FC<MyAppBarProps> = ({ hideHeaderTitle, routes }) => {
                         horizontal: 'center',
                     }}
                 >
-                    <Box p={2}>
-                        <Typography variant="h6">Welcome, {}</Typography>
-                        <CustomSpacer height={Constants(4)}></CustomSpacer>
+                    <Box p={2} style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
                         <Typography variant="body1"></Typography>
-                        {/* Add more profile information here */}
+                        <IconButton
+                            color="inherit"
+                            onClick={() => {
+                                router.push('/profile');
+                            }}
+                        >
+                            <Box display="flex" flexDirection="row">
+                                <AccountCircleIcon />
+                                <CustomSpacer width={Constants(1)}></CustomSpacer>
+                                <CustomTypography>Profile</CustomTypography>
+                            </Box>
+                        </IconButton>
                         <IconButton
                             color="inherit"
                             onClick={() => {

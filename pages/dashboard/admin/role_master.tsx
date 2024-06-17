@@ -11,11 +11,12 @@ import { URLAPI } from "@/pages/api/env";
 import CustomTextField from '@/pages/components/mui/CustomTextField';
 import CustomTypography from '@/pages/components/mui/CustomTypography';
 import CustomButton from '@/pages/components/mui/CustomButton';
-import CustomCircularProgressBar from '@/pages/components/mui/CustomProgressBar';
-import { routes } from '../../../routes/routes';
+import CustomCircularProgressBar, {CustomProgressBarEntireScreen} from '@/pages/components/mui/CustomProgressBar';
+import { routes } from '@/routes/routes';
 import MyAppBar from "@/pages/components/mui/DashboardComponent/AppBar";
 import moment from 'moment';
-import RefreshIcon from '@mui/icons-material/Refresh'; // Import Refresh icon
+import RefreshIcon from '@mui/icons-material/Refresh';
+import {router} from "next/client"; // Import Refresh icon
 
 const initialRows: [] = [];
 
@@ -90,7 +91,6 @@ const RoleMaster = () => {
             let dataNew = {
                 roleName: roleName,
                 roleDescription: roleDescription,
-                // createdBy: createdBy,
             };
 
             await createRole(dataNew);
@@ -126,7 +126,12 @@ const RoleMaster = () => {
 
             setRows(roleData);
 
-        } catch (error) {
+        } catch (error : any) {
+            await router.replace({
+                pathname: '/error',
+                query : {
+                    message: error.message,
+                }});
             console.error("Failed to fetch users", error);
         }
     };
@@ -137,7 +142,12 @@ const RoleMaster = () => {
             await axios.post(URLAPI + routeAPI, dataNew);
             setIsAddDialogOpen(false);
             await fetchRole();
-        } catch (error) {
+        } catch (error : any) {
+            await router.replace({
+                pathname: '/error',
+                query : {
+                    message: error.message,
+                }});
             console.error("Failed to create role", error);
         }
     };
@@ -213,7 +223,12 @@ const RoleMaster = () => {
             console.log(URLAPI+routeAPI);
             await axios.post(URLAPI + routeAPI, deleteRow);
             await fetchRole();
-        } catch (error) {
+        } catch (error : any) {
+            await router.replace({
+                pathname: '/error',
+                query : {
+                    message: error.message,
+                }});
             console.error("Failed to delete user", error);
         }
     };
@@ -224,19 +239,22 @@ const RoleMaster = () => {
             console.log(URLAPI+routeAPI);
             await axios.post(URLAPI + routeAPI, updatedRow);
             await fetchRole();
-        } catch (error) {
+        } catch (error : any) {
+            await router.replace({
+                pathname: '/error',
+                query : {
+                    message: error.message,
+                }});
             console.error("Failed to update role", error);
         }
     };
 
     return (
-        <CustomContainer>
-            <MyAppBar routes={routes}></MyAppBar>
+        <>
             {isLoading ? (
-                <CustomCircularProgressBar></CustomCircularProgressBar>
+                <CustomProgressBarEntireScreen></CustomProgressBarEntireScreen>
             ) : (
-                <>
-                    <CustomSpacer height={Constants(8)}></CustomSpacer>
+                <div style={{height: '100vh', width: '85vw', overflow: 'hidden', padding: "20px"}}>
                     <CustomTypography bold size={"M"}>Role Master</CustomTypography>
                     <CustomSpacer height={Constants(2)}></CustomSpacer>
                     <Box sx={{ height: 'calc(100vh - 160px)', width: '100%' }}>
@@ -344,9 +362,9 @@ const RoleMaster = () => {
                             <CustomButton variant={'contained'} onClick={handleConfirmDelete}>Delete</CustomButton>
                         </DialogActions>
                     </Dialog>
-                </>
+                </div>
             )}
-        </CustomContainer>
+        </>
     );
 }
 

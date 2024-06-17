@@ -79,11 +79,10 @@ export default function Splash() {
                     setState(true);
                     return false;
                 }
-            } catch (error) {
+            } catch (error: any) {
+                await router.replace({pathname: '/error', query: {message: error.message}});
                 console.log(error);
                 localStorage.removeItem('token');
-
-                // await router.replace('/noconnection');
             }
     };
 

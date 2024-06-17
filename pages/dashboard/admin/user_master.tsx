@@ -11,13 +11,25 @@ import { URLAPI } from "@/pages/api/env";
 import CustomTextField from '@/pages/components/mui/CustomTextField';
 import CustomTypography from '@/pages/components/mui/CustomTypography';
 import CustomButton from '@/pages/components/mui/CustomButton';
-import CustomCircularProgressBar from '@/pages/components/mui/CustomProgressBar';
-import { routes } from '../../../routes/routes';
+import CustomCircularProgressBar, {CustomProgressBarEntireScreen} from '@/pages/components/mui/CustomProgressBar';
+import { routes } from '@/routes/routes';
 import MyAppBar from "@/pages/components/mui/DashboardComponent/AppBar";
 import moment from 'moment';
-import RefreshIcon from '@mui/icons-material/Refresh'; // Import Refresh icon
+import RefreshIcon from '@mui/icons-material/Refresh';
+import {router} from "next/client";
 
 const initialRows: [] = [];
+
+function isLocalStorageAvailable() {
+    try {
+        const test = '__localStorage_test__';
+        localStorage.setItem(test, test);
+        localStorage.removeItem(test);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
 
 const UserMaster = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -56,7 +68,7 @@ const UserMaster = () => {
             value: 'Non-Active',
         }
     ]);
-    const nikFromLocal: string | null = localStorage.getItem('nik');
+    // const nikFromLocal: string | null = localStorage.getItem('nik');
     const [createdBy, setCreatedBy] = useState<string>('');
 
     const columns: GridColDef[] = [
@@ -97,10 +109,12 @@ const UserMaster = () => {
         fetchUsers().then(() => {
             fetchDropdownTeam().then(() => {
                 fetchDropdownRole().then(() => {
-                    const nikFromLocal: string | null = localStorage.getItem('nikUser');
-                    console.log('Get All User Completed')
-                    setCreatedBy(nikFromLocal ?? '');
-                    setIsLoading(false);
+                    if(isLocalStorageAvailable()) {
+                        const nikFromLocal: string | null = localStorage.getItem('nikUser');
+                        console.log('Get All User Completed')
+                        setCreatedBy(nikFromLocal ?? '');
+                        setIsLoading(false);
+                    }
                 });
             });
         });
@@ -180,6 +194,7 @@ const UserMaster = () => {
 
     const fetchUsers = async () => {
         try {
+            setIsLoading(true);
             const routeAPI: string = '/api/user/getAllUser';
             const response = await axios.get(URLAPI + routeAPI);
 
@@ -200,7 +215,14 @@ const UserMaster = () => {
             }));
 
             setRows(userData);
-        } catch (error) {
+
+            setIsLoading(false);
+        } catch (error : any) {
+            await router.replace({
+                pathname: '/error',
+                query : {
+                    message: error.message,
+                }});
             console.error("Failed to fetch users", error);
         }
     };
@@ -221,7 +243,12 @@ const UserMaster = () => {
             }));
 
             setRoleOptions(roleOptions);
-        } catch (error) {
+        } catch (error : any) {
+            await router.replace({
+                pathname: '/error',
+                query : {
+                    message: error.message,
+                }});
             console.error("Failed to fetch roles", error);
         }
     };
@@ -242,18 +269,30 @@ const UserMaster = () => {
             }));
 
             setTeamOptions(teamOptions);
-        } catch (error) {
+        } catch (error : any) {
+            await router.replace({
+                pathname: '/error',
+                query : {
+                    message: error.message,
+                }});
             console.error("Failed to fetch teams", error);
         }
     };
 
     const createUser = async (dataNew: any) => {
         try {
+            setIsLoading(true);
             const routeAPI: string = '/api/user/createUser';
             await axios.post(URLAPI + routeAPI, dataNew);
             setIsAddDialogOpen(false);
             await fetchUsers();
-        } catch (error) {
+            setIsLoading(false);
+        } catch (error : any) {
+            await router.replace({
+                pathname: '/error',
+                query : {
+                    message: error.message,
+                }});
             console.error("Failed to create user", error);
         }
     };
@@ -334,10 +373,17 @@ const UserMaster = () => {
 
     const deleteUser = async (deleteRow: any) => {
         try {
+            setIsLoading(true);
             const routeAPI: string = `/api/user/deleteUser`;
             await axios.post(URLAPI + routeAPI, deleteRow);
             await fetchUsers();
-        } catch (error) {
+            setIsLoading(false);
+        } catch (error : any) {
+            await router.replace({
+                pathname: '/error',
+                query : {
+                    message: error.message,
+                }});
             console.error("Failed to delete user", error);
         }
     };
@@ -347,19 +393,22 @@ const UserMaster = () => {
             const routeAPI: string = `/api/user/updateUser`;
             await axios.post(URLAPI + routeAPI, updatedRow);
             await fetchUsers();
-        } catch (error) {
+        } catch (error : any) {
+            await router.replace({
+                pathname: '/error',
+                query : {
+                    message: error.message,
+                }});
             console.error("Failed to update user", error);
         }
     };
 
     return (
-        <CustomContainer>
-            <MyAppBar routes={routes}></MyAppBar>
+        <>
             {isLoading ? (
-                <CustomCircularProgressBar></CustomCircularProgressBar>
+                <CustomProgressBarEntireScreen></CustomProgressBarEntireScreen>
             ) : (
-                <>
-                    <CustomSpacer height={Constants(8)}></CustomSpacer>
+                <div style={{height: '100vh', width: '85vw', overflow:'hidden', padding: "20px"}}>
                     <CustomTypography bold size={"M"}>User Master</CustomTypography>
                     <CustomSpacer height={Constants(2)}></CustomSpacer>
                     <Box sx={{ height: 'calc(100vh - 160px)', width: '100%' }}>
@@ -565,9 +614,9 @@ const UserMaster = () => {
                             <CustomButton variant={'contained'} onClick={handleConfirmDelete}>Delete</CustomButton>
                         </DialogActions>
                     </Dialog>
-                </>
+                </div>
             )}
-        </CustomContainer>
+        </>
     );
 };
 

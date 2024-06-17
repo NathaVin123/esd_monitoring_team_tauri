@@ -13,67 +13,69 @@ import AboutPage from "@/pages/about";
 import {useState} from "react";
 import {DevProjectTaskPage} from "@/pages/dashboard/developer/project/task";
 
-const drawerWidth = 240;
-
-const sidebarItems = [
-    { name: 'Dashboard', route: '/dashboard/developer' },
-    { name: 'Project', route: '/dashboard/developer/project' },
-    { name: 'Monitoring', route: '/dashboard/developer/monitoring' },
-    { name: 'Settings', route: '/settings' },
-    { name: 'About', route: '/about' },
-];
+// const drawerWidth = 240;
+//
+// const sidebarItems = [
+//     { name: 'Dashboard', route: '/dashboard/developer' },
+//     { name: 'Project', route: '/dashboard/developer/project' },
+//     { name: 'Monitoring', route: '/dashboard/developer/monitoring' },
+//     { name: 'Settings', route: '/settings' },
+//     { name: 'About', route: '/about' },
+// ];
 
 export function Test() {
-    const [currentRoute, setCurrentRoute] = useState(sidebarItems[0].route); // Default to the first route
+    // const [currentRoute, setCurrentRoute] = useState(sidebarItems[0].route); // Default to the first route
+    //
+    // const handleNavigation = (route : any) => {
+    //     setCurrentRoute(route);
+    // };
+    //
+    // const router = useRouter();
 
-    const handleNavigation = (route : any) => {
-        setCurrentRoute(route);
-    };
-
-    const router = useRouter();
-
-    const renderContent = () => {
-        switch (currentRoute) {
-            case '/dashboard/developer':
-                return <DeveloperDashboard />;
-            case '/dashboard/developer/project':
-                return <DevProjectPage />;
-            case '/dashboard/developer/monitoring':
-                return <DevMonitoringPage />;
-            case '/settings':
-                return <SettingPage />;
-            case '/about':
-                return <AboutPage />;
-            default:
-                return <div>404 - Page Not Found</div>;
-        }
-    };
+    // const renderContent = () => {
+    //     switch (currentRoute) {
+    //         case '/dashboard/developer':
+    //             return <DeveloperDashboard />;
+    //         case '/dashboard/developer/project':
+    //             return <DevProjectPage />;
+    //         case '/dashboard/developer/monitoring':
+    //             return <DevMonitoringPage />;
+    //         case '/settings':
+    //             return <SettingPage />;
+    //         case '/about':
+    //             return <AboutPage />;
+    //         default:
+    //             return <div>404 - Page Not Found</div>;
+    //     }
+    // };
 
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          height: "100vh",
-          width: "100vw",
-        }}
-      >
-        <MyAppBar routes={[]} />
-        <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
-          <CustomSideBar items={sidebarItems} onNavigate={handleNavigation} />
-          <div
-            style={{
-              flex: 1,
-              overflow: "auto",
-              padding: "0px",
-            }}
-          >
-            {renderContent()}
-            <CustomSpacer height={Constants(5)} />
-          </div>
-        </div>
-      </div>
+        <></>
     );
+    //   <div
+    //     style={{
+    //       display: "flex",
+    //       flexDirection: "column",
+    //       height: "100vh",
+    //       width: "100vw",
+    //     }}
+    //   >
+    //     <MyAppBar routes={[]} />
+    //     <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+    //       <CustomSideBar items={sidebarItems} onNavigate={handleNavigation} />
+    //       <div
+    //         style={{
+    //           flex: 1,
+    //           overflow: "auto",
+    //           padding: "0px",
+    //         }}
+    //       >
+    //         {renderContent()}
+    //         <CustomSpacer height={Constants(5)} />
+    //       </div>
+    //     </div>
+    //   </div>
+    // );
 
     // const [darkMode, setDarkMode] = useState(false);
     // const [sidebarOpen, setSidebarOpen] = useState(true); // Set initial state to true to open the sidebar by default

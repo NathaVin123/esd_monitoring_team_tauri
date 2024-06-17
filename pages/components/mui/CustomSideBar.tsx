@@ -1,7 +1,7 @@
 import React from 'react';
 import { List, ListItem, ListItemText, Divider } from '@mui/material';
 import { useRouter } from "next/router";
-import {CustomProgressBarEntireScreen} from "@/pages/components/mui/CustomProgressBar";
+import { CustomProgressBarEntireScreen } from "@/pages/components/mui/CustomProgressBar";
 
 interface SidebarItem {
     name: string;
@@ -10,10 +10,10 @@ interface SidebarItem {
 
 interface SidebarProps {
     items: SidebarItem[];
-    onNavigate: any;
+    onNavigate: (route: string) => void;
 }
 
-const CustomSideBar: React.FC<SidebarProps> = ({ items, onNavigate }) => {
+const CustomSideBar: React.FC<SidebarProps> = ({ items = [], onNavigate }) => {
     const router = useRouter();
 
     return (
