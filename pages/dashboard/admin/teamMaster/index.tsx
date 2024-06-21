@@ -16,7 +16,8 @@ import { routes } from '@/routes/routes';
 import MyAppBar from "@/pages/components/mui/DashboardComponent/AppBar";
 import moment from 'moment';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import {router} from "next/client"; // Import Refresh icon
+import {router} from "next/client";
+import CustomToast from "@/pages/components/mui/CustomToast"; // Import Refresh icon
 
 const initialRows: [] = [];
 
@@ -88,15 +89,18 @@ const TeamMaster = () => {
 
     const handleAddDialogSave = async () => {
         try {
-            let dataNew = {
-                teamName: teamName,
-                teamDescription: teamDescription,
-                // createdBy: createdBy,
-            };
+            if(validate()) {
+                let dataNew = {
+                    teamName: teamName,
+                    teamDescription: teamDescription,
+                    // createdBy: createdBy,
+                };
 
-            await createTeam(dataNew);
+                await createTeam(dataNew);
+            }
+
         } catch (error) {
-            console.error("Failed to add user", error);
+            console.log("Failed to add user", error);
         }
     };
 
@@ -134,9 +138,26 @@ const TeamMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to fetch users", error);
+            console.log("Failed to fetch users", error);
         }
     };
+
+    const [taastOpen, setToastOpen] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>('');
+
+    const handleOnCloseToast = () => {
+        setToastOpen(false);
+    }
+
+    const validate = () => {
+        if(!teamName) {
+            setToastOpen(true);
+            setErrorMessage('Team name is required!')
+            return false;
+        }
+
+        return true;
+    }
 
     const createTeam = async (dataNew: any) => {
         try {
@@ -150,7 +171,7 @@ const TeamMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to create team", error);
+            console.log("Failed to create team", error);
         }
     };
 
@@ -186,7 +207,7 @@ const TeamMaster = () => {
             setSelectedRow(null);
             await fetchTeam();
         } catch (error) {
-            console.error("Failed to delete user", error);
+            console.log("Failed to delete user", error);
         }
     };
 
@@ -202,20 +223,23 @@ const TeamMaster = () => {
 
     const handleEditDialogSave = async () => {
         try {
-            const updatedRow = {
-                uuid: teamUuid,
-                teamName: teamName,
-                teamDescription: teamDescription,
-            };
+            if(validate()) {
+                const updatedRow = {
+                    uuid: teamUuid,
+                    teamName: teamName,
+                    teamDescription: teamDescription,
+                };
 
-            await updateTeam(updatedRow);
+                await updateTeam(updatedRow);
 
-            setIsDialogOpen(false);
-            setSelectedRow(null);
+                setIsDialogOpen(false);
+                setSelectedRow(null);
 
-            await fetchTeam();
+                await fetchTeam();
+            }
+
         } catch (error) {
-            console.error("Failed to update user", error);
+            console.log("Failed to update user", error);
         }
     };
 
@@ -231,7 +255,7 @@ const TeamMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to delete user", error);
+            console.log("Failed to delete user", error);
         }
     };
 
@@ -247,7 +271,7 @@ const TeamMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to update team", error);
+            console.log("Failed to update team", error);
         }
     };
 
@@ -364,6 +388,7 @@ const TeamMaster = () => {
                             <CustomButton variant={'contained'} onClick={handleConfirmDelete}>Delete</CustomButton>
                         </DialogActions>
                     </Dialog>
+                    <CustomToast open={taastOpen} onClose={handleOnCloseToast} message={errorMessage} severity={'warning'}></CustomToast>
                 </div>
             )}
         </>

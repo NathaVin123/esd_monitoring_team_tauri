@@ -43,8 +43,8 @@ export default function Dashboard() {
                 return 'Something wrong with get role';
             }
         } catch (error) {
-            console.error('Error fetching data:', error);
-            router.replace('/error');
+            console.log('Error fetching data:', error);
+            await router.replace('/error');
             // return [JSON.stringify(error), 'false']
         }
     }

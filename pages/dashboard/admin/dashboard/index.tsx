@@ -35,7 +35,7 @@ export const AdminDashboard = () => {
             setCountActiveUserMonitoring(dataCount.countActiveUserMonitoring ?? 0);
 
         } catch (error : any) {
-            console.error(error);
+            console.log(error);
             await router.replace({
                 pathname: '/error',
                 query : {

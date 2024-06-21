@@ -10,7 +10,7 @@ import CustomSpacer from "@/pages/components/mui/CustomSpacer";
 import Constants from "@/pages/components/mui/value/contants";
 import {AlertColor, Box, Link as MuiLink} from "@mui/material";
 import CustomToast from "@/pages/components/mui/CustomToast";
-import { CustomCircularProgressBar } from "@/pages/components/mui/CustomProgressBar";
+import {CustomCircularProgressBar, CustomProgressBarEntireScreen} from "@/pages/components/mui/CustomProgressBar";
 
 import Link from 'next/link';
 import CustomImage from "@/pages/components/mui/CustomImage";
@@ -46,14 +46,41 @@ export function Login() {
         setErrors((prev) => ({ ...prev, password: hasError }));
     }, []);
 
+    const handleNIK = (e: any) => {
+        const value = e.target.value;
+
+        if (/^\d*$/.test(value)) {
+            setNik(value);
+        }
+    }
+
+    const handlePassword = (e: any) => {
+        const value = e.target.value;
+
+        setPassword(value);
+    }
+
     useEffect(() => {
-        validateInput(nik, password);
     }, [nik, password]);
 
     const validateInput = (nik: string, password: string) => {
-        if (!nik.trim() || !password.trim()) {
+        if (!nik.trim()) {
             setSeverity('warning');
-            setMessage('Both fields are required');
+            setMessage('Nik are required !');
+            setToastOpen(true);
+            return false;
+        }
+
+        if (!password.trim()) {
+            setSeverity('warning');
+            setMessage('Password are required !');
+            setToastOpen(true);
+            return false;
+        }
+
+        if(password.trim().length < 8) {
+            setSeverity('warning');
+            setMessage('Password must be at least 8 characters long !');
             setToastOpen(true);
             return false;
         }
@@ -73,12 +100,15 @@ export function Login() {
         } else if (success) {
             setSeverity('success');
             setMessage(message);
-            await router.replace({
-                pathname: '/dashboard',
-                query: { nik }
-            });
+            setTimeout(() => {
+                router.replace({
+                    pathname: '/dashboard',
+                    query: { nik }
+                });
 
-            localStorage.setItem('nikUser', nik);
+                localStorage.setItem('nikUser', nik);
+            }, 2000);
+
         } else {
             setSeverity('error');
             setMessage('Something went wrong!');
@@ -106,13 +136,14 @@ export function Login() {
 
             return [response.data.success, response.data.message];
         } catch (error) {
-            console.error("Error fetching data:", error);
+            console.log("Error fetching data:", error);
             return [false, JSON.stringify(error)];
         }
     };
 
     return (
-        <CustomContainerCenter>
+        <>
+            <CustomContainerCenter>
                 <CustomImage path={PolytronIcon}></CustomImage>
                 <CustomTypography bold size={'XL'}>
                     ESD Monitoring Team
@@ -125,27 +156,27 @@ export function Login() {
                 <Box>
                     <CustomTextField
                         label="NIK"
-                        type="number"
-                        required
+                        type="text"
+                        // required
                         value={nik}
-                        onChange={(e) => setNik(e.target.value)}
+                        onChange={(e) => handleNIK(e)}
                         onError={handleNikError}
                         sx={{ mb: 2 }}
                     />
                     <CustomTextField
                         label="Password"
                         type="password"
-                        required
+                        // required
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) => handlePassword(e)}
                         onError={handlePasswordError}
                         sx={{ mb: 2 }}
                     />
                     <CustomButton disabled={isLoading} type="submit" variant="contained" color="primary" fullWidth onClick={submitLogin}>
-                        {isLoading ? (<CustomCircularProgressBar color={'inherit'} />) : 'Submit'}
+                        {/*{isLoading ? (<CustomCircularProgressBar color={'inherit'} />) : 'Submit'}*/}
+                        Submit
                     </CustomButton>
 
-                    <CustomToast open={toastOpen} onClose={handleCloseToast} message={message} severity={severity} />
 
                     <CustomSpacer height={Constants(1)} />
 
@@ -155,7 +186,11 @@ export function Login() {
                         </Link>
                     </Box>
                 </Box>
-        </CustomContainerCenter>
+            </CustomContainerCenter>
+            <CustomToast open={toastOpen} onClose={handleCloseToast} message={message} severity={severity} />
+            {isLoading ? (<CustomProgressBarEntireScreen></CustomProgressBarEntireScreen>) : (<></>)}
+
+        </>
     );
 }
 

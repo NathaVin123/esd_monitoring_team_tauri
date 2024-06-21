@@ -16,7 +16,8 @@ import { routes } from '@/routes/routes';
 import MyAppBar from "@/pages/components/mui/DashboardComponent/AppBar";
 import moment from 'moment';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import {router} from "next/client"; // Import Refresh icon
+import {router} from "next/client";
+import CustomToast from "@/pages/components/mui/CustomToast";
 
 const initialRows: [] = [];
 
@@ -88,14 +89,17 @@ const RoleMaster = () => {
 
     const handleAddDialogSave = async () => {
         try {
-            let dataNew = {
-                roleName: roleName,
-                roleDescription: roleDescription,
-            };
+            if(validate()) {
+                let dataNew = {
+                    roleName: roleName,
+                    roleDescription: roleDescription,
+                };
 
-            await createRole(dataNew);
+                await createRole(dataNew);
+            }
+
         } catch (error) {
-            console.error("Failed to add user", error);
+            console.log("Failed to add user", error);
         }
     };
 
@@ -132,9 +136,26 @@ const RoleMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to fetch users", error);
+            console.log("Failed to fetch users", error);
         }
     };
+
+    const [taastOpen, setToastOpen] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>('');
+
+    const handleOnCloseToast = () => {
+        setToastOpen(false);
+    }
+
+    const validate = () => {
+        if(!roleName) {
+            setToastOpen(true);
+            setErrorMessage('Role name is required!')
+            return false;
+        }
+
+        return true;
+    }
 
     const createRole = async (dataNew: any) => {
         try {
@@ -148,7 +169,7 @@ const RoleMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to create role", error);
+            console.log("Failed to create role", error);
         }
     };
 
@@ -184,7 +205,7 @@ const RoleMaster = () => {
             setSelectedRow(null);
             await fetchRole();
         } catch (error) {
-            console.error("Failed to delete user", error);
+            console.log("Failed to delete user", error);
         }
     };
 
@@ -200,20 +221,23 @@ const RoleMaster = () => {
 
     const handleEditDialogSave = async () => {
         try {
-            const updatedRow = {
-                uuid: roleUuid,
-                roleName: roleName,
-                roleDescription: roleDescription,
-            };
+            if(validate()) {
+                const updatedRow = {
+                    uuid: roleUuid,
+                    roleName: roleName,
+                    roleDescription: roleDescription,
+                };
 
-            await updateRole(updatedRow);
+                await updateRole(updatedRow);
 
-            setIsDialogOpen(false);
-            setSelectedRow(null);
+                setIsDialogOpen(false);
+                setSelectedRow(null);
 
-            await fetchRole();
+                await fetchRole();
+            }
+
         } catch (error) {
-            console.error("Failed to update user", error);
+            console.log("Failed to update user", error);
         }
     };
 
@@ -229,7 +253,7 @@ const RoleMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to delete user", error);
+            console.log("Failed to delete user", error);
         }
     };
 
@@ -245,7 +269,7 @@ const RoleMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to update role", error);
+            console.log("Failed to update role", error);
         }
     };
 
@@ -337,7 +361,7 @@ const RoleMaster = () => {
                             <CustomTextField
                                 margin="dense"
                                 name="role_description"
-                                label="Team Description"
+                                label="Role Description"
                                 type="text"
                                 fullWidth
                                 value={roleDescription}
@@ -362,6 +386,7 @@ const RoleMaster = () => {
                             <CustomButton variant={'contained'} onClick={handleConfirmDelete}>Delete</CustomButton>
                         </DialogActions>
                     </Dialog>
+                    <CustomToast open={taastOpen} onClose={handleOnCloseToast} message={errorMessage} severity={'warning'}></CustomToast>
                 </div>
             )}
         </>

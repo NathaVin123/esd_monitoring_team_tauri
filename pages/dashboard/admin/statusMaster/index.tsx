@@ -16,7 +16,8 @@ import { routes } from '@/routes/routes';
 import MyAppBar from "@/pages/components/mui/DashboardComponent/AppBar";
 import moment from 'moment';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import {router} from "next/client"; // Import Refresh icon
+import {router} from "next/client";
+import CustomToast from "@/pages/components/mui/CustomToast"; // Import Refresh icon
 
 const initialRows: [] = [];
 
@@ -88,15 +89,18 @@ const StatusMaster = () => {
 
     const handleAddDialogSave = async () => {
         try {
-            let dataNew = {
-                statusName: statusName,
-                statusDescription: statusDescription,
-                // createdBy: createdBy,
-            };
+            if(validate()) {
+                let dataNew = {
+                    statusName: statusName,
+                    statusDescription: statusDescription,
+                    // createdBy: createdBy,
+                };
 
-            await createStatus(dataNew);
+                await createStatus(dataNew);
+            }
+
         } catch (error) {
-            console.error("Failed to add user", error);
+            console.log("Failed to add user", error);
         }
     };
 
@@ -134,9 +138,26 @@ const StatusMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to fetch users", error);
+            console.log("Failed to fetch users", error);
         }
     };
+
+    const [taastOpen, setToastOpen] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>('');
+
+    const handleOnCloseToast = () => {
+        setToastOpen(false);
+    }
+
+    const validate = () => {
+        if(!statusName) {
+            setToastOpen(true);
+            setErrorMessage('Status name is required!')
+            return false;
+        }
+
+        return true;
+    }
 
     const createStatus = async (dataNew: any) => {
         try {
@@ -150,7 +171,7 @@ const StatusMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to create status", error);
+            console.log("Failed to create status", error);
         }
     };
 
@@ -186,7 +207,7 @@ const StatusMaster = () => {
             setSelectedRow(null);
             await fetchStatus();
         } catch (error) {
-            console.error("Failed to delete user", error);
+            console.log("Failed to delete user", error);
         }
     };
 
@@ -202,20 +223,23 @@ const StatusMaster = () => {
 
     const handleEditDialogSave = async () => {
         try {
-            const updatedRow = {
-                uuid: statusUuid,
-                statusName: statusName,
-                statusDescription: statusDescription,
-            };
+            if(validate()) {
+                const updatedRow = {
+                    uuid: statusUuid,
+                    statusName: statusName,
+                    statusDescription: statusDescription,
+                };
 
-            await updateStatus(updatedRow);
+                await updateStatus(updatedRow);
 
-            setIsDialogOpen(false);
-            setSelectedRow(null);
+                setIsDialogOpen(false);
+                setSelectedRow(null);
 
-            await fetchStatus();
+                await fetchStatus();
+            }
+
         } catch (error) {
-            console.error("Failed to update user", error);
+            console.log("Failed to update user", error);
         }
     };
 
@@ -233,7 +257,7 @@ const StatusMaster = () => {
                     message: error.message,
                 }});
 
-            console.error("Failed to delete user", error);
+            console.log("Failed to delete user", error);
         }
     };
 
@@ -249,7 +273,7 @@ const StatusMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to update status", error);
+            console.log("Failed to update status", error);
         }
     };
 
@@ -366,6 +390,7 @@ const StatusMaster = () => {
                             <CustomButton variant={'contained'} onClick={handleConfirmDelete}>Delete</CustomButton>
                         </DialogActions>
                     </Dialog>
+                    <CustomToast open={taastOpen} onClose={handleOnCloseToast} message={errorMessage} severity={'warning'}></CustomToast>
                 </div>
             )}
         </>

@@ -40,16 +40,16 @@ export default function CustomTextField(props: CustomTextFieldProps) {
     }, [props.required, props.type]);
 
     useEffect(() => {
-        if (props.value !== undefined) {
-            validateInput(props.value);
-        }
+        // if (props.value !== undefined) {
+        //     validateInput(props.value);
+        // }
     }, [props.value, validateInput]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (props.onChange) {
             props.onChange(event);
         }
-        validateInput(event.target.value);
+        // validateInput(event.target.value);
     };
 
     const isValidDateTime = (value: string) => {

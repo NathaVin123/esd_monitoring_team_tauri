@@ -83,6 +83,13 @@ export default function Splash() {
                 await router.replace({pathname: '/error', query: {message: error.message}});
                 console.log(error);
                 localStorage.removeItem('token');
+
+                await router.replace({
+                    pathname: "/error",
+                    query: {
+                        message: error.message,
+                    },
+                });
             }
     };
 

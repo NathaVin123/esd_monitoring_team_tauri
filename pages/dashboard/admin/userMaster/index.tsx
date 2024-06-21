@@ -17,6 +17,7 @@ import MyAppBar from "@/pages/components/mui/DashboardComponent/AppBar";
 import moment from 'moment';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {router} from "next/client";
+import CustomToast from "@/pages/components/mui/CustomToast";
 
 const initialRows: [] = [];
 
@@ -57,19 +58,72 @@ const UserMaster = () => {
             value: 'Women',
         }
     ]);
-    const [activeUser, setActiveUser] = useState<boolean | null>(null);
+    const [activeUser, setActiveUser] = useState<number>(0);
     const [activeOptions, setActiveOptions] = useState<any>([
         {
-            key: true,
+            key: 1,
             value: 'Active',
         },
         {
-            key: false,
+            key: 0,
             value: 'Non-Active',
         }
     ]);
     // const nikFromLocal: string | null = localStorage.getItem('nik');
     const [createdBy, setCreatedBy] = useState<string>('');
+    const [errors, setErrors] = useState<string>('');
+
+    const [messageError, setMessageError] = useState<string>('');
+    const [openToast, setOpenToast] = useState<boolean>(false);
+    const handleCloseToast = () => {
+        setOpenToast(false);
+    };
+
+    const validate = () => {
+        if (!nik) {
+            setOpenToast(true);
+            setMessageError('NIK is required')
+            return false;
+        }
+        if (!fullName) {
+            setOpenToast(true);
+            setMessageError('Full Name is required')
+            return false;
+        }
+        if (!email) {
+            setOpenToast(true);
+            setMessageError('Email is required')
+            return false;
+        }
+        if (!password) {
+            setOpenToast(true);
+            setMessageError('Password is required')
+            return false;
+        }
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            setOpenToast(true);
+            setMessageError('Email is not valid');
+            return false;
+        }
+        if (!gender) {
+            setOpenToast(true);
+            setMessageError('Gender is required')
+            return false;
+        }
+        if (!roleId) {
+            setOpenToast(true);
+            setMessageError('Role is required')
+            return false;
+        }
+        if (!teamId) {
+            setOpenToast(true);
+            setMessageError('Team is required')
+            return false;
+        }
+
+        return true;
+    };
 
     const columns: GridColDef[] = [
         {
@@ -124,6 +178,7 @@ const UserMaster = () => {
         setNik('');
         setEmail('');
         setFullName('');
+        setPassword('');
         setGender('');
         setRoleId('');
         setTeamId('');
@@ -142,26 +197,35 @@ const UserMaster = () => {
 
     const handleAddDialogSave = async () => {
         try {
-            let dataNew = {
-                nik: nik,
-                email: email,
-                fullName: fullName,
-                password: password,
-                gender: gender,
-                activeUser: activeUser,
-                roleId: roleId,
-                teamId: teamId,
-                createdBy: createdBy,
-            };
+            if(validate()){
+                let dataNew = {
+                    nik: nik,
+                    email: email,
+                    fullName: fullName,
+                    password: password,
+                    gender: gender,
+                    activeUser: activeUser === 1 ? true : false,
+                    roleId: roleId,
+                    teamId: teamId,
+                    createdBy: createdBy,
+                };
 
-            await createUser(dataNew);
+                console.log(dataNew);
+
+                await createUser(dataNew);
+            }
+
         } catch (error) {
-            console.error("Failed to add user", error);
+            console.log("Failed to add user", error);
         }
     };
 
     const handleNewNIK = (e: any) => {
-        setNik(e.target.value);
+        const value = e.target.value;
+        // Only allow numbers
+        if (/^\d*$/.test(value)) {
+            setNik(value);
+        }
     };
 
     const handleNewFullName = (e: any) => {
@@ -181,7 +245,7 @@ const UserMaster = () => {
     };
 
     const handleNewActive = (e: any) => {
-        setActiveUser(e.target.value === 'true');
+        setActiveUser(e.target.value);
     };
 
     const handleNewRole = (e: any) => {
@@ -223,7 +287,7 @@ const UserMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to fetch users", error);
+            console.log("Failed to fetch users", error);
         }
     };
 
@@ -249,7 +313,7 @@ const UserMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to fetch roles", error);
+            console.log("Failed to fetch roles", error);
         }
     };
 
@@ -275,7 +339,7 @@ const UserMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to fetch teams", error);
+            console.log("Failed to fetch teams", error);
         }
     };
 
@@ -293,11 +357,11 @@ const UserMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to create user", error);
+            console.log("Failed to create user", error);
         }
     };
 
-    const handleEditRow = (row: any) => {
+    const handleEditRow = async (row: any) => {
         setSelectedRow([]);
         setNik('');
         setEmail('');
@@ -306,14 +370,24 @@ const UserMaster = () => {
         setRoleId('');
         setTeamId('');
 
+        console.log(row);
+
+        const findRole = await axios.post(URLAPI+'/api/role/getRoleWithName', {name: row.role});
+        const dataRole = findRole.data.data;
+        console.log(findRole.data.data);
+
+        const findTeam = await axios.post(URLAPI+'/api/team/getTeamWithName', {name: row.team});
+        const dataTeam = findTeam.data.data;
+        console.log(findTeam.data.data);
+
         setSelectedRow(row);
         setNik(row.nik);
         setEmail(row.email);
         setFullName(row.full_name);
         setGender(row.gender);
-        setRoleId(row.role);
-        setTeamId(row.team);
-        setActiveUser(row.active_user === 'Active');
+        setRoleId(dataRole.uuid);
+        setTeamId(dataTeam.uuid);
+        setActiveUser(row.active_user === 'Active' ? 1 : 0);
         setIsDialogOpen(true);
     };
 
@@ -334,7 +408,7 @@ const UserMaster = () => {
             setSelectedRow(null);
             await fetchUsers();
         } catch (error) {
-            console.error("Failed to delete user", error);
+            console.log("Failed to delete user", error);
         }
     };
 
@@ -357,7 +431,8 @@ const UserMaster = () => {
                 email: email,
                 fullName: fullName,
                 gender: gender,
-                activeUser: activeUser,
+                activeUser: activeUser === 1 ? true : false,
+                updatedBy: createdBy,
             };
 
             await updateUser(updatedRow);
@@ -367,7 +442,7 @@ const UserMaster = () => {
 
             await fetchUsers();
         } catch (error) {
-            console.error("Failed to update user", error);
+            console.log("Failed to update user", error);
         }
     };
 
@@ -384,13 +459,14 @@ const UserMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to delete user", error);
+            console.log("Failed to delete user", error);
         }
     };
 
     const updateUser = async (updatedRow: any) => {
         try {
             const routeAPI: string = `/api/user/updateUser`;
+            console.log(updatedRow);
             await axios.post(URLAPI + routeAPI, updatedRow);
             await fetchUsers();
         } catch (error : any) {
@@ -399,7 +475,7 @@ const UserMaster = () => {
                 query : {
                     message: error.message,
                 }});
-            console.error("Failed to update user", error);
+            console.log("Failed to update user", error);
         }
     };
 
@@ -458,6 +534,8 @@ const UserMaster = () => {
                                 fullWidth
                                 value={nik}
                                 onChange={handleNewNIK}
+                                error={!!errors}
+                                helperText={errors}
                             />
                             <CustomTextField
                                 margin="dense"
@@ -467,6 +545,8 @@ const UserMaster = () => {
                                 fullWidth
                                 value={fullName}
                                 onChange={handleNewFullName}
+                                error={!!errors}
+                                helperText={errors}
                             />
                             <CustomTextField
                                 margin="dense"
@@ -476,6 +556,8 @@ const UserMaster = () => {
                                 fullWidth
                                 value={email}
                                 onChange={handleNewEmail}
+                                error={!!errors}
+                                helperText={errors}
                             />
                             <CustomTextField
                                 margin="dense"
@@ -485,6 +567,8 @@ const UserMaster = () => {
                                 fullWidth
                                 value={password}
                                 onChange={handleNewPassword}
+                                error={!!errors}
+                                helperText={errors}
                             />
                             <CustomTextField
                                 margin="dense"
@@ -495,6 +579,8 @@ const UserMaster = () => {
                                 value={gender}
                                 options={genderOptions}
                                 onChange={handleNewGender}
+                                error={!!errors}
+                                helperText={errors}
                             />
                             <CustomTextField
                                 margin="dense"
@@ -505,6 +591,8 @@ const UserMaster = () => {
                                 options={activeOptions}
                                 value={activeUser?.toString() ?? ''}
                                 onChange={handleNewActive}
+                                error={!!errors}
+                                helperText={errors}
                             />
                             <CustomTextField
                                 margin="dense"
@@ -515,6 +603,8 @@ const UserMaster = () => {
                                 value={roleId}
                                 options={roleOptions}
                                 onChange={handleNewRole}
+                                error={!!errors}
+                                helperText={errors}
                             />
                             <CustomTextField
                                 margin="dense"
@@ -525,6 +615,8 @@ const UserMaster = () => {
                                 value={teamId}
                                 options={teamOptions}
                                 onChange={handleNewTeam}
+                                error={!!errors}
+                                helperText={errors}
                             />
                         </DialogContent>
                         <DialogActions>
@@ -614,6 +706,7 @@ const UserMaster = () => {
                             <CustomButton variant={'contained'} onClick={handleConfirmDelete}>Delete</CustomButton>
                         </DialogActions>
                     </Dialog>
+                    <CustomToast open={openToast} onClose={handleCloseToast} message={messageError} severity={'warning'}></CustomToast>
                 </div>
             )}
         </>

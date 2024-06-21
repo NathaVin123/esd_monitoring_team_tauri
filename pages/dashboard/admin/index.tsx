@@ -11,13 +11,14 @@ import AboutPage from "@/pages/about";
 import AdminDashboard from "@/pages/dashboard/admin/dashboard";
 import CustomSpacer from "@/pages/components/mui/CustomSpacer";
 import Constants from "@/pages/components/mui/value/contants";
-import UserMaster from "@/pages/dashboard/admin/user_master";
-import TeamMaster from "@/pages/dashboard/admin/team_master";
-import RoleMaster from "@/pages/dashboard/admin/role_master";
-import StatusMaster from "@/pages/dashboard/admin/status_master";
-import ProjectMaster from "@/pages/dashboard/admin/project_master";
-import TaskMaster from "@/pages/dashboard/admin/task_master";
-import CaseMaster from "@/pages/dashboard/admin/case_master";
+import UserMaster from "@/pages/dashboard/admin/userMaster";
+import TeamMaster from "@/pages/dashboard/admin/teamMaster";
+import RoleMaster from "@/pages/dashboard/admin/roleMaster";
+import StatusMaster from "@/pages/dashboard/admin/statusMaster";
+import ProjectMaster from "@/pages/dashboard/admin/projectMaster";
+import TaskMaster from "@/pages/dashboard/admin/taskMaster";
+import CaseMaster from "@/pages/dashboard/admin/caseMaster";
+import AdminActiveUserMonitoring from "@/pages/dashboard/admin/activeUserMonitoring";
 
 const sidebarItems = [
     { name: 'Dashboard', route: '/dashboard' },
@@ -28,6 +29,7 @@ const sidebarItems = [
     { name: 'Project Master', route: '/project_master' },
     { name: 'Task Master', route: '/task_master' },
     { name: 'Case Master', route: '/case_master' },
+    { name: 'Active User Monitoring', route: '/active_user_monitoring' },
 ];
 
 export const AdminDashboardRoot = () => {
@@ -57,6 +59,8 @@ export const AdminDashboardRoot = () => {
                 return <TaskMaster />;
             case '/case_master':
                 return <CaseMaster />;
+            case '/active_user_monitoring':
+                return <AdminActiveUserMonitoring />;
             default:
                 return <div style={{padding: "20px"}}>404 - Page Not Found</div>;
         }

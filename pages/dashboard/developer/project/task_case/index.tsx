@@ -11,6 +11,7 @@ import {useRouter} from "next/router";
 import axios from "axios";
 import {URLAPI} from "@/pages/api/env";
 import {CustomProgressBarEntireScreen} from "@/pages/components/mui/CustomProgressBar";
+import {ca} from "date-fns/locale";
 
 export const DevProjectTaskPage = () => {
     const router = useRouter();
@@ -116,7 +117,7 @@ export const DevProjectTaskPage = () => {
             }
 
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     }
 
@@ -147,7 +148,7 @@ export const DevProjectTaskPage = () => {
             }
 
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     }
 
@@ -159,20 +160,37 @@ export const DevProjectTaskPage = () => {
         }
     };
 
-    const goToCase = () => {
-        router.push('/dashboard/project/task/case', {}).then(() => {});
+    const fetchUser = async () => {
+        try {
+            let dataReq = {
+                uuid : sa_leader_name2,
+            };
+
+            let response = await axios.post(URLAPI+'/api/user/GetFirstUser', dataReq);
+
+            if(response) {
+                setSaLeaderName(response.data.data.full_name);
+            } else {
+                console.log('Something wrong');
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     useEffect(() => {
-        setSaLeaderName(sa_leader_name2);
-        fetchTask().then(() => {
-            setIsLoading(true);
-            console.log('Fetching Task...');
-            fetchCase().then(() => {
-                console.log('Fetching Case');
-                setIsLoading(false);
-            })
-        });
+        // setSaLeaderName(sa_leader_name2);
+        fetchUser().then(() => {
+            fetchTask().then(() => {
+                setIsLoading(true);
+                console.log('Fetching Task...');
+                fetchCase().then(() => {
+                    console.log('Fetching Case');
+                    setIsLoading(false);
+                })
+            });
+        })
+
         console.log('Done Fetching Task and Case');
     }, []);
 
@@ -212,7 +230,7 @@ export const DevProjectTaskPage = () => {
                                 New Task
                             </CustomButton>
 
-                            <DataGrid columns={columnsTask} rows={rowsTask} onRowClick={goToCase}></DataGrid>
+                            <DataGrid columns={columnsTask} rows={rowsTask}></DataGrid>
                         </>
                     ) : (
                         <>
@@ -223,7 +241,9 @@ export const DevProjectTaskPage = () => {
                                 New Case
                             </CustomButton>
 
-                            <DataGrid columns={columnsCase} rows={rowsCase} onRowClick={goToCase}></DataGrid>
+                            {/*<DataGrid columns={columnsCase} rows={rowsCase} onRowClick={goToCase}></DataGrid>*/}
+                            <DataGrid columns={columnsCase} rows={rowsCase}></DataGrid>
+
                         </>
                         )
                     }

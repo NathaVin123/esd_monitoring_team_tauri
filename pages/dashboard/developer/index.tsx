@@ -12,10 +12,9 @@ import {useState} from "react";
 import DevDashboard from "@/pages/dashboard/developer/dashboard";
 
 const sidebarItems = [
-    { name: 'Dashboard', route: '/dashboard' },
+    // { name: 'Dashboard', route: '/dashboard' },
     { name: 'Project', route: '/project' },
-    { name: 'Monitoring', route: '/monitoring' },
-    { name: 'Settings', route: '/settings' },
+    { name: 'Activity', route: '/activity' },
     { name: 'About', route: '/about' },
 ];
 
@@ -27,18 +26,14 @@ export const DeveloperDashboard = () => {
         setCurrentRoute(route);
     };
 
-    const router = useRouter();
-
     const renderContent = () => {
         switch (currentRoute) {
             case '/dashboard':
                 return <DevDashboard />;
             case '/project':
                 return <DevProjectPage />;
-            case '/monitoring':
+            case '/activity':
                 return <DevMonitoringPage />;
-            case '/settings':
-                return <SettingPage />;
             case '/about':
                 return <AboutPage />;
             default:
@@ -70,24 +65,6 @@ export const DeveloperDashboard = () => {
                 </div>
             </div>
         </div>
-        // <div style={{ height: "100vh", width: "100vw", overflow: "hidden" }}>
-        //   <div style={{ height: "100%", overflow: "auto", padding: "20px" }}>
-        //     <CustomTypography size={"M"}>Welcome Dev !</CustomTypography>
-        //   </div>
-        // </div>
-        // <Router>
-        //     <div style={{ display: 'flex' }}>
-        //         <CustomSideBar items={sidebarItems} />
-        //         <div style={{ flex: 1, padding: '20px' }}>
-        //             <Routes>
-        //                 <Route path="/dashboard" element={<Dashboard />} />
-        //                 <Route path="/profile" element={<Profile />} />
-        //                 <Route path="/settings" element={<Settings />} />
-        //                 <Route path="/" element={<CustomContainerCenter>Welcome to Developer Dashboard</CustomContainerCenter>} />
-        //             </Routes>
-        //         </div>
-        //     </div>
-        // </Router>
     );
 }
 
