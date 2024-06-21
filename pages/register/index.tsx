@@ -20,12 +20,6 @@ export function RegisterRole() {
 
     const [role, setRole] = useState<string>('');
 
-    // const handleRoleSelect = async (role: string) => {
-    //     setSelectedRole(role);
-    //
-    //     router.push('/register/form')
-    // };
-
     const doFetchRoleData = async () => {
         const routeAPI = '/api/role/getRole';
         try {

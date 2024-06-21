@@ -88,7 +88,6 @@ export const ProfilePage = () => {
             if(isLocalStorageAvailable()) {
                 const nikFromLocal: string | null = localStorage.getItem('nikUser');
                 console.log('nikFromLocal : ', nikFromLocal);
-                // setCreatedBy(nikFromLocal ?? '');
                 fetchUserProfile(nikFromLocal).then(() => {
                     setIsLoading(false);
                 });

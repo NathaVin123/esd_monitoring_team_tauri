@@ -157,7 +157,6 @@ export function Login() {
                     <CustomTextField
                         label="NIK"
                         type="text"
-                        // required
                         value={nik}
                         onChange={(e) => handleNIK(e)}
                         onError={handleNikError}
@@ -166,14 +165,12 @@ export function Login() {
                     <CustomTextField
                         label="Password"
                         type="password"
-                        // required
                         value={password}
                         onChange={(e) => handlePassword(e)}
                         onError={handlePasswordError}
                         sx={{ mb: 2 }}
                     />
                     <CustomButton disabled={isLoading} type="submit" variant="contained" color="primary" fullWidth onClick={submitLogin}>
-                        {/*{isLoading ? (<CustomCircularProgressBar color={'inherit'} />) : 'Submit'}*/}
                         Submit
                     </CustomButton>
 
@@ -189,7 +186,6 @@ export function Login() {
             </CustomContainerCenter>
             <CustomToast open={toastOpen} onClose={handleCloseToast} message={message} severity={severity} />
             {isLoading ? (<CustomProgressBarEntireScreen></CustomProgressBarEntireScreen>) : (<></>)}
-
         </>
     );
 }

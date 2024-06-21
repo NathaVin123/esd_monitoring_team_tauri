@@ -7,13 +7,11 @@ import CustomImage from "@/pages/components/mui/CustomImage";
 import { CustomLinearProgessBar, CustomCircularProgressBar } from "@/pages/components/mui/CustomProgressBar";
 import CustomSpacer from "@/pages/components/mui/CustomSpacer";
 import Constants from "@/pages/components/mui/value/contants";
-import CustomButton from "@/pages/components/mui/CustomButton";
 import CustomToast from "@/pages/components/mui/CustomToast";
 import {AlertColor} from "@mui/material";
 import axios from "axios";
 import {URLAPI} from "@/pages/api/env";
 import {jwtDecode} from "jwt-decode";
-import {router} from "next/client";
 
 interface DecodedToken {
     exp: number;
@@ -27,26 +25,15 @@ export default function Splash() {
 
     const [state, setState] = useState<boolean>(false);
 
-    // const doUseAuthRedirect = useAuthRedirect();
-
     const [isLoading, setIsLoading] = useState(false);
-
-    const handleCloseToast = () => {
-        setToastOpen(false);
-    };
 
     const [message, setMessage] = useState<string>('');
 
     const [severity, setSeverity] = useState<AlertColor>('info');
 
-    const doCheckConnectivityToServer = async()  => {
-        try {
-
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    const handleCloseToast = () => {
+        setToastOpen(false);
+    };
 
     const useAuthRedirect = async () => {
             try {
@@ -94,9 +81,8 @@ export default function Splash() {
     };
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-
         setIsLoading(true);
+        const token = localStorage.getItem('token');
 
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const doUseAuthRedirect = useAuthRedirect();

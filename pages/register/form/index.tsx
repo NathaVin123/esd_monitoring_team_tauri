@@ -12,9 +12,6 @@ import {CustomCircularProgressBar, CustomProgressBarEntireScreen} from "@/pages/
 import CustomToast from "@/pages/components/mui/CustomToast";
 import {AlertColor, Box, Input} from "@mui/material";
 import {ArrowBack} from "@mui/icons-material";
-import {any, number} from "prop-types";
-import moment from "moment/moment";
-import {router} from "next/client";
 
 type keyValue = {
     key: string,
@@ -44,7 +41,6 @@ export function Register() {
     const [password, setPassword] = useState<string>('');
     const [teamDropDown, setTeamDropdown] = useState<keyValue[]>([]);
     const [roleSelected, setRoleSelected] = useState<string>('')
-    const [roleId, setRoleId] = useState<string>('');
     const [teamId, setTeamId] = useState<string>('');
     const [gender, setGender] = useState<string>('');
     const [genderDropdown, setGenderDropdown] = useState<keyValue[]>([
@@ -261,8 +257,6 @@ export function Register() {
                 router.replace('/login');
             }, 3000);
 
-            // setOpenToast(true);
-            // setMessageError('Register Success');
         } catch (error : any) {
             await router.replace({
                 pathname: '/error',

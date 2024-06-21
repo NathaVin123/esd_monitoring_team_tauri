@@ -45,7 +45,6 @@ export default function Dashboard() {
         } catch (error) {
             console.log('Error fetching data:', error);
             await router.replace('/error');
-            // return [JSON.stringify(error), 'false']
         }
     }
 
