@@ -14,11 +14,15 @@ import {CustomProgressBarEntireScreen} from "@/pages/components/mui/CustomProgre
 import moment from "moment";
 import {styled} from "@mui/system";
 import {Refresh} from "@mui/icons-material";
+import {useRouter} from "next/router";
 
 export const SAMonitoringPage = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const [rowsMonitoring, setRowsMonitoring] = useState<[]>([]);
+
+    const router = useRouter(); // Initialize useRouter
+
 
     const StyledDataGrid = styled(DataGrid)({
         '& .greenRow': {
@@ -60,7 +64,7 @@ export const SAMonitoringPage = () => {
     const [userTeamName, setUserTeamName] = useState<string>('');
 
     const fetchUser = async () => {
-        setIsLoading(true);
+        // setIsLoading(true);
 
         try {
             const routeAPI: string = '/api/user/getFirstUser';
@@ -85,7 +89,7 @@ export const SAMonitoringPage = () => {
             } else {
             }
 
-            setIsLoading(false);
+            // setIsLoading(false);
         } catch (error : any) {
             await router.replace({
                 pathname: '/error',
@@ -115,7 +119,7 @@ export const SAMonitoringPage = () => {
 
     const fetchMonitoring = async (userTeamUUID : string) => {
         try {
-            setIsLoading(true);
+            // setIsLoading(true);
             let dataReq = {
                 teamId: userTeamUUID,
             };
@@ -129,10 +133,9 @@ export const SAMonitoringPage = () => {
                 uuid : data.uuid,
                 pic : data.user?.full_name,
                 task_name: data.task?.task_name ? data.task?.task_name + '(Task)' : data.case?.case_name + '(Case)',
-                // case_name: data.case?.case_name ?? '-',
                 team_name: data.team?.team_name ?? '-',
-                start_time: data.start_time ? moment(data.start_time).format('hh:mm:ss') : '-',
-                end_time: data.end_time ? moment(data.end_time).format('hh:mm:ss') : '-',
+                start_time: data.start_time ? moment(data.start_time).format('DD-MM-yyyy hh:mm:ss') : '-',
+                end_time: data.end_time ? moment(data.end_time).format('DD-MM-yyyy hh:mm:ss') : '-',
                 remark: data.remark ?? '-',
                 active: data.active ? 'Working' : 'Idle',
             }));
@@ -140,7 +143,7 @@ export const SAMonitoringPage = () => {
             console.log('Team Monitoring : ', dataMonitoring);
 
             setRowsMonitoring(dataMonitoring);
-            setIsLoading(false);
+            // setIsLoading(false);
         } catch (error: any) {
             await router.replace({
                 pathname: '/error',
@@ -155,10 +158,11 @@ export const SAMonitoringPage = () => {
     };
 
     useEffect(() => {
+        setIsLoading(true);
         fetchUser().then(() => {
             fetchTeam(userTeamUUID).then(() => {
                 fetchMonitoring(userTeamUUID).then(() => {
-
+                    setIsLoading(false);
                 })
             });
         });
@@ -179,8 +183,6 @@ export const SAMonitoringPage = () => {
                     </div>
                     {isLoading ? (<CustomProgressBarEntireScreen></CustomProgressBarEntireScreen>) : (
                         <>
-
-
                             <CustomSpacer height={Constants(2)}></CustomSpacer>
                             {/*<DataGrid columns={columnsMonitoringTeam} rows={rowsMonitoring}></DataGrid>*/}
                             <StyledDataGrid

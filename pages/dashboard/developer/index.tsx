@@ -5,16 +5,18 @@ import CustomSideBar from "@/pages/components/mui/CustomSideBar";
 import CustomSpacer from "@/pages/components/mui/CustomSpacer";
 import Constants from "@/pages/components/mui/value/contants";
 import DevProjectPage from "@/pages/dashboard/developer/project";
-import {DevMonitoringPage} from "@/pages/dashboard/developer/monitoring";
+import {DevActivityPage} from "@/pages/dashboard/developer/activity";
 import {SettingPage} from "@/pages/setting";
 import AboutPage from "@/pages/about";
 import {useState} from "react";
 import DevDashboard from "@/pages/dashboard/developer/dashboard";
+import DevActivityHist from "@/pages/dashboard/developer/activityHist";
 
 const sidebarItems = [
-    // { name: 'Dashboard', route: '/dashboard' },
+    { name: 'Dashboard', route: '/dashboard' },
     { name: 'Project', route: '/project' },
     { name: 'Activity', route: '/activity' },
+    { name: 'Activity History', route: '/activityHist' },
     { name: 'About', route: '/about' },
 ];
 
@@ -33,7 +35,9 @@ export const DeveloperDashboard = () => {
             case '/project':
                 return <DevProjectPage />;
             case '/activity':
-                return <DevMonitoringPage />;
+                return <DevActivityPage />;
+            case '/activityHist':
+                return <DevActivityHist />;
             case '/about':
                 return <AboutPage />;
             default:

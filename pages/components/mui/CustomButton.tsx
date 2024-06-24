@@ -4,19 +4,19 @@ import { styled } from '@mui/material/styles';
 import { SvgIconProps } from '@mui/material/SvgIcon';
 
 interface CustumeButtonProps extends ButtonProps {
-    customProps?: string;
-    leftIcon?: React.ReactElement<SvgIconProps>; // Prop for the optional left icon
-    rightIcon?: React.ReactElement<SvgIconProps>; // Prop for the optional right icon
+    customProps?    : string;
+    leftIcon?       : React.ReactElement<SvgIconProps>;
+    rightIcon?      : React.ReactElement<SvgIconProps>;
 }
 
 const StyledButton = styled(Button)(({ theme }) => ({
-    borderRadius: '50px', // Adjust the border radius as needed
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '0.5rem 1rem',
-    textTransform: 'none', // Ensure text is not transformed to uppercase
-    gap: '0.5rem', // Add some space between the icon and the text
+    borderRadius    : '50px',
+    display         : 'flex',
+    alignItems      : 'center',
+    justifyContent  : 'center',
+    padding         : '0.5rem 1rem',
+    textTransform   : 'none',
+    gap             : '0.5rem',
 }));
 
 export const CustomButton: React.FC<CustumeButtonProps> = ({ customProps, leftIcon, rightIcon, ...props }) => {

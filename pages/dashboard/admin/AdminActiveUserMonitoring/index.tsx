@@ -13,28 +13,14 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import {DataGrid, GridColDef} from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import {useRouter} from "next/router";
 
 export const AdminActiveUserMonitoring = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const [rows, setRows] = useState<[]>([]);
 
-    const [selectedRow, setSelectedRow] = useState<any>(null);
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-    const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-
-    const handleEditRow = (id: string) => {
-
-    }
-
-    const openConfirmDialog = (id: string) => {
-
-    }
-
-    const handleAddRow = () => {
-
-    }
+    const router = useRouter(); // Initialize useRouter
 
     const columns: GridColDef[] = [
         // {
@@ -161,77 +147,6 @@ export const AdminActiveUserMonitoring = () => {
                             }}
                         />
                     </Box>
-
-                    {/*<Dialog open={isAddDialogOpen} onClose={handleAddDialogClose}>*/}
-                    {/*    <DialogTitle>Add Team</DialogTitle>*/}
-                    {/*    <DialogContent>*/}
-                    {/*        <DialogContentText>Enter role details and save.</DialogContentText>*/}
-                    {/*        <CustomTextField*/}
-                    {/*            margin="dense"*/}
-                    {/*            name="role_name"*/}
-                    {/*            label="Role Name"*/}
-                    {/*            type="text"*/}
-                    {/*            fullWidth*/}
-                    {/*            value={roleName}*/}
-                    {/*            onChange={handleNewRoleName}*/}
-                    {/*        />*/}
-                    {/*        <CustomTextField*/}
-                    {/*            margin="dense"*/}
-                    {/*            name="role_description"*/}
-                    {/*            label="Team Description"*/}
-                    {/*            type="text"*/}
-                    {/*            fullWidth*/}
-                    {/*            value={roleDescription}*/}
-                    {/*            onChange={handleNewRoleDescription}*/}
-                    {/*        />*/}
-                    {/*    </DialogContent>*/}
-                    {/*    <DialogActions>*/}
-                    {/*        <CustomButton variant={'contained'} onClick={handleAddDialogClose}>Cancel</CustomButton>*/}
-                    {/*        <CustomButton variant={'contained'} onClick={handleAddDialogSave}>Save</CustomButton>*/}
-                    {/*    </DialogActions>*/}
-                    {/*</Dialog>*/}
-
-                    {/*<Dialog open={isDialogOpen} onClose={handleDialogClose}>*/}
-                    {/*    <DialogTitle>Edit Role</DialogTitle>*/}
-                    {/*    <DialogContent>*/}
-                    {/*        <DialogContentText>Update role details and save.</DialogContentText>*/}
-                    {/*        <CustomTextField*/}
-                    {/*            margin="dense"*/}
-                    {/*            name="role_name"*/}
-                    {/*            label="Role Name"*/}
-                    {/*            type="text"*/}
-                    {/*            fullWidth*/}
-                    {/*            value={roleName}*/}
-                    {/*            onChange={handleNewRoleName}*/}
-                    {/*        />*/}
-                    {/*        <CustomTextField*/}
-                    {/*            margin="dense"*/}
-                    {/*            name="role_description"*/}
-                    {/*            label="Team Description"*/}
-                    {/*            type="text"*/}
-                    {/*            fullWidth*/}
-                    {/*            value={roleDescription}*/}
-                    {/*            onChange={handleNewRoleDescription}*/}
-                    {/*        />*/}
-                    {/*    </DialogContent>*/}
-                    {/*    <DialogActions>*/}
-                    {/*        <CustomButton variant={'contained'} onClick={handleDialogClose}>Cancel</CustomButton>*/}
-                    {/*        <CustomButton variant={'contained'} onClick={handleEditDialogSave}>Save</CustomButton>*/}
-                    {/*    </DialogActions>*/}
-                    {/*</Dialog>*/}
-
-                    {/*<Dialog open={isConfirmDialogOpen} onClose={handleConfirmDialogClose}>*/}
-                    {/*    <DialogTitle>Confirm Delete</DialogTitle>*/}
-                    {/*    <DialogContent>*/}
-                    {/*        <DialogContentText>*/}
-                    {/*            Are you sure you want to delete this Project?*/}
-                    {/*        </DialogContentText>*/}
-                    {/*    </DialogContent>*/}
-                    {/*    <DialogActions>*/}
-                    {/*        <CustomButton variant={'contained'} onClick={handleConfirmDialogClose}>Cancel</CustomButton>*/}
-                    {/*        <CustomButton variant={'contained'} onClick={handleConfirmDelete}>Delete</CustomButton>*/}
-                    {/*    </DialogActions>*/}
-                    {/*</Dialog>*/}
                 </div>
             )}
         </>

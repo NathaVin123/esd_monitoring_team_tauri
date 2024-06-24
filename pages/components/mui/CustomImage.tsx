@@ -3,18 +3,18 @@ import { Box } from '@mui/material';
 import Image from 'next/image';
 
 interface CustomImageProps {
-    path: any; // Changed to string type for next/image compatibility
-    alt?: string;
-    size?: 'XS' | 'S' | 'M' | 'L' | 'XL';
-    borderRadius?: number | string;
+    path            : any; // Changed to string type for next/image compatibility
+    alt?            : string;
+    size?           : 'XS' | 'S' | 'M' | 'L' | 'XL';
+    borderRadius?   : number | string;
 }
 
 const sizeMap = {
-    XS: 50,
-    S: 100,
-    M: 150,
-    L: 200,
-    XL: 250,
+    XS  : 50,
+    S   : 100,
+    M   : 150,
+    L   : 200,
+    XL  : 250,
 };
 
 const CustomImage: React.FC<CustomImageProps> = ({ path, alt = 'image', size = 'M', borderRadius }) => {

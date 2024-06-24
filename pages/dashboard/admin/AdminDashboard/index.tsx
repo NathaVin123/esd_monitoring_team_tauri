@@ -5,8 +5,11 @@ import CustomTypography from "@/pages/components/mui/CustomTypography";
 import { CustomProgressBarEntireScreen } from "@/pages/components/mui/CustomProgressBar";
 import { Grid, Paper, Typography } from "@mui/material";
 import {router} from "next/client";
+import {useRouter} from "next/router";
 
 export const AdminDashboard = () => {
+    const router = useRouter(); // Initialize useRouter
+
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const [countUser, setCountUser] = useState<number>(0);

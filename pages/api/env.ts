@@ -1,1 +1,1 @@
-export const URLAPI = process.env.url;
+export const URLAPI: string | undefined = process.env.url;

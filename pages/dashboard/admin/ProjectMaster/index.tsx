@@ -14,10 +14,14 @@ import Constants from "@/pages/components/mui/value/contants";
 import CustomButton from "@/pages/components/mui/CustomButton";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import CustomTextField from "@/pages/components/mui/CustomTextField";
+import {useRouter} from "next/router";
 
 const ProjectMaster = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [rows, setRows] = useState<[]>([]);
+
+    const router = useRouter(); // Initialize useRouter
+
     // const [selectedRow, setSelectedRow] = useState<any>(null);
     // const [isDialogOpen, setIsDialogOpen] = useState(false);
     // const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);

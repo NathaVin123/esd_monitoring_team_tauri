@@ -95,7 +95,7 @@ export default function Splash() {
     return (
         <CustomContainerCenter>
             <CustomImage path={PolytronLogo} />
-            <CustomTypography size={"L"} bold>ESD Monitoring Team</CustomTypography>
+            <CustomTypography size={"L"} bold>ESD Team Monitoring</CustomTypography>
             <CustomSpacer height={Constants(2)} />
             <CustomLinearProgessBar />
             <CustomSpacer height={Constants(2)} />

@@ -70,7 +70,7 @@ export const SAActivityPage = () => {
     const [rows, setRows] = useState<[]>([]);
 
     const fetchUser = async () => {
-        setIsLoading(true);
+        // setIsLoading(true);
 
         try {
             const routeAPI: string = '/api/user/getFirstUser';
@@ -95,7 +95,7 @@ export const SAActivityPage = () => {
             if(!response) {
                 console.log('Something Wrong !');
             } else {
-                setIsLoading(false);
+                // setIsLoading(false);
             }
         } catch (error : any) {
             await router.replace({

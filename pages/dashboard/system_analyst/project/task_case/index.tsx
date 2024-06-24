@@ -25,6 +25,7 @@ import { CustomProgressBarEntireScreen } from "@/pages/components/mui/CustomProg
 import CustomTextField from "@/pages/components/mui/CustomTextField";
 import CustomSpacer from "@/pages/components/mui/CustomSpacer";
 import Constants from "@/pages/components/mui/value/contants";
+import CustomToast from "@/pages/components/mui/CustomToast";
 
 export const TaskCase = () => {
     const router = useRouter();
@@ -164,6 +165,14 @@ export const TaskCase = () => {
         setEndDateCase(e.target.value);
     };
 
+    const [isOpenToast, setIsOpenToast] = useState<boolean>(false);
+
+    const [messageError, setMessageError] = useState<string>('');
+
+    const handleCloseToast = () => {
+        setIsOpenToast(false);
+    }
+
     const handleEditTask = async (row: any) => {
         setUuidEditTask('');
         setSelectedEditRow([]);
@@ -218,46 +227,7 @@ export const TaskCase = () => {
     const [assignedCase, setAssignedCase] = useState<string>('');
 
     const fetchUserTeamDropdown = async (teamId : string) => {
-        setIsLoading(true);
 
-        let dataReq = {
-            teamId : teamId,
-        };
-
-        console.log(dataReq);
-
-        console.log(URLAPI+'/api/user/getUserAllTeam');
-
-        try {
-            let response = await axios.post(URLAPI+'/api/user/getAllUserTeam', dataReq);
-
-            let userData = response.data.data;
-
-            if(userData) {
-                let data = userData.map((data : any, index : number) => ({
-                    id : index + 1,
-                    uuid : data.uuid,
-                    user_name: data.full_name,
-                }));
-
-                console.log('Test 1', userData);
-
-                let userOptions = data.map((data : any, index : number) => ({
-                    key : data.uuid,
-                    value: data.user_name,
-                }))
-
-                console.log(userOptions);
-
-                setRowsUserOptions(userOptions);
-
-                console.log(rowsUserOptions);
-            }
-
-            setIsLoading(false);
-        } catch (error : any) {
-
-        }
     }
 
     const handleDeleteCase = (row: any) => {
@@ -420,7 +390,7 @@ export const TaskCase = () => {
     const [userTeam, setUserTeam] = useState<string>("");
 
     const fetchUser = async () => {
-        setIsLoading(true);
+        // setIsLoading(true);
 
         try {
             const routeAPI: string = "/api/user/getFirstUser";
@@ -438,12 +408,55 @@ export const TaskCase = () => {
 
                 setUserUUID(dataUser.uuid);
                 setUserTeam(dataUser.team_master_id);
+
+                // setIsLoading(true);
+
+                let dataReq = {
+                    teamId : dataUser.team_master_id,
+                };
+
+                console.log(dataReq);
+
+                console.log(URLAPI+'/api/user/getUserAllTeam');
+
+                try {
+                    let response = await axios.post(URLAPI+'/api/user/getAllUserTeam', dataReq);
+
+                    let userData = response.data.data;
+
+                    console.log(userData);
+
+                    if(userData) {
+                        let data = userData.map((data : any, index : number) => ({
+                            id : index + 1,
+                            uuid : data.uuid,
+                            user_name: data.full_name,
+                        }));
+
+                        console.log('Test 1', userData);
+
+                        let userOptions = data.map((data : any, index : number) => ({
+                            key : data.uuid,
+                            value: data.user_name,
+                        }))
+
+                        console.log(userOptions);
+
+                        setRowsUserOptions(userOptions);
+
+                        console.log(rowsUserOptions);
+                    }
+
+                    // setIsLoading(false);
+                } catch (error : any) {
+                    console.log(error);
+                }
             }
 
             if (!response) {
                 console.log("Something Wrong !");
             } else {
-                setIsLoading(false);
+                // setIsLoading(false);
             }
         } catch (error: any) {
             await router.replace({
@@ -645,7 +658,7 @@ export const TaskCase = () => {
         setIsLoading(false);
     };
 
-    const deleteTask = async () => {
+     const deleteTask = async () => {
         setIsLoading(true);
         setIsConfirmDialogOpenTask(false);
 
@@ -740,6 +753,9 @@ export const TaskCase = () => {
 
     const [statusOptions, setStatusOptions] = useState<[]>([]);
 
+    const [remarkTask, setRemarkTask] = useState<string>('');
+    const [remarkCase, setRemarkCase] = useState<string>('');
+
     const fetchStatus = async () => {
         setIsLoading(true);
         try {
@@ -787,6 +803,14 @@ export const TaskCase = () => {
         setAssignedCase(e.target.value);
     }
 
+    const handleNewRemarkTask = (e: any) => {
+        setRemarkTask(e.target.value);
+    }
+
+    const handleNewRemarkCase = (e: any) => {
+        setRemarkCase(e.target.value);
+    }
+
     const [isDialogOpenAssignedTask, setIsDialogOpenAssignedTask] = useState<boolean>(false);
 
     const [isDialogOpenAssignedCase, setIsDialogOpenAssignedCase] = useState<boolean>(false);
@@ -810,12 +834,37 @@ export const TaskCase = () => {
         console.log('Team Id : ', userTeam);
         console.log('User Task Assigned Id : ', assignedTask);
 
+        let dataReqFind = {
+            userId : assignedTask,
+            taskId: taskUUIDAssigned,
+            caseId: null,
+            teamId: userTeam,
+            projectId: uuid,
+        };
+
+        console.log('Data Req Find : ', dataReqFind);
+
+        // let responseFind = await axios.post(URLAPI+'/api/monitoring/findExistActivityAssign', dataReqFind);
+        //
+        // console.log('Response Find : ', responseFind.data);
+        //
+        // if(responseFind.data.success === false) {
+        //     setIsOpenToast(true);
+        //     setMessageError('Already Assigned');
+        //
+        //     setIsLoading(false);
+        //     return false;
+        // }
+
         let dataReq = {
             uuidTask: taskUUIDAssigned,
             teamId: userTeam,
             assignedBy: assignedTask,
             projectId : uuid,
+            remark: remarkTask,
         };
+
+        console.log(dataReq);
 
         let response = await axios.post(URLAPI+'/api/monitoring/updateActivityTaskSA', dataReq);
 
@@ -837,13 +886,17 @@ export const TaskCase = () => {
         console.log('Case UUID : ', caseUUIDAssigned);
         console.log('Team Id : ', userTeam);
         console.log('User Case Assigned Id : ', assignedCase);
+        console.log('Project : ', uuid);
 
         let dataReq = {
             uuidCase: caseUUIDAssigned,
             teamId: userTeam,
             assignedBy: assignedCase,
             projectId : uuid,
+            remark: remarkCase,
         };
+
+        console.log(dataReq);
 
         let response = await axios.post(URLAPI+'/api/monitoring/updateActivityCaseSA', dataReq);
 
@@ -863,14 +916,15 @@ export const TaskCase = () => {
             fetchStatus().then(() => {
                 fetchTask().then(() => {
                     fetchCase().then(() => {
-                        fetchUserTeamDropdown(userTeam).then(() => {
-                            setIsLoading(false);
-                        })
+                        // fetchUserTeamDropdown(userTeam).then(() => {
+                        //     setIsLoading(false);
+                        // })
+                        setIsLoading(false);
                     });
                 });
             });
         });
-    }, [userTeam]);
+    }, []);
 
     return (
         <>
@@ -1069,6 +1123,15 @@ export const TaskCase = () => {
                                         value={assignedTask}
                                         onChange={handleAssignedTaskChange}
                                     />
+                                    <CustomTextField
+                                        margin="dense"
+                                        name="remark"
+                                        label="Remark"
+                                        type="text"
+                                        fullWidth
+                                        value={remarkTask}
+                                        onChange={handleNewRemarkTask}
+                                    />
                                 </DialogContent>
                                 <DialogActions>
                                     <CustomButton variant={'contained'} onClick={ () => { setIsDialogOpenAssignedTask(false) }}>Cancel</CustomButton>
@@ -1168,22 +1231,6 @@ export const TaskCase = () => {
                                 </DialogActions>
                             </Dialog>
 
-                            <Dialog open={isDialogOpenAssignedCase} onClose={handleDialogOpenAssignedCase}>
-                                <DialogTitle>Assigned By</DialogTitle>
-                                <DialogContent>
-                                    <DialogContentText>Choose user assigned case</DialogContentText>
-                                    <CustomTextField
-                                        margin="dense"
-                                        name="assignedCase"
-                                        label="User"
-                                        type="select"
-                                        fullWidth
-                                        value={startDateCase}
-                                        onChange={handleNewStartDateCase}
-                                    />
-                                </DialogContent>
-                            </Dialog>
-
                             <Dialog open={isDialogOpenEditCase} onClose={handleDialogCloseEditCase}>
                                 <DialogTitle>Edit Case</DialogTitle>
                                 <DialogContent>
@@ -1256,24 +1303,56 @@ export const TaskCase = () => {
 
                             <Dialog open={isDialogOpenAssignedCase} onClose={handleDialogOpenAssignedCase}>
                                 <DialogTitle>Assigned By</DialogTitle>
-                                <DialogContentText>Choose user assigned case</DialogContentText>
-                                <CustomTextField
-                                    margin="dense"
-                                    name="assignedCase"
-                                    label="User"
-                                    type="select"
-                                    fullWidth
-                                    options={rowsUserOptions}
-                                    value={assignedCase}
-                                    onChange={handleAssignedCaseChange}
-                                />
-                                <DialogActions>
-                                    <CustomButton variant={'contained'} onClick={() => {
-                                        setIsDialogOpenAssignedCase(false);
-                                    }}>Cancel</CustomButton>
-                                    <CustomButton variant={'contained'} onClick={saveAssignedCase}>Assign</CustomButton>
-                                </DialogActions>
+                                <DialogContent>
+                                    <DialogContentText>Choose user assigned case</DialogContentText>
+                                    <CustomTextField
+                                        margin="dense"
+                                        name="assignedCase"
+                                        label="User"
+                                        type="select"
+                                        fullWidth
+                                        value={assignedCase}
+                                        options={rowsUserOptions}
+                                        onChange={handleAssignedCaseChange}
+                                    />
+                                    <CustomTextField
+                                        margin="dense"
+                                        name="remark"
+                                        label="Remark"
+                                        type="text"
+                                        fullWidth
+                                        value={remarkCase}
+                                        onChange={handleNewRemarkCase}
+                                    />
+                                        <DialogActions>
+                                            <CustomButton variant={'contained'} onClick={() => {
+                                                setIsDialogOpenAssignedCase(false);
+                                            }}>Cancel</CustomButton>
+                                            <CustomButton variant={'contained'} onClick={saveAssignedCase}>Assign</CustomButton>
+                                        </DialogActions>
+                                </DialogContent>
                             </Dialog>
+
+                            {/*<Dialog open={isDialogOpenAssignedCase} onClose={handleDialogOpenAssignedCase}>*/}
+                            {/*    <DialogTitle>Assigned By</DialogTitle>*/}
+                            {/*    <DialogContentText>Choose user assigned case</DialogContentText>*/}
+                            {/*    <CustomTextField*/}
+                            {/*        margin="dense"*/}
+                            {/*        name="assignedCase"*/}
+                            {/*        label="User"*/}
+                            {/*        type="select"*/}
+                            {/*        fullWidth*/}
+                            {/*        options={rowsUserOptions}*/}
+                            {/*        value={assignedCase}*/}
+                            {/*        onChange={handleAssignedCaseChange}*/}
+                            {/*    />*/}
+                            {/*    <DialogActions>*/}
+                            {/*        <CustomButton variant={'contained'} onClick={() => {*/}
+                            {/*            setIsDialogOpenAssignedCase(false);*/}
+                            {/*        }}>Cancel</CustomButton>*/}
+                            {/*        <CustomButton variant={'contained'} onClick={saveAssignedCase}>Assign</CustomButton>*/}
+                            {/*    </DialogActions>*/}
+                            {/*</Dialog>*/}
 
                             <Dialog open={isConfirmDialogOpenCase} onClose={handleConfirmDialogCloseTask}>
                                 <DialogTitle>Confirm Delete</DialogTitle>
@@ -1290,6 +1369,7 @@ export const TaskCase = () => {
                         </>
                     )}
                 </div>
+                <CustomToast open={isOpenToast} onClose={handleCloseToast} message={messageError} severity={'error'}></CustomToast>
             </div>
             {isLoading ? (<CustomProgressBarEntireScreen></CustomProgressBarEntireScreen>) : (<></>)}
         </>

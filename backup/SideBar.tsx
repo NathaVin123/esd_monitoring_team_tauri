@@ -25,7 +25,7 @@ const Sidebar: React.FC<{ mobileOpen: boolean; handleDrawerToggle: () => void }>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                     <CustomImage size={'XS'} path={PolytronLogo} />
                     <CustomTypography size={'S'} bold sx={{ ml: 1 }}>
-                        ESD Monitoring Team
+                        ESD Team Monitoring
                     </CustomTypography>
                 </Box>
             </Box>

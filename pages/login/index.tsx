@@ -146,7 +146,7 @@ export function Login() {
             <CustomContainerCenter>
                 <CustomImage path={PolytronIcon}></CustomImage>
                 <CustomTypography bold size={'XL'}>
-                    ESD Monitoring Team
+                    ESD Team Monitoring
                 </CustomTypography>
                 <CustomSpacer height={Constants(4)} />
                 <CustomTypography size={'L'}>

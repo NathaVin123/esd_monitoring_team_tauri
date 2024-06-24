@@ -57,10 +57,10 @@
     },
     "windows": [
       {
-        "fullscreen": false,
+        "fullscreen": true,
         "height": 600,
-        "resizable": true,
-        "title": "ESD Monitoring Team",
+        "resizable": false,
+        "title": "ESD Team Monitoring",
         "width": 800
       }
     ]

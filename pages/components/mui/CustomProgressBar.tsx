@@ -1,4 +1,5 @@
 import {LinearProgress, CircularProgress, Box} from "@mui/material";
+import React from "react";
 
 export const CustomLinearProgessBar = () => {
     return (

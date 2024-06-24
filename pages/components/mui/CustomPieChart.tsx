@@ -1,13 +1,12 @@
 import React from 'react';
-import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, Legend, TooltipProps } from 'recharts';
 
-// Define the type for the chart data
 interface ChartData {
     name: string;
     value: number;
+    unit: 'seconds' | 'minutes' | 'hours';
 }
 
-// Define the prop types for CustomPieChart
 interface CustomPieChartProps {
     data: ChartData[];
     dataKey: string;
@@ -19,20 +18,24 @@ interface CustomPieChartProps {
     showLegend?: boolean;
 }
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+const COLORS = ['#0000FF', '#FF0000', '#FFBB28', '#FF8042'];
 
-const CustomPieChart: React.FC<CustomPieChartProps> = ({
-                                                           data = [], // Default to an empty array
-                                                           dataKey,
-                                                           nameKey,
-                                                           innerRadius = 60,
-                                                           outerRadius = 80,
-                                                           cx = '50%',
-                                                           cy = '50%',
-                                                           showLegend = true,
-                                                       }) => {
+const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+        const { name, value, payload: { unit } } = payload[0];
+        return (
+            <div className="custom-tooltip" style={{ backgroundColor: '#fff', border: '1px solid #ccc', padding: '10px' }}>
+                <p>{`${name}: ${value} ${unit}`}</p>
+            </div>
+        );
+    }
+
+    return null;
+};
+
+const CustomPieChart: React.FC<CustomPieChartProps> = ({ data = [], dataKey, nameKey, innerRadius = 60, outerRadius = 80, cx = '50%', cy = '50%', showLegend = true }) => {
     return (
-        <PieChart width={400} height={400}>
+        <PieChart width={500} height={500}>
             <Pie
                 data={data}
                 dataKey={dataKey}
@@ -48,7 +51,7 @@ const CustomPieChart: React.FC<CustomPieChartProps> = ({
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
             </Pie>
-            <Tooltip />
+            <Tooltip content={<CustomTooltip />} />
             {showLegend && <Legend />}
         </PieChart>
     );

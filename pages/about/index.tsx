@@ -12,7 +12,7 @@ export const AboutPage = () => {
         <Box sx={{flex: 1, height: '100vh', width: '100vw', overflow:'hidden', justifyContent: 'space-between'}}>
             <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
                 <CustomImage size={'XL'} path={PolytronLogo}></CustomImage>
-                <CustomTypography size={'L'}>ESD Monitoring Team</CustomTypography>
+                <CustomTypography size={'L'}>ESD Team Monitoring</CustomTypography>
                 <CustomSpacer height={Constants(3)}></CustomSpacer>
                 <CustomTypography size={'S'}>Developed By : Nathaniel Vincent Wibowo - 01017533</CustomTypography>
             </div>

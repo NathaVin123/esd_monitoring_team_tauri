@@ -18,6 +18,7 @@ import moment from 'moment';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {router} from "next/client";
 import CustomToast from "@/pages/components/mui/CustomToast";
+import {useRouter} from "next/router";
 
 const initialRows: [] = [];
 
@@ -35,6 +36,9 @@ function isLocalStorageAvailable() {
 const UserMaster = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [rows, setRows] = useState<[]>(initialRows);
+
+    const router = useRouter(); // Initialize useRouter
+
     const [selectedRow, setSelectedRow] = useState<any>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);

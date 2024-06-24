@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Box } from '@mui/material';
 import { useEffect, useState, ReactNode } from 'react';
 
-// Define the prop types for CustomContainer
 interface CustomContainerProps {
     darkMode?: boolean;
     children: ReactNode;
@@ -12,14 +11,14 @@ export function CustomContainer({ darkMode, children }: CustomContainerProps) {
     return (
         <Box
             sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                width: '100vw',
-                height: '100vh',
-                bgcolor: darkMode ? 'grey.900' : 'background.paper',
-                color: darkMode ? 'grey.300' : 'text.primary',
-                overflow: 'auto',
-                padding: '16px',
+                display         : 'flex',
+                flexDirection   : 'column',
+                width           : '100vw',
+                height          : '100vh',
+                bgcolor         : darkMode ? 'grey.900' : 'background.paper',
+                color           : darkMode ? 'grey.300' : 'text.primary',
+                overflow        : 'auto',
+                padding         : '16px',
             }}
         >
             {children}
@@ -27,7 +26,6 @@ export function CustomContainer({ darkMode, children }: CustomContainerProps) {
     );
 }
 
-// Define the prop types for CustomContainerCenter
 interface CustomContainerCenterProps {
     children: ReactNode;
 }
@@ -39,15 +37,15 @@ export function CustomContainerCenter({ children }: CustomContainerCenterProps) 
         <CustomContainer darkMode={darkMode}>
             <Box
                 sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '100vw',
-                    height: '100vh',
-                    bgcolor: darkMode ? 'grey.900' : 'background.paper',
-                    color: darkMode ? 'grey.300' : 'text.primary',
-                    overflow: 'auto',
+                    display             : 'flex',
+                    flexDirection       : 'column',
+                    justifyContent      : 'center',
+                    alignItems          : 'center',
+                    width               : '100vw',
+                    height              : '100vh',
+                    bgcolor             : darkMode ? 'grey.900' : 'background.paper',
+                    color               : darkMode ? 'grey.300' : 'text.primary',
+                    overflow            : 'auto',
                 }}
             >
                 {children}

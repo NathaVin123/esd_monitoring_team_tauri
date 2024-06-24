@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Box, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import { grey, red } from "@mui/material/colors";
 import { useRouter } from "next/router";
-import MyAppBar from './AppBar';
 
 const MainLayout: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     const [mobileOpen, setMobileOpen] = useState(false);

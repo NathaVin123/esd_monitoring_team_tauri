@@ -8,7 +8,7 @@ interface CustomTypographyProps extends TypographyProps {
     bold?: boolean;
     italic?: boolean;
     hoverable?: boolean;
-    onClick?: () => void;  // Optionally pass an onClick function
+    onClick?: () => void;
 }
 
 const StyledTypography = styled(Typography)<CustomTypographyProps>(({ theme, size, customSize, bold, italic, hoverable }) => ({
@@ -19,9 +19,9 @@ const StyledTypography = styled(Typography)<CustomTypographyProps>(({ theme, siz
                 theme.typography.body1.fontSize),
     fontWeight: bold ? 'bold' : 'normal',
     fontStyle: italic ? 'italic' : 'normal',
-    transition: 'color 0.3s ease',  // Add transition effect for color change
+    transition: 'color 0.3s ease',
     '&:hover': {
-        color: hoverable ? 'red' : 'inherit',  // Only change color if hoverable is true
+        color: hoverable ? 'red' : 'inherit',
     },
 }));
 

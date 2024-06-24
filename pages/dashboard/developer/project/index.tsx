@@ -13,7 +13,6 @@ import {useRouter} from "next/router";
 import {router} from "next/client";
 import {Refresh} from "@mui/icons-material";
 
-
 export const DevProjectPage = () => {
     const [data, setData] = useState<[]>([]);
 
@@ -28,8 +27,6 @@ export const DevProjectPage = () => {
 
 
     const fetchUser = async () => {
-        setIsLoading(true);
-
         try {
             const routeAPI: string = '/api/user/getFirstUser';
 
@@ -51,7 +48,7 @@ export const DevProjectPage = () => {
             if(!response) {
                 console.log('Something Wrong !');
             } else {
-                setIsLoading(false);
+
             }
         } catch (error : any) {
             await router.replace({
@@ -65,7 +62,6 @@ export const DevProjectPage = () => {
 
     const fetchProject = async (userId: any) => {
         try {
-            setIsLoading(true);
             const routeAPI: string = '/api/project/getUserProject';
 
             console.log(userId);
@@ -97,8 +93,6 @@ export const DevProjectPage = () => {
             });
 
             setRows(userProjectData);
-
-            setIsLoading(false);
         } catch (error : any) {
             console.log(error);
             await router.replace({
@@ -150,6 +144,7 @@ export const DevProjectPage = () => {
     ];
 
     useEffect(() => {
+        setIsLoading(true);
         fetchUser().then(() => {
             fetchProject(userUUID).then(() => {
                 setIsLoading(false);

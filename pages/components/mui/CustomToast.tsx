@@ -5,7 +5,7 @@ interface ToastProps {
     open: boolean;
     onClose: () => void;
     message: string;
-    severity?: AlertColor;  // Make severity optional
+    severity?: AlertColor;
     autoHideDuration?: number;
 }
 

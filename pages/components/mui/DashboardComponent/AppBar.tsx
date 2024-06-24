@@ -81,19 +81,8 @@ const MyAppBar: React.FC<MyAppBarProps> = ({ hideHeaderTitle, routes }) => {
 
     const [routesList, setRoutesList] = useState<routesInterface[] | undefined>([]);
 
-
-    // const [nik, setNik] = useState<string | null>('');
-
     useEffect(() => {
-        // setRoutesList(routes);
-        // if(isLocalStorageAvailable()) {
-        //     setNik(localStorage.getItem('nikUser'));
-        // } else {
-        //     setNik('');
-        // }
         console.log('App Bar NIK : '+localStorage.getItem('nikUser'));
-
-        // setNik(localStorage.getItem('nikUser') ?? '-');
 
         doFetchUser().then(() => {
             console.log('Successfully fetching user');
@@ -130,7 +119,6 @@ const MyAppBar: React.FC<MyAppBarProps> = ({ hideHeaderTitle, routes }) => {
 
     const signOut = async () => {
         localStorage.removeItem('token');
-        // localStorage.removeItem('nikUser');
 
         await router.replace('/splash').then(() => {
             console.log('Back to Login');
@@ -147,7 +135,7 @@ const MyAppBar: React.FC<MyAppBarProps> = ({ hideHeaderTitle, routes }) => {
                 <Box display="flex" flexDirection="row" width="100%" alignItems="center">
                     <CustomImage size={"XS"} path={PolytronLogo}></CustomImage>
                     <CustomTypography size={'M'} bold>
-                        ESD Monitoring Team
+                        ESD Team Monitoring
                     </CustomTypography>
                 </Box>
                 ) : <></>}

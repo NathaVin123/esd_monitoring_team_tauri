@@ -179,13 +179,12 @@ export const DevProjectTaskPage = () => {
     }
 
     useEffect(() => {
-        // setSaLeaderName(sa_leader_name2);
+        setIsLoading(true);
         fetchUser().then(() => {
             fetchTask().then(() => {
-                setIsLoading(true);
                 console.log('Fetching Task...');
                 fetchCase().then(() => {
-                    console.log('Fetching Case');
+                    console.log('Fetching Case...');
                     setIsLoading(false);
                 })
             });
@@ -241,7 +240,6 @@ export const DevProjectTaskPage = () => {
                                 New Case
                             </CustomButton>
 
-                            {/*<DataGrid columns={columnsCase} rows={rowsCase} onRowClick={goToCase}></DataGrid>*/}
                             <DataGrid columns={columnsCase} rows={rowsCase}></DataGrid>
 
                         </>

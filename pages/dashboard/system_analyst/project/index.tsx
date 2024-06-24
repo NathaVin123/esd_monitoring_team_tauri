@@ -26,9 +26,12 @@ import Constants from "@/pages/components/mui/value/contants";
 import {Add} from "@mui/icons-material";
 import {DatePicker} from "@mui/x-date-pickers";
 import {ca} from "date-fns/locale";
+import {useRouter} from "next/router";
 
 export const SAProjectPage = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    const router = useRouter(); // Initialize useRouter
 
     const [isAddDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const [isAEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
@@ -230,7 +233,7 @@ export const SAProjectPage = () => {
     }
 
     const fetchUser = async () => {
-        setIsLoading(true);
+        // setIsLoading(true);
 
         try {
             const routeAPI: string = '/api/user/getFirstUser';
@@ -253,7 +256,7 @@ export const SAProjectPage = () => {
             if(!response) {
                 console.log('Something Wrong !');
             } else {
-                setIsLoading(false);
+                // setIsLoading(false);
             }
         } catch (error : any) {
             await router.replace({
@@ -266,7 +269,7 @@ export const SAProjectPage = () => {
     }
 
     const fetchStatus = async () => {
-        setIsLoading(true);
+        // setIsLoading(true);
         try {
             const routeAPI: string = '/api/status/getAllStatus';
             console.log(URLAPI+routeAPI);
@@ -289,7 +292,7 @@ export const SAProjectPage = () => {
             setStatusOptions(statusOptions);
 
             // setStatus(statusOptions);
-            setIsLoading(false);
+            // setIsLoading(false);
         } catch (error : any) {
             await router.replace({
                 pathname: '/error',
@@ -302,7 +305,7 @@ export const SAProjectPage = () => {
 
     const fetchProject = async (userUUID: string) => {
         try {
-            setIsLoading(true);
+            // setIsLoading(true);
 
             let dataReq = {
                 saLeaderId: userUUID,
@@ -330,7 +333,7 @@ export const SAProjectPage = () => {
 
             setRows(projectData);
 
-            setIsLoading(false);
+            // setIsLoading(false);
         } catch (error : any) {
             await router.replace({
                 pathname: '/error',
@@ -420,6 +423,7 @@ export const SAProjectPage = () => {
     }
 
     useEffect(() => {
+        setIsLoading(true);
         fetchStatus().then(() => {
             fetchUser().then(() => {
                 fetchProject(userUUID).then(() => {

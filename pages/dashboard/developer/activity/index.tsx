@@ -46,7 +46,7 @@ interface MonitoringData {
     isRunning: boolean;
 }
 
-export const DevMonitoringPage = () => {
+export const DevActivityPage = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [rowsMonitoring, setRowsMonitoring] = useState<MonitoringData[]>([]);
 
@@ -91,6 +91,8 @@ export const DevMonitoringPage = () => {
             const data = {
                 uuid: params.uuid,
             };
+
+            console.log('Data : ', data);
 
             const response = await axios.post(URLAPI + routeAPI, data);
 
@@ -149,7 +151,6 @@ export const DevMonitoringPage = () => {
                                 </IconButton>
                                 <IconButton onClick={() => {
                                     console.log(params.row);
-                                    // monitoringDone(pa)
                                 }}>
                                     <TiTick>
                                     </TiTick>
@@ -180,7 +181,6 @@ export const DevMonitoringPage = () => {
     const fetchMonitoring = async (userId: any) => {
         try {
             console.log('Fetch Monitoring...');
-            setIsLoading(true);
             const routeAPI: string = '/api/monitoring/getMonitoring';
 
             console.log(URLAPI + routeAPI);
@@ -188,7 +188,7 @@ export const DevMonitoringPage = () => {
             const data = {
                 userId: userId,
             };
-            
+
             const response = await axios.post(URLAPI + routeAPI, data);
 
             const activeUserMonitoringData = response.data.data.map((data: any, index: number) => {
@@ -224,8 +224,6 @@ export const DevMonitoringPage = () => {
             console.log(activeUserMonitoringData);
 
             setRowsMonitoring(activeUserMonitoringData);
-
-            setIsLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -238,8 +236,6 @@ export const DevMonitoringPage = () => {
     const router = useRouter();
 
     const fetchUser = async () => {
-        setIsLoading(true);
-
         try {
             const routeAPI: string = '/api/user/getFirstUser';
 
@@ -257,8 +253,6 @@ export const DevMonitoringPage = () => {
                 setUserUUID(dataUser.uuid);
                 setUserTeam(dataUser.team_master_id);
             }
-
-            setIsLoading(false);
 
         } catch (error : any) {
             await router.replace({
@@ -325,10 +319,6 @@ export const DevMonitoringPage = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        // const data = {
-        //     userId: userUUID,
-        // };
-
         fetchUser().then(() => {
             fetchMonitoring(userUUID).then(() => {
                 setIsLoading(false);
@@ -378,4 +368,4 @@ export const DevMonitoringPage = () => {
     );
 };
 
-export default DevMonitoringPage;
+export default DevActivityPage;

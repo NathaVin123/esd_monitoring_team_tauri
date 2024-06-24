@@ -4,12 +4,12 @@ import MenuItem from '@mui/material/MenuItem';
 import { useEffect, useCallback, useState } from 'react';
 
 interface CustomTextFieldProps {
-    type?: string;
-    required?: boolean;
-    options?: { key: string; value: string }[];
-    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    sx?: object;
-    value?: string; // Add value prop
+    type?           : string;
+    required?       : boolean;
+    options?        : { key: string; value: string }[];
+    onChange?       : (event: React.ChangeEvent<HTMLInputElement>) => void;
+    sx?             : object;
+    value?          : string; // Add value prop
     [key: string]: any;
 }
 
@@ -40,16 +40,13 @@ export default function CustomTextField(props: CustomTextFieldProps) {
     }, [props.required, props.type]);
 
     useEffect(() => {
-        // if (props.value !== undefined) {
-        //     validateInput(props.value);
-        // }
+
     }, [props.value, validateInput]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (props.onChange) {
             props.onChange(event);
         }
-        // validateInput(event.target.value);
     };
 
     const isValidDateTime = (value: string) => {
@@ -67,11 +64,11 @@ export default function CustomTextField(props: CustomTextFieldProps) {
 
     return (
         <TextField
-            variant="filled" // Default variant
-            label="Custom TextField" // Default label
-            fullWidth // Default full width
-            {...props} // Spread the rest of the props
-            value={props.value} // Use the value prop directly
+            variant="filled"
+            label="Custom TextField"
+            fullWidth
+            {...props}
+            value={props.value}
             onChange={handleChange}
             error={error}
             helperText={helperText}
@@ -80,44 +77,44 @@ export default function CustomTextField(props: CustomTextFieldProps) {
             inputProps={props.type === 'number' ? { inputMode: 'numeric', pattern: '\\d*' } : {}}
             sx={{
                 '& .MuiFilledInput-root': {
-                    backgroundColor: 'white', // Keep input field background in light mode
-                    color: 'black', // Keep input field text in light mode
-                    borderRadius: '8px', // Adjust the border radius as needed
+                    backgroundColor: 'white',
+                    color: 'black',
+                    borderRadius: '8px',
                     '&:before': {
-                        borderBottom: 'none', // Remove the default underline
+                        borderBottom: 'none',
                     },
                     '&:after': {
-                        borderBottom: 'none', // Remove the active underline
+                        borderBottom: 'none',
                     },
                     '&:hover:before': {
-                        borderBottom: 'none !important', // Remove the hover underline
+                        borderBottom: 'none !important',
                     },
                 },
                 '& .MuiInputLabel-root': {
-                    color: 'black', // Keep input label text in light mode
+                    color: 'black',
                 },
                 '& .MuiFormHelperText-root': {
-                    color: error ? 'red' : 'black', // Keep helper text in light mode
+                    color: error ? 'red' : 'black',
                 },
-                // Ensure that the TextField stays in light mode even if the theme is dark
+
                 '& .MuiInputBase-root': {
-                    backgroundColor: 'white', // Keep input background color white
-                    color: 'black', // Keep input text color black
+                    backgroundColor: 'white',
+                    color: 'black',
                 },
                 '& .MuiInputBase-input': {
-                    color: 'black', // Keep input text color black
+                    color: 'black',
                     '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
                         '-webkit-appearance': 'none',
                         margin: 0,
                     },
                     '&[type=number]': {
-                        '-moz-appearance': 'textfield', // Firefox
+                        '-moz-appearance': 'textfield',
                     },
                 },
                 '& .MuiSvgIcon-root': {
-                    color: 'black', // Keep icons in the input (like clear button) black
+                    color: 'black',
                 },
-                ...props.sx // Spread custom styles
+                ...props.sx
             }}
         >
             {props.type === 'select' && props.options && props.options.map(option => (

@@ -14,12 +14,14 @@ import SAMonitoringPage from "@/pages/dashboard/system_analyst/monitoring";
 import SettingPage from "@/pages/setting";
 import SAProjectPage from "@/pages/dashboard/system_analyst/project";
 import SAActivityPage from "@/pages/dashboard/system_analyst/activity";
+import SAMonitoringHistPage from "@/pages/dashboard/system_analyst/monitoringHist";
 
 const sidebarItems = [
     // { name: 'Dashboard', route: '/dashboard' },
     { name: 'Project', route: '/project' },
     { name: 'Activity', route: '/activity' },
     { name: 'Monitoring', route: '/monitoring' },
+    { name: 'Monitoring History', route: '/monitoringHist' },
     { name: 'About', route: '/about' },
 ];
 
@@ -40,6 +42,8 @@ export const SystemAnalystDashboard = () => {
                 return <SAProjectPage />;
             case '/monitoring':
                 return <SAMonitoringPage />;
+            case '/monitoringHist':
+                return <SAMonitoringHistPage />;
             case '/activity':
                 return <SAActivityPage></SAActivityPage>;
             case '/about':

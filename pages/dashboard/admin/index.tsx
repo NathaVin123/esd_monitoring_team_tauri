@@ -5,20 +5,17 @@ import {routes} from '@/routes/routes';
 import CustomSideBar from "@/pages/components/mui/CustomSideBar";
 import {useState} from "react";
 import {useRouter} from "next/router";
-import DevDashboard from "@/pages/dashboard/developer/dashboard";
-import DevProjectPage from "@/pages/dashboard/developer/project";
-import AboutPage from "@/pages/about";
-import AdminDashboard from "@/pages/dashboard/admin/dashboard";
 import CustomSpacer from "@/pages/components/mui/CustomSpacer";
 import Constants from "@/pages/components/mui/value/contants";
-import UserMaster from "@/pages/dashboard/admin/userMaster";
-import TeamMaster from "@/pages/dashboard/admin/teamMaster";
-import RoleMaster from "@/pages/dashboard/admin/roleMaster";
-import StatusMaster from "@/pages/dashboard/admin/statusMaster";
-import ProjectMaster from "@/pages/dashboard/admin/projectMaster";
-import TaskMaster from "@/pages/dashboard/admin/taskMaster";
-import CaseMaster from "@/pages/dashboard/admin/caseMaster";
-import AdminActiveUserMonitoring from "@/pages/dashboard/admin/activeUserMonitoring";
+import AdminDashboard from "@/pages/dashboard/admin/AdminDashboard";
+import UserMaster from "@/pages/dashboard/admin/UserMaster";
+import TeamMaster from "@/pages/dashboard/admin/TeamMaster";
+import RoleMaster from "@/pages/dashboard/admin/RoleMaster";
+import StatusMaster from "@/pages/dashboard/admin/StatusMaster";
+import ProjectMaster from "@/pages/dashboard/admin/ProjectMaster";
+import TaskMaster from "@/pages/dashboard/admin/TaskMaster";
+import CaseMaster from "@/pages/dashboard/admin/CaseMaster";
+import AdminActiveUserMonitoring from "@/pages/dashboard/admin/AdminActiveUserMonitoring";
 
 const sidebarItems = [
     { name: 'Dashboard', route: '/dashboard' },
@@ -44,7 +41,7 @@ export const AdminDashboardRoot = () => {
     const renderContent = () => {
         switch (currentRoute) {
             case '/dashboard':
-                return <AdminDashboard></AdminDashboard>;
+                return <AdminDashboard />;
             case '/user_master':
                 return <UserMaster />;
             case '/team_master':

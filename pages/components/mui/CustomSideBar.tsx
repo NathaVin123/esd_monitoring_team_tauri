@@ -4,13 +4,13 @@ import { useRouter } from "next/router";
 import { CustomProgressBarEntireScreen } from "@/pages/components/mui/CustomProgressBar";
 
 interface SidebarItem {
-    name: string;
-    route: string;
+    name    : string;
+    route   : string;
 }
 
 interface SidebarProps {
-    items: SidebarItem[];
-    onNavigate: (route: string) => void;
+    items           : SidebarItem[];
+    onNavigate      : (route: string) => void;
 }
 
 const CustomSideBar: React.FC<SidebarProps> = ({ items = [], onNavigate }) => {

@@ -17,21 +17,25 @@ import MyAppBar from "@/pages/components/mui/DashboardComponent/AppBar";
 import moment from 'moment';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {router} from "next/client";
-import CustomToast from "@/pages/components/mui/CustomToast"; // Import Refresh icon
+import CustomToast from "@/pages/components/mui/CustomToast";
+import {useRouter} from "next/router";
 
 const initialRows: [] = [];
 
-const StatusMaster = () => {
+const RoleMaster = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [rows, setRows] = useState<[]>(initialRows);
+
+    const router = useRouter(); // Initialize useRouter
+
     const [selectedRow, setSelectedRow] = useState<any>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
 
-    const [statusUuid, setStatusUuid] = useState<string>('');
-    const [statusName, setStatusName] = useState<string>('');
-    const [statusDescription, setStatusDescription] = useState<string>('');
+    const [roleUuid, setRoleUuid] = useState<string>('');
+    const [roleName, setRoleName] = useState<string>('');
+    const [roleDescription, setRoleDescription] = useState<string>('');
 
     const columns: GridColDef[] = [
         {
@@ -54,8 +58,8 @@ const StatusMaster = () => {
         },
         { field: 'id', headerName: 'ID', width: 50, sortable: true },
         { field: 'uuid', headerName: 'UUID', width: 200, editable: false },
-        { field: 'status_name', headerName: 'Status Name', width: 200, editable: false },
-        { field: 'status_description', headerName: 'Status Description', width: 200, editable: false },
+        { field: 'role_name', headerName: 'Role Name', width: 200, editable: false },
+        { field: 'role_description', headerName: 'Team Description', width: 200, editable: false },
         { field: 'created_at', headerName: 'Created At', width: 200, editable: false},
         { field: 'updated_at', headerName: 'Updated At', width: 200, editable: false},
         { field: 'created_by', headerName: 'Created By', width: 200, editable: false},
@@ -65,15 +69,15 @@ const StatusMaster = () => {
     useEffect(() => {
         setIsLoading(true);
 
-        fetchStatus().then(() => {
-            console.log('Get All Status Completed')
+        fetchRole().then(() => {
+            console.log('Get All Role Completed')
             setIsLoading(false);
         });
     }, []);
 
     const handleAddRow = () => {
-        setStatusName('');
-        setStatusDescription('');
+        setRoleName('');
+        setRoleDescription('');
 
         setIsAddDialogOpen(true);
     };
@@ -91,12 +95,11 @@ const StatusMaster = () => {
         try {
             if(validate()) {
                 let dataNew = {
-                    statusName: statusName,
-                    statusDescription: statusDescription,
-                    // createdBy: createdBy,
+                    roleName: roleName,
+                    roleDescription: roleDescription,
                 };
 
-                await createStatus(dataNew);
+                await createRole(dataNew);
             }
 
         } catch (error) {
@@ -104,34 +107,33 @@ const StatusMaster = () => {
         }
     };
 
-    const handleNewTeamName = (e: any) => {
-        setStatusName(e.target.value);
+    const handleNewRoleName = (e: any) => {
+        setRoleName(e.target.value);
     };
 
-    const handleNewTeamDescription = (e: any) => {
-        setStatusDescription(e.target.value);
+    const handleNewRoleDescription = (e: any) => {
+        setRoleDescription(e.target.value);
     };
 
-    const fetchStatus = async () => {
-        setIsLoading(true);
+    const fetchRole = async () => {
         try {
-            const routeAPI: string = '/api/status/getAllStatus';
+            const routeAPI: string = '/api/role/getAllRole';
             console.log(URLAPI+routeAPI);
 
             const response = await axios.get(URLAPI+routeAPI);
-            let statusData = response.data.data.map((data: any, index: number) => ({
+            let roleData = response.data.data.map((data: any, index: number) => ({
                 id: index + 1,
                 uuid: data.uuid,
-                status_name: data.status_name ?? '-',
-                status_description: data.status_description ?? '-',
+                role_name: data.role_name ?? '-',
+                role_description: data.role_description ?? '-',
                 created_at: data.created_at ? moment(data.created_at).format('DD/MM/YYYY hh:mm:ss') : '-',
                 created_by: data.created_by ?? '-',
                 updated_at: data.updated_at ? moment(data.updated_at).format('DD/MM/YYYY hh:mm:ss') : '-',
                 updated_by: data.update_by ?? '-',
             }));
 
-            setRows(statusData);
-            setIsLoading(false);
+            setRows(roleData);
+
         } catch (error : any) {
             await router.replace({
                 pathname: '/error',
@@ -150,42 +152,42 @@ const StatusMaster = () => {
     }
 
     const validate = () => {
-        if(!statusName) {
+        if(!roleName) {
             setToastOpen(true);
-            setErrorMessage('Status name is required!')
+            setErrorMessage('Role name is required!')
             return false;
         }
 
         return true;
     }
 
-    const createStatus = async (dataNew: any) => {
+    const createRole = async (dataNew: any) => {
         try {
-            const routeAPI: string = '/api/status/createStatus';
+            const routeAPI: string = '/api/role/createRole';
             await axios.post(URLAPI + routeAPI, dataNew);
             setIsAddDialogOpen(false);
-            await fetchStatus();
+            await fetchRole();
         } catch (error : any) {
             await router.replace({
                 pathname: '/error',
                 query : {
                     message: error.message,
                 }});
-            console.log("Failed to create status", error);
+            console.log("Failed to create role", error);
         }
     };
 
     const handleEditRow = (row: any) => {
         setSelectedRow([]);
 
-        setStatusUuid('')
-        setStatusName('');
-        setStatusDescription('');
+        setRoleUuid('')
+        setRoleName('');
+        setRoleDescription('');
 
         setSelectedRow(row);
-        setStatusUuid(row.uuid);
-        setStatusName(row.status_name);
-        setStatusDescription(row.status_description);
+        setRoleUuid(row.uuid);
+        setRoleName(row.role_name);
+        setRoleDescription(row.role_description);
 
         setIsDialogOpen(true);
     };
@@ -202,10 +204,10 @@ const StatusMaster = () => {
 
     const handleConfirmDelete = async () => {
         try {
-            await deleteStatus(selectedRow);
+            await deleteRole(selectedRow);
             setIsConfirmDialogOpen(false);
             setSelectedRow(null);
-            await fetchStatus();
+            await fetchRole();
         } catch (error) {
             console.log("Failed to delete user", error);
         }
@@ -218,24 +220,24 @@ const StatusMaster = () => {
             uuid: row.uuid,
         };
 
-        await deleteStatus(deletedRow);
+        await deleteRole(deletedRow);
     }
 
     const handleEditDialogSave = async () => {
         try {
             if(validate()) {
                 const updatedRow = {
-                    uuid: statusUuid,
-                    statusName: statusName,
-                    statusDescription: statusDescription,
+                    uuid: roleUuid,
+                    roleName: roleName,
+                    roleDescription: roleDescription,
                 };
 
-                await updateStatus(updatedRow);
+                await updateRole(updatedRow);
 
                 setIsDialogOpen(false);
                 setSelectedRow(null);
 
-                await fetchStatus();
+                await fetchRole();
             }
 
         } catch (error) {
@@ -243,37 +245,35 @@ const StatusMaster = () => {
         }
     };
 
-    const deleteStatus = async (deleteRow: any) => {
+    const deleteRole = async (deleteRow: any) => {
         try {
-            const routeAPI: string = `/api/status/deleteStatus`;
+            const routeAPI: string = `/api/role/deleteRole`;
             console.log(URLAPI+routeAPI);
-            const response = axios.post(URLAPI + routeAPI, deleteRow);
-            console.log(response);
-            await fetchStatus();
+            await axios.post(URLAPI + routeAPI, deleteRow);
+            await fetchRole();
         } catch (error : any) {
             await router.replace({
                 pathname: '/error',
                 query : {
                     message: error.message,
                 }});
-
             console.log("Failed to delete user", error);
         }
     };
 
-    const updateStatus = async (updatedRow: any) => {
+    const updateRole = async (updatedRow: any) => {
         try {
-            const routeAPI: string = `/api/status/updateStatus`;
+            const routeAPI: string = `/api/role/updateRole`;
             console.log(URLAPI+routeAPI);
             await axios.post(URLAPI + routeAPI, updatedRow);
-            await fetchStatus();
+            await fetchRole();
         } catch (error : any) {
             await router.replace({
                 pathname: '/error',
                 query : {
                     message: error.message,
                 }});
-            console.log("Failed to update status", error);
+            console.log("Failed to update role", error);
         }
     };
 
@@ -283,12 +283,12 @@ const StatusMaster = () => {
                 <CustomProgressBarEntireScreen></CustomProgressBarEntireScreen>
             ) : (
                 <div style={{height: '100vh', width: '85vw', overflow: 'hidden', padding: "20px"}}>
-                    <CustomTypography bold size={"M"}>Status Master</CustomTypography>
+                    <CustomTypography bold size={"M"}>Role Master</CustomTypography>
                     <CustomSpacer height={Constants(2)}></CustomSpacer>
-                    <Box sx={{height: 'calc(100vh - 160px)', width: '100%'}}>
+                    <Box sx={{ height: 'calc(100vh - 160px)', width: '100%' }}>
                         <Box display="flex" flexDirection="row" alignItems="center" gap={2}>
-                            <CustomButton variant="contained" onClick={handleAddRow}>Add Status</CustomButton>
-                            <IconButton onClick={fetchStatus}>
+                            <CustomButton variant="contained" onClick={handleAddRow}>Add Role</CustomButton>
+                            <IconButton onClick={fetchRole}>
                                 <RefreshIcon></RefreshIcon>
                             </IconButton>
                         </Box>
@@ -321,26 +321,26 @@ const StatusMaster = () => {
                     </Box>
 
                     <Dialog open={isAddDialogOpen} onClose={handleAddDialogClose}>
-                        <DialogTitle>Add Status</DialogTitle>
+                        <DialogTitle>Add Team</DialogTitle>
                         <DialogContent>
-                            <DialogContentText>Enter status details and save.</DialogContentText>
+                            <DialogContentText>Enter role details and save.</DialogContentText>
                             <CustomTextField
                                 margin="dense"
-                                name="status_name"
-                                label="Status Name"
+                                name="role_name"
+                                label="Role Name"
                                 type="text"
                                 fullWidth
-                                value={statusName}
-                                onChange={handleNewTeamName}
+                                value={roleName}
+                                onChange={handleNewRoleName}
                             />
                             <CustomTextField
                                 margin="dense"
-                                name="status_description"
-                                label="Status Description"
+                                name="role_description"
+                                label="Team Description"
                                 type="text"
                                 fullWidth
-                                value={statusDescription}
-                                onChange={handleNewTeamDescription}
+                                value={roleDescription}
+                                onChange={handleNewRoleDescription}
                             />
                         </DialogContent>
                         <DialogActions>
@@ -350,26 +350,26 @@ const StatusMaster = () => {
                     </Dialog>
 
                     <Dialog open={isDialogOpen} onClose={handleDialogClose}>
-                        <DialogTitle>Edit Status</DialogTitle>
+                        <DialogTitle>Edit Role</DialogTitle>
                         <DialogContent>
-                            <DialogContentText>Update status details and save.</DialogContentText>
+                            <DialogContentText>Update role details and save.</DialogContentText>
                             <CustomTextField
                                 margin="dense"
-                                name="status_name"
-                                label="Status Name"
+                                name="role_name"
+                                label="Role Name"
                                 type="text"
                                 fullWidth
-                                value={statusName}
-                                onChange={handleNewTeamName}
+                                value={roleName}
+                                onChange={handleNewRoleName}
                             />
                             <CustomTextField
                                 margin="dense"
-                                name="status_description"
-                                label="Status Description"
+                                name="role_description"
+                                label="Role Description"
                                 type="text"
                                 fullWidth
-                                value={statusDescription}
-                                onChange={handleNewTeamDescription}
+                                value={roleDescription}
+                                onChange={handleNewRoleDescription}
                             />
                         </DialogContent>
                         <DialogActions>
@@ -382,7 +382,7 @@ const StatusMaster = () => {
                         <DialogTitle>Confirm Delete</DialogTitle>
                         <DialogContent>
                             <DialogContentText>
-                                Are you sure you want to delete this status?
+                                Are you sure you want to delete this role?
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
@@ -397,4 +397,4 @@ const StatusMaster = () => {
     );
 }
 
-export default StatusMaster;
+export default RoleMaster;
