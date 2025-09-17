@@ -41,6 +41,8 @@ export const SAMonitoringHistPage = () => {
 
                 setUserUUID(dataUser.uuid);
                 setUserTeamUUID(dataUser.team_master_id);
+
+                await fetchMonitoringHist(userTeamUUID);
             }
 
         } catch (error : any) {
@@ -67,22 +69,38 @@ export const SAMonitoringHistPage = () => {
 
             console.log(response.data);
 
-            let dataMonitoringHist = response.data.data.map((data: any, index: number) =>({
-                id: index + 1,
-                uuid: data.uuid,
-                user: data.user_master_id ?? '-',
-                activity: data.task_master_id ? data.task_master_id : data.case_master_id,
-                case: data.case_master_id ?? '-',
-                // team: data.team_master_id,
-                project: data.project_master_id ?? '-',
-                remark: data.remark,
-                start_time: data.start_time ? (moment(data.start_time).format('DD/MM/YYYY HH:mm:ss')) : '-',
-                end_time: data.end_time ? (moment(data.end_time).format('DD/MM/YYYY HH:mm:ss')) : '-',
-                active: data.active,
-                duration: data.duration === 0 ? '-' : data.duration,
-                type: data.type,
-                created_at: data.created_at ? (moment(data.created_at).format('DD/MM/YYYY HH:mm:ss')) : '-',
-            }));
+
+            let dataMonitoringHist = response.data.data.map((data: any, index: number) => {
+                const duration = moment.duration(data.duration, 'seconds');
+
+                const days = duration.days();
+                const hours = duration.hours();
+                const minutes = duration.minutes();
+                const seconds = duration.seconds();
+
+                let durationString = '';
+                if (days > 0) durationString += `${days} Days `;
+                if (hours > 0) durationString += `${hours} Hours `;
+                if (minutes > 0) durationString += `${minutes} Minutes `;
+                if (seconds > 0 || durationString === '') durationString += `${seconds} Seconds`;
+
+                return {
+                    id: index + 1,
+                    uuid: data.uuid,
+                    user: data.user_master_id ?? '-',
+                    activity: data.task_master_id ? data.task_master_id : data.case_master_id,
+                    case: data.case_master_id ?? '-',
+                    // team: data.team_master_id,
+                    project: data.project_master_id ?? '-',
+                    remark: data.remark,
+                    start_time: data.start_time ? (moment(data.start_time).format('DD/MM/YYYY HH:mm:ss')) : '-',
+                    end_time: data.end_time ? (moment(data.end_time).format('DD/MM/YYYY HH:mm:ss')) : '-',
+                    active: data.active,
+                    duration: durationString.trim(),
+                    type: data.type,
+                    created_at: data.created_at ? (moment(data.created_at).format('DD/MM/YYYY HH:mm:ss')) : '-',
+                };
+            });
 
             console.log('Data Monitoring History : '+dataMonitoringHist);
 
@@ -137,9 +155,9 @@ export const SAMonitoringHistPage = () => {
     useEffect(() => {
         setIsLoading(true);
         fetchUser().then(() => {
-            fetchMonitoringHist(userTeamUUID).then(() => {
+            // fetchMonitoringHist(userTeamUUID).then(() => {
                 setIsLoading(false);
-            })
+            // })
         })
     }, [userTeamUUID]);
 

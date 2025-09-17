@@ -82,7 +82,7 @@ export const SAProjectPage = () => {
     };
 
     const handleEditDialogClose = () => {
-        setIsDialogOpen(false);
+        setIsEditDialogOpen(false);
         setSelectedEditRow(null);
     };
 
@@ -173,6 +173,11 @@ export const SAProjectPage = () => {
 
     const saveProject = async () => {
         try {
+
+            setIsDialogOpen(false);
+
+            setIsLoading(true);
+
             console.log(projectName);
             console.log(projectDescription);
             console.log(startDate);
@@ -208,9 +213,11 @@ export const SAProjectPage = () => {
             setSeverity('success');
             setIsOpen(true);
 
-            setIsDialogOpen(false);
+            // setIsDialogOpen(false);
 
             fetchProject(userUUID).then(() => {});
+
+            setIsLoading(false);
             return false;
         } catch (error : any) {
             await router.replace({
@@ -290,6 +297,10 @@ export const SAProjectPage = () => {
             }));
 
             setStatusOptions(statusOptions);
+
+            await fetchUser();
+
+            await fetchProject(userUUID);
 
             // setStatus(statusOptions);
             // setIsLoading(false);
@@ -425,8 +436,8 @@ export const SAProjectPage = () => {
     useEffect(() => {
         setIsLoading(true);
         fetchStatus().then(() => {
-            fetchUser().then(() => {
-                fetchProject(userUUID).then(() => {
+            // fetchUser().then(() => {
+            //     fetchProject(userUUID).then(() => {
                     // fetchUserTeamDropdown().then(() => {
                         setMessage('Successfully Fetch Project');
                         setSeverity('success');
@@ -435,8 +446,8 @@ export const SAProjectPage = () => {
                         setIsLoading(false);
                     // });
                 });
-            })
-        });
+            // })
+        // });
     }, [userUUID]);
 
     return (

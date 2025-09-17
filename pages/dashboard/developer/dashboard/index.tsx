@@ -7,6 +7,7 @@ import CustomSpacer from "@/pages/components/mui/CustomSpacer";
 import Constants from "@/pages/components/mui/value/contants";
 import {useEffect, useState} from "react";
 import {CustomProgressBarEntireScreen} from "@/pages/components/mui/CustomProgressBar";
+import {ca} from "date-fns/locale";
 
 export const DevDashboard = () => {
     const router = useRouter();
@@ -17,6 +18,12 @@ export const DevDashboard = () => {
     // ];
 
     const [data, setData] = useState<any>([]);
+    const [dataCount, setDataCount] = useState<any>([]);
+
+    const [projectSum, setProjectSum] = useState<number>(0);
+
+    const [taskSum, setTaskSum] = useState<number>(0);
+    const [caseSum, setCaseSum] = useState<number>(0);
 
     const [userUUID, setUserUUID] = useState<string>('');
     const [userTeam, setUserTeam] = useState<string>('');
@@ -45,7 +52,8 @@ export const DevDashboard = () => {
                 setUserTeam(dataUser.team_master_id);
                 setUserName(dataUser.full_name);
 
-                await fetchUserDashboard(dataUser.full_name);
+                await fetchUserDashboard(dataUser.uuid);
+                await fetchProjectDashboard(dataUser.uuid);
             }
 
             if(!response) {
@@ -75,6 +83,39 @@ export const DevDashboard = () => {
         }
     };
 
+    const fetchProjectDashboard = async (userUUID :string)=> {
+        try {
+            let dataReq = {
+                userId: userUUID
+            };
+
+            let response = await axios.post(URLAPI+'/api/monitoring/sumCountUserProject', dataReq);
+
+            let dataUser = response.data.data;
+
+            console.log(dataUser);
+
+            // if(dataUser){
+                setDataCount(
+                    [
+                        { name: 'Project', value: dataUser.countProjectData ?? 0},
+                    ]
+                )
+            // }
+
+            console.log(dataCount);
+
+            setProjectSum(dataUser.countProjectData ?? 0);
+
+        } catch (error : any) {
+            await router.replace({
+                pathname: '/error',
+                query : {
+                    message: error.message,
+                }});
+        }
+    }
+
     const fetchUserDashboard = async (userName: string) => {
         try {
             let dataReq = {
@@ -83,18 +124,30 @@ export const DevDashboard = () => {
 
             console.log(dataReq);
 
-            let response = await axios.post(URLAPI+'/api/monitoring/sumDurationTaskUserId', dataReq);
+            // let response = await axios.post(URLAPI+'/api/monitoring/sumDurationTaskUserId', dataReq);
+
+            let response = await axios.post(URLAPI+'/api/monitoring/sumCountTaskCase', dataReq);
 
             let dataSum = response.data.data;
 
             console.log(dataSum);
 
-            setData([
-                    // { name: 'Task', value: 50, unit: 'seconds'},
-                    // { name: 'Case', value: 50, unit: 'minutes'},
-                    { name: 'Task', ...convertTime(dataSum.sumTask)},
-                    { name: 'Case', ...convertTime(dataSum.sumCase)},
-            ]);
+            // setData([
+            //         // { name: 'Task', value: 50, unit: 'seconds'},
+            //         // { name: 'Case', value: 50, unit: 'minutes'},
+            //         { name: 'Task', ...convertTime(dataSum.sumTask)},
+            //         { name: 'Case', ...convertTime(dataSum.sumCase)},
+            // ]);
+
+            setData(
+                [
+                            { name: 'Task', value: dataSum.sumTask ?? 0},
+                            { name: 'Case', value: dataSum.sumCase ?? 0},
+                ]
+            )
+
+            setTaskSum(dataSum.sumTask ?? 0);
+            setCaseSum(dataSum.sumCase ?? 0);
 
             console.log('Data : ',data);
         } catch (error : any) {
@@ -124,11 +177,15 @@ export const DevDashboard = () => {
                 <CustomSpacer height={Constants(2)}></CustomSpacer>
                 {isLoading ? (<CustomProgressBarEntireScreen></CustomProgressBarEntireScreen>) : (
                     <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
-                        <CustomTypography size={'S'}>Duration Activity</CustomTypography>
-                        <CustomPieChart data={data} dataKey={'value'} nameKey={'name'}></CustomPieChart>
+                        <CustomTypography size={'L'}>Task / Case</CustomTypography>
+                        <CustomSpacer width={Constants(4)}></CustomSpacer>
+                        {taskSum === 0 || caseSum === 0 ? (<CustomTypography size={'M'}> No Data </CustomTypography>) : (<CustomPieChart data={data} dataKey={'value'} nameKey={'name'}></CustomPieChart>)}
+                        <CustomSpacer height={Constants(4)}></CustomSpacer>
+                        <CustomTypography size={'L'}>Project</CustomTypography>
+                        <CustomSpacer width={Constants(4)}></CustomSpacer>
+                        {projectSum === 0  ? (<CustomTypography size={'M'}> No Data </CustomTypography>) : (<CustomPieChart data={dataCount} dataKey={'value'} nameKey={'name'}></CustomPieChart>)}
                     </div>
                 )}
-
             </div>
         </div>
     );

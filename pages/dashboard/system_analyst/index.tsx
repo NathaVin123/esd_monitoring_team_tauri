@@ -17,7 +17,7 @@ import SAActivityPage from "@/pages/dashboard/system_analyst/activity";
 import SAMonitoringHistPage from "@/pages/dashboard/system_analyst/monitoringHist";
 
 const sidebarItems = [
-    // { name: 'Dashboard', route: '/dashboard' },
+    { name: 'Dashboard', route: '/dashboard' },
     { name: 'Project', route: '/project' },
     { name: 'Activity', route: '/activity' },
     { name: 'Monitoring', route: '/monitoring' },

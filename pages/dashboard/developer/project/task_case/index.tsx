@@ -45,12 +45,12 @@ export const DevProjectTaskPage = () => {
                         {/*<IconButton onClick={() => openConfirmDialog(params.row)}>*/}
                         {/*    <DeleteIcon />*/}
                         {/*</IconButton>*/}
-                        <IconButton onClick={() => {}}>
-                            <EditIcon />
-                        </IconButton>
-                        <IconButton onClick={() => {}}>
-                            <DeleteIcon />
-                        </IconButton>
+                        {/*<IconButton onClick={() => {}}>*/}
+                        {/*    <EditIcon />*/}
+                        {/*</IconButton>*/}
+                        {/*<IconButton onClick={() => {}}>*/}
+                        {/*    <DeleteIcon />*/}
+                        {/*</IconButton>*/}
                     </div>
                 );
             }
@@ -75,12 +75,12 @@ export const DevProjectTaskPage = () => {
                         {/*<IconButton onClick={() => openConfirmDialog(params.row)}>*/}
                         {/*    <DeleteIcon />*/}
                         {/*</IconButton>*/}
-                        <IconButton onClick={() => {}}>
-                            <EditIcon />
-                        </IconButton>
-                        <IconButton onClick={() => {}}>
-                            <DeleteIcon />
-                        </IconButton>
+                        {/*<IconButton onClick={() => {}}>*/}
+                        {/*    <EditIcon />*/}
+                        {/*</IconButton>*/}
+                        {/*<IconButton onClick={() => {}}>*/}
+                        {/*    <DeleteIcon />*/}
+                        {/*</IconButton>*/}
                     </div>
                 );
             }
@@ -224,24 +224,22 @@ export const DevProjectTaskPage = () => {
                     {view === 'tasks' ? (
                         <>
                             <CustomTypography size={'M'}>Task List</CustomTypography>
-                            <CustomButton leftIcon={<Add/>} variant="contained" color="primary" onClick={() => {
-                            }} style={{ marginBottom: '20px' }}>
-                                New Task
-                            </CustomButton>
+                            {/*<CustomButton leftIcon={<Add/>} variant="contained" color="primary" onClick={() => {*/}
+                            {/*}} style={{ marginBottom: '20px' }}>*/}
+                            {/*    New Task*/}
+                            {/*</CustomButton>*/}
 
                             <DataGrid columns={columnsTask} rows={rowsTask}></DataGrid>
                         </>
                     ) : (
                         <>
-
                             <CustomTypography size={'M'}>Case List</CustomTypography>
-                            <CustomButton leftIcon={<Add/>} variant="contained" color="primary" onClick={() => {
-                            }} style={{ marginBottom: '20px' }}>
-                                New Case
-                            </CustomButton>
+                            {/*<CustomButton leftIcon={<Add/>} variant="contained" color="primary" onClick={() => {*/}
+                            {/*}} style={{ marginBottom: '20px' }}>*/}
+                            {/*    New Case*/}
+                            {/*</CustomButton>*/}
 
                             <DataGrid columns={columnsCase} rows={rowsCase}></DataGrid>
-
                         </>
                         )
                     }

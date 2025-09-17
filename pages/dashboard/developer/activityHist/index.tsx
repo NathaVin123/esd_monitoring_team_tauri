@@ -50,6 +50,8 @@ export const DevActivityHist = () => {
             }
 
             // setIsLoading(false);
+
+            await fetchMonitoringUser(userUUID);
         } catch (error : any) {
             await router.replace({
                 pathname: '/error',
@@ -72,18 +74,35 @@ export const DevActivityHist = () => {
 
             console.log(response);
 
-            let dataMonitoring = response.data.data.map((data: any, index: number) => ({
-                id: index + 1,
-                uuid: data.uuid,
-                pic : data.user_master_id,
-                task_name: data.task_master_id ? data.task_master_id + '(Task)' : data.case_master_id + '(Case)',
-                // team_name: data.team?.team_name ?? '-',
-                start_time: data.start_time ? moment(data.start_time).format('DD-MM-yyyy HH:mm:ss') : '-',
-                end_time: data.end_time ? moment(data.end_time).format('DD-MM-yyyy HH:mm:ss') : '-',
-                remark: data.remark ?? '-',
-                active: data.active ? 'Working' : 'Idle',
-                duration: data.duration ?? 0,
-            }));
+            let dataMonitoring = response.data.data.map((data: any, index: number) => {
+
+                const duration = moment.duration(data.duration, 'seconds');
+
+                const days = duration.days();
+                const hours = duration.hours();
+                const minutes = duration.minutes();
+                const seconds = duration.seconds();
+
+                let durationString = '';
+                if (days > 0) durationString += `${days} Days `;
+                if (hours > 0) durationString += `${hours} Hours `;
+                if (minutes > 0) durationString += `${minutes} Minutes `;
+                if (seconds > 0 || durationString === '') durationString += `${seconds} Seconds`;
+
+                return {
+                    id: index + 1,
+                    uuid: data.uuid,
+                    pic : data.user_master_id,
+                    task_name: data.task_master_id ? data.task_master_id + '(Task)' : data.case_master_id + '(Case)',
+                    // team_name: data.team?.team_name ?? '-',
+                    start_time: data.start_time ? moment(data.start_time).format('DD-MM-yyyy HH:mm:ss') : '-',
+                    end_time: data.end_time ? moment(data.end_time).format('DD-MM-yyyy HH:mm:ss') : '-',
+                    remark: data.remark ?? '-',
+                    active: data.active ? 'Working' : 'Idle',
+                    duration: durationString.trim(),
+                };
+
+            });
 
             console.log(dataMonitoring);
 
@@ -144,9 +163,9 @@ export const DevActivityHist = () => {
     useEffect(() => {
         setIsLoading(true);
         fetchUser().then(() => {
-            fetchMonitoringUser(userUUID).then(() => {
+            // fetchMonitoringUser(userUUID).then(() => {
                 setIsLoading(false);
-            });
+            // });
         });
     }, [userUUID]);
 

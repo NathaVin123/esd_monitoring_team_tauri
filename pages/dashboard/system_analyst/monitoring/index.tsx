@@ -89,6 +89,10 @@ export const SAMonitoringPage = () => {
             } else {
             }
 
+            await fetchTeam(userTeamUUID);
+
+            await fetchMonitoring(userTeamUUID);
+
             // setIsLoading(false);
         } catch (error : any) {
             await router.replace({
@@ -160,11 +164,11 @@ export const SAMonitoringPage = () => {
     useEffect(() => {
         setIsLoading(true);
         fetchUser().then(() => {
-            fetchTeam(userTeamUUID).then(() => {
-                fetchMonitoring(userTeamUUID).then(() => {
+            // fetchTeam(userTeamUUID).then(() => {
+            //     fetchMonitoring(userTeamUUID).then(() => {
                     setIsLoading(false);
-                })
-            });
+                // })
+            // });
         });
     }, [userTeamUUID, userTeamName]);
 

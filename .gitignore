@@ -34,3 +34,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+pnpm-lock.yaml
+.gitignore
+.idea/inspectionProfiles/Project_Default.xml
+.idea/webResources.xml
+.idea/vcs.xml
+.idea/prettier.xml
+.idea/modules.xml
+.idea/misc.xml
+.idea/material_theme_project_new.xml
+.idea/git_toolbox_prj.xml
+.idea/esd-monitoring-team2.iml
+.idea/.gitignore

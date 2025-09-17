@@ -149,13 +149,13 @@ export const DevActivityPage = () => {
                                     <PlayArrowIcon />
                                     <CustomTypography>Start</CustomTypography>
                                 </IconButton>
-                                <IconButton onClick={() => {
-                                    console.log(params.row);
-                                }}>
-                                    <TiTick>
-                                    </TiTick>
-                                    <CustomTypography>Done</CustomTypography>
-                                </IconButton>
+                                {/*<IconButton onClick={() => {*/}
+                                {/*    console.log(params.row);*/}
+                                {/*}}>*/}
+                                {/*    <TiTick>*/}
+                                {/*    </TiTick>*/}
+                                {/*    <CustomTypography>Done</CustomTypography>*/}
+                                {/*</IconButton>*/}
                             </>
 
                         ) : (
@@ -253,7 +253,7 @@ export const DevActivityPage = () => {
                 setUserUUID(dataUser.uuid);
                 setUserTeam(dataUser.team_master_id);
             }
-
+        await fetchMonitoring(userUUID);
         } catch (error : any) {
             await router.replace({
                 pathname: '/error',
@@ -320,9 +320,9 @@ export const DevActivityPage = () => {
     useEffect(() => {
         setIsLoading(true);
         fetchUser().then(() => {
-            fetchMonitoring(userUUID).then(() => {
+            // fetchMonitoring(userUUID).then(() => {
                 setIsLoading(false);
-            });
+            // });
         });
 
     }, [userUUID]);

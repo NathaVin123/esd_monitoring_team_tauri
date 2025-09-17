@@ -50,6 +50,8 @@ export const DevProjectPage = () => {
             } else {
 
             }
+
+            await fetchProject(userUUID);
         } catch (error : any) {
             await router.replace({
                 pathname: '/error',
@@ -146,9 +148,9 @@ export const DevProjectPage = () => {
     useEffect(() => {
         setIsLoading(true);
         fetchUser().then(() => {
-            fetchProject(userUUID).then(() => {
+            // fetchProject(userUUID).then(() => {
                 setIsLoading(false);
-            });
+            // });
         });
     }, [userUUID]);
 

@@ -245,12 +245,14 @@ export const TaskCase = () => {
             renderCell: (params) => {
                 return (
                     <div>
-                        <IconButton onClick={() => {
+                        <IconButton onClick={(event) => {
+                            event.stopPropagation();
                             handleEditTask(params.row).then(r => {});
                         }}>
                             <EditIcon />
                         </IconButton>
-                        <IconButton onClick={() => {
+                        <IconButton onClick={(event) => {
+                            event.stopPropagation();
                             handleDeleteTask(params.row).then(r => {});
                         }}>
                             <DeleteIcon />
@@ -320,12 +322,14 @@ export const TaskCase = () => {
             renderCell: (params) => {
                 return (
                     <div>
-                        <IconButton onClick={() => {
+                        <IconButton onClick={(event) => {
+                            event.stopPropagation();
                             handleEditCase(params.row);
                         }}>
                             <EditIcon />
                         </IconButton>
-                        <IconButton onClick={() => {
+                        <IconButton onClick={(event) => {
+                            event.stopPropagation();
                             handleDeleteCase(params.row);
                         }}>
                             <DeleteIcon />

@@ -25,7 +25,7 @@ const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload
         const { name, value, payload: { unit } } = payload[0];
         return (
             <div className="custom-tooltip" style={{ backgroundColor: '#fff', border: '1px solid #ccc', padding: '10px' }}>
-                <p>{`${name}: ${value} ${unit}`}</p>
+                <p>{`${name}: ${value}`}</p>
             </div>
         );
     }
